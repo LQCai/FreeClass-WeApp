@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Swiper, SwiperItem } from '@tarojs/components';
-import { AtCard } from 'taro-ui';
 import './index.scss';
+import ClassCard from '../../components/classCard/ClassCard';
 
 class Index extends Component {
 
@@ -28,6 +28,22 @@ class Index extends Component {
       'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
     ];
 
+    const classList = [
+      {
+        name: 'Taro小课堂',
+        peopleCount: '10',
+        role: '学生    ',
+        teacherName: '教师: lqcai',
+        code: 'ZZNJX9'
+      },
+      {
+        name: 'fitness',
+        peopleCount: '20',
+        role: '教师',
+        code: 'SXW4W2'
+      },
+    ];
+
     return (
       <View className='index'>
         <Swiper indicatorDots autoplay circular className='swiper'>
@@ -38,11 +54,15 @@ class Index extends Component {
           ))}
         </Swiper>
         <View className='class-list'>
-          <AtCard
-            note='10人'
-            title='Taro小课堂'
-            thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-          >邀请码：  ZZNJX9</AtCard>
+        {classList.map((course, index) => (
+            <ClassCard key={index}
+              peopleCount={course.peopleCount}
+              name={course.name}
+              role={course.role}
+              teacherName={course.teacherName}
+              code={course.code}
+            />
+          ))}
         </View>
       </View>
     )

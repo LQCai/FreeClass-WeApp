@@ -1,0 +1,15 @@
+.class-card {
+    position: relative;
+    margin-top: 20px;
+    .code {
+        position: absolute;
+        left: 80%;
+        top: 180px;
+        font-size: 26px;
+    }
+    .menu {
+        position: absolute;
+        left: 88%;
+        top: 20px;
+    }
+}

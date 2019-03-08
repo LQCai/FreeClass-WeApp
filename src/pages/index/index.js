@@ -32,14 +32,14 @@ class Index extends Component {
       {
         name: 'Taro小课堂',
         peopleCount: '10',
-        role: '学生    ',
+        role: 2,
         teacherName: '教师: lqcai',
         code: 'ZZNJX9'
       },
       {
         name: 'fitness',
         peopleCount: '20',
-        role: '教师',
+        role: 1,
         code: 'SXW4W2'
       },
     ];

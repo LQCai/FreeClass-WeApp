@@ -29,7 +29,22 @@ export default class ClassCard extends Taro.Component {
 
   render() {
   
-    const teacherActions = ['编辑班级', '删除班级', '归档班级'];
+    let roleName = '学生';
+    switch(this.props.role) {
+      case 1 :
+      roleName = '教师';
+      break;
+      case 2 :
+      roleName = '学生';
+      break;
+      default:
+      break;
+    }
+
+    let actions = ['退出教室'];
+    if(this.props.role == 1){
+      actions=['编辑班级', '删除班级', '归档班级']
+    }
 
     return (
       <View className='class-card'>
@@ -37,7 +52,7 @@ export default class ClassCard extends Taro.Component {
           note={this.props.peopleCount + '人'}
           title={this.props.name}
         >
-          {'角色: ' + this.props.role + this.props.teacherName}
+          {'角色: ' + roleName + this.props.teacherName}
         </AtCard>
         <Text className='code'>
           {this.props.code}
@@ -45,12 +60,13 @@ export default class ClassCard extends Taro.Component {
         <View className='menu' >
           <AtIcon value='menu' onClick={this.sheetOpen} />
         </View>
+        
         <AtActionSheet
           isOpened={isOpened}
           cancelText='取消'
           onCancel={this.sheetClose}
           onClose={this.sheetClose}>
-          {teacherActions.map((menu, index) => (
+          {actions.map((menu, index) => (
             <AtActionSheetItem key={index}>
               {menu}
             </AtActionSheetItem>
@@ -62,9 +78,9 @@ export default class ClassCard extends Taro.Component {
 }
 
 ClassCard.defaultProps = {
-  peopleCount: '0',
+  peopleCount: '0人',
   name: 'loading...',
-  role: '0人',
+  role: '',
   teacherName: '',
   code: '',
 }

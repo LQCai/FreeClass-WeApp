@@ -2,10 +2,20 @@ import Taro, { Component } from '@tarojs/taro';
 import { View, Swiper, SwiperItem } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
+import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon } from 'taro-ui';
+
 import './index.scss';
 import ClassCard from '../../components/classCard/ClassCard';
-import { AtTabs, AtTabsPane } from 'taro-ui';
-import { close } from '../../actions/classMenu';
+import { close, open } from '../../actions/classMenu';
+
+
+@connect(({ classMenu }) => ({
+  classMenu: classMenu.isOpen
+}), (dispatch) => bindActionCreators({
+  close,
+  open,
+}, dispatch))
+
 class Index extends Component {
 
   config = {
@@ -14,6 +24,7 @@ class Index extends Component {
     backgroundTextStyle: 'dark',
   }
 
+
   constructor() {
     super(...arguments)
     this.state = {
@@ -21,12 +32,6 @@ class Index extends Component {
       isOpened: false,
     }
   }
-
-  @connect(({ classMenu }) => ({
-    classMenu,
-  }), (dispatch) => bindActionCreators({
-    close,
-  }, dispatch))
 
   componentWillMount() { }
 
@@ -46,9 +51,12 @@ class Index extends Component {
   }
 
   render() {
+    //课堂actionSheet的状态
+    let { classMenu, open, close } = this.props;
+
     let actions = ['退出教室'];
-    if(this.role == 1){
-      actions=['编辑班级', '删除班级', '归档班级']
+    if (this.role == 1) {
+      actions = ['编辑班级', '删除班级', '归档班级']
     }
 
     const images = [
@@ -84,7 +92,10 @@ class Index extends Component {
             </SwiperItem>
           ))}
         </Swiper>
-        <View>
+        <View className='class-list-pane'>
+        <View className='class-control'>
+            <AtIcon value='add' size='15' color='#6190E8' />
+          </View>
           <AtTabs className='at-tab' current={this.state.current} tabList={tabList} onClick={this.tabClick.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} className='at-tabs__item' >
               <View className='class-list'>
@@ -115,10 +126,11 @@ class Index extends Component {
           </AtTabs>
         </View>
         <AtActionSheet
-          isOpened={true}
+          isOpened={classMenu}
           cancelText='取消'
-          onCancel={this.props.close}
-          onClose={this.props.close}>
+          onCancel={close}
+          onClose={close}
+          onClick={open}>
           {actions.map((menu, index) => (
             <AtActionSheetItem key={index}>
               {menu}

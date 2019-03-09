@@ -8,7 +8,7 @@ import './ClassCard.scss';
 import { open } from '../../actions/classMenu';
 
 @connect(({ classMenu }) => ({
-  classMenu,
+  classMenu: classMenu.isOpen,
 }), (dispatch) => bindActionCreators({
   open,
 }, dispatch))

@@ -7,11 +7,27 @@
                 height: 100%;
             }
     }
-    .at-tab {
-        height: 1000px;
-    }
-    .class-list {
-        margin-top: 20px;
+    .class-list-pane {
+        position: relative;
+        .class-control {
+            position: absolute;
+            left: 85%;
+            z-index: 999;
+            top: 23px;
+            background-color: #e7f8f8;
+            border-radius: 5px;
+            width: 60px;
+            height: 40px;
+            display: flex;
+            display: -webkit-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .at-tab {
+            .class-list {
+                margin-top: 20px;
+            }
+        }
     }
 }
 
@@ -39,7 +55,6 @@
     width:100%;
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
-    
 }
 
     

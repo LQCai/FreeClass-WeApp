@@ -31,7 +31,6 @@ class Index extends Component {
     super(...arguments)
     this.state = {
       current: 0,
-      isOpened: false,
     }
   }
 

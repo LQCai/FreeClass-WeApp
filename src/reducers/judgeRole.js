@@ -9,7 +9,6 @@ const INITAL_STATE = {
 export default function counter(state=INITAL_STATE,action) {
     switch(action.type) {
         case ROLE_TEACHER:
-        console.log("i do")
         return {
             ...state,
             actions:[

@@ -18,16 +18,27 @@ import { isTeacher, isStudent } from '../../actions/judgeRole';
 }, dispatch))
 
 
-// function menu() {
-//   open();
-//   isTeacher();
-// }
 
 export default class ClassCard extends Taro.Component {
 
+  menu = (role) => {
+    const { open, isTeacher, isStudent } = this.props;
+    open();
+    switch(role) {
+      case 1:
+      isTeacher(role);
+      break;
+      case 2:
+      isStudent(role);
+      break;
+      default:
+      break;
+    }
+  }
+
 
   render() {
-    let { isStduent, isTeacher, open, role, teacherName, name, peopleCount, code } = this.props;
+    let { role, teacherName, name, peopleCount, code } = this.props;
 
     let roleName = '学生';
     switch (role) {
@@ -52,7 +63,7 @@ export default class ClassCard extends Taro.Component {
         <Text className='code'>
           {code}
         </Text>
-        <View className='menu' onClick={open} >
+        <View className='menu' onClick={this.menu.bind(this, role)} >
           <AtIcon value='menu' />
         </View>
       </View>

@@ -55,7 +55,6 @@ class Index extends Component {
   render() {
     //课堂actionSheet的状态
     let { classMenu, open, close, judgeRole } = this.props;
-
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://gooju.cn/simages/783845_mark.jpg',
@@ -91,7 +90,7 @@ class Index extends Component {
         </Swiper>
         <View className='class-list-pane'>
         <View className='class-control'>
-            <AtIcon value='add' size='15' color='#6190E8' />
+            <AtIcon value='add' size='20' color='#6190E8' />
           </View>
           <AtTabs className='at-tab' current={this.state.current} tabList={tabList} onClick={this.tabClick.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} className='at-tabs__item' >

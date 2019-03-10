@@ -7,10 +7,12 @@ import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon } from 'ta
 import './index.scss';
 import ClassCard from '../../components/classCard/ClassCard';
 import { close, open } from '../../actions/classMenu';
+import '../../actions/judgeRole';
 
 
-@connect(({ classMenu }) => ({
-  classMenu: classMenu.isOpen
+@connect(({ classMenu,judgeRole }) => ({
+  classMenu: classMenu.isOpen,
+  judgeRole: judgeRole.actions,
 }), (dispatch) => bindActionCreators({
   close,
   open,
@@ -52,12 +54,7 @@ class Index extends Component {
 
   render() {
     //课堂actionSheet的状态
-    let { classMenu, open, close } = this.props;
-
-    let actions = ['退出教室'];
-    if (this.role == 1) {
-      actions = ['编辑班级', '删除班级', '归档班级']
-    }
+    let { classMenu, open, close, judgeRole } = this.props;
 
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
@@ -131,9 +128,9 @@ class Index extends Component {
           onCancel={close}
           onClose={close}
           onClick={open}>
-          {actions.map((menu, index) => (
+          {judgeRole.map((menu, index) => (
             <AtActionSheetItem key={index}>
-              {menu}
+              {menu.title}
             </AtActionSheetItem>
           ))}
         </AtActionSheet>

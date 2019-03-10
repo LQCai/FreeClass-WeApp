@@ -6,20 +6,31 @@ import { bindActionCreators } from 'redux';
 import './ClassCard.scss';
 
 import { open } from '../../actions/classMenu';
+import { isTeacher, isStudent } from '../../actions/judgeRole';
 
-@connect(({ classMenu }) => ({
+@connect(({ classMenu, judgeRole }) => ({
   classMenu: classMenu.isOpen,
+  judgeRole: judgeRole.actions,
 }), (dispatch) => bindActionCreators({
   open,
+  isStudent,
+  isTeacher,
 }, dispatch))
+
+
+// function menu() {
+//   open();
+//   isTeacher();
+// }
 
 export default class ClassCard extends Taro.Component {
 
 
   render() {
+    let { isStduent, isTeacher, open, role, teacherName, name, peopleCount, code } = this.props;
 
     let roleName = '学生';
-    switch (this.props.role) {
+    switch (role) {
       case 1:
         roleName = '教师';
         break;
@@ -33,15 +44,15 @@ export default class ClassCard extends Taro.Component {
     return (
       <View className='class-card'>
         <AtCard
-          note={this.props.peopleCount + '人'}
-          title={this.props.name}
+          note={peopleCount + '人'}
+          title={name}
         >
-          {'角色: ' + roleName + this.props.teacherName}
+          {'角色: ' + roleName + teacherName}
         </AtCard>
         <Text className='code'>
-          {this.props.code}
+          {code}
         </Text>
-        <View className='menu' onClick={this.props.open} >
+        <View className='menu' onClick={open} >
           <AtIcon value='menu' />
         </View>
       </View>

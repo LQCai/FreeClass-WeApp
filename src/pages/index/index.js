@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Swiper, SwiperItem } from '@tarojs/components';
+import { View, Swiper, SwiperItem, Button, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
 import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon } from 'taro-ui';
@@ -8,14 +8,17 @@ import './index.scss';
 import ClassCard from '../../components/classCard/ClassCard';
 import { close, open } from '../../actions/classMenu';
 import '../../actions/judgeRole';
+import { hasOpenId } from '../../actions/openId';
 
 
-@connect(({ classMenu,judgeRole }) => ({
+@connect(({ classMenu, judgeRole, openId }) => ({
   classMenu: classMenu.isOpen,
   judgeRole: judgeRole.actions,
+  openId: openId.openIdExist,
 }), (dispatch) => bindActionCreators({
   close,
   open,
+  hasOpenId,
 }, dispatch))
 
 class Index extends Component {
@@ -53,7 +56,7 @@ class Index extends Component {
 
   render() {
     //课堂actionSheet的状态
-    let { classMenu, open, close, judgeRole } = this.props;
+    let { classMenu, open, close, judgeRole, openId } = this.props;
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://gooju.cn/simages/783845_mark.jpg',
@@ -76,6 +79,17 @@ class Index extends Component {
       },
     ];
 
+    // Taro.setStorage({
+    //   key: 'openId', data: '12312312321'
+    // }).then(res => console.log(res))
+
+    //这里打算处理获取openId缓存
+    const openIdNum = Taro.getStorageSync('openId');
+    if (openIdNum == '') {
+      hasOpenId(true);
+    }
+
+
     const tabList = [{ title: '我听的课' }, { title: '我教的课' }];
 
     return (
@@ -88,7 +102,7 @@ class Index extends Component {
           ))}
         </Swiper>
         <View className='class-list-pane'>
-        <View className='class-control'>
+          <View className='class-control'>
             <AtIcon value='add' size='20' color='#6190E8' />
           </View>
           <AtTabs className='at-tab' current={this.state.current} tabList={tabList} onClick={this.tabClick.bind(this)}>
@@ -119,6 +133,7 @@ class Index extends Component {
               </View>
             </AtTabsPane>
           </AtTabs>
+          <Button openType='getUserInfo'>123</Button>
         </View>
         <AtActionSheet
           isOpened={classMenu}

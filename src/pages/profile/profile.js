@@ -2,14 +2,13 @@ import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 
 
-
+//获取用户信息
 Taro.getUserInfo().then(res =>{
-  // const userInfo = res.userInfo;
   console.log(res.userInfo)
 })
 
+//获取code
 Taro.login().then(res =>{
-  // const userInfo = res.userInfo;
   console.log(res.code)
 })
 

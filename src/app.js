@@ -1,11 +1,14 @@
 import Taro, { Component } from '@tarojs/taro';
 import Index from './pages/index';
+import _ from 'lodash';
 import { Provider } from '@tarojs/redux';
 
 import configStore from './store/index';
 
 import 'taro-ui/dist/style/index.scss'
 import './app.scss';
+import wreq from './utils/request';
+
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -52,18 +55,50 @@ class App extends Component {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#3d50b4',
-      navigationBarTitleText: 'Conveniention Class',
+      navigationBarTitleText: 'Free Class',
       navigationBarTextStyle: 'white'
     }
   }
 
-  componentDidMount() { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    this.checkIfLoggedIn();
+  }
 
-  componentDidHide() { }
+  checkIfLoggedIn() {
+    const state = store.getState();
+    const openId = Taro.getStorageSync('openId');
+    if (!openId) {
+      this.login();
+    } else {
+      Taro.reLaunch({
+        url: 'pages/index/index',
+      });
+    }
+  }
 
-  componentDidCatchError() { }
+  login() {
+    //获取code,向后台请求获取openId
+    Taro.login().then(res => {
+      console.log(res.code)
+      const code = res.code;
+      wreq.request({
+        url: '',//后台尚未开工
+        method: 'POST',
+        data: {
+
+        },
+      }).then((res) => {
+        //TODO 拿到openId后存入storage,然后跳转首页
+        console.log(res.data);
+        Taro.reLaunch({
+          url: 'pages/index/index',
+        });
+      }).catch((e) => {
+        console.log(e);
+      });
+    });
+  }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
@@ -77,3 +112,5 @@ class App extends Component {
 }
 
 Taro.render(<App />, document.getElementById('app'))
+
+

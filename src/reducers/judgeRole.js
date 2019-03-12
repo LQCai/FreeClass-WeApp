@@ -6,7 +6,7 @@ const INITAL_STATE = {
     ],
 }
 
-export default function counter(state=INITAL_STATE,action) {
+export default function judgeRole(state=INITAL_STATE,action) {
     switch(action.type) {
         case ROLE_TEACHER:
         return {

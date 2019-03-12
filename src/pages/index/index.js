@@ -1,4 +1,4 @@
-import Taro, { Component } from '@tarojs/taro';
+import Taro, { Component, getUserInfo } from '@tarojs/taro';
 import { View, Swiper, SwiperItem, Button, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
@@ -44,7 +44,7 @@ class Index extends Component {
     if (!openId) {
       this.login();
     } else {
-      //TODO 获取用户信息
+      this.getUserInfoWithOpenId(openId);
     }
   }
 
@@ -57,6 +57,8 @@ class Index extends Component {
    * 再请求后台判断数据库中是否有此openId，
    * 如果没有跳转授权页面,不将openId写入数据库
    * 有则将openId存入storage
+   * 
+   * storage含有openId => 已授权  storage不含openId => 未授权
    * 
    */
   login() {
@@ -73,19 +75,37 @@ class Index extends Component {
           code: code,
         },
       }).then((res) => {
-        const newOpenId = res.data.openId;
-        if (!newOpenId) {
+        const openId = res.data.openId;
+        //后台没返回openId(数据库中无此用户),跳转至授权页面
+        if (!openId) {
           Taro.reLaunch({
             url: 'pages/auth/auth'
           });
         }
-        Taro.setStorageSync('openId', newOpenId);
+
+        Taro.setStorageSync('openId', openId);
+        this.getUserInfoWithOpenId(openId);
       }).catch((e) => {
         console.log(e);
       });
 
 
-      //测试跳转
+      /**
+       * 获取用户信息
+       */
+      getUserInfoWithOpenId = (openId) => {
+        wreq.request({
+          url: '/getUserInfo',
+          method: 'GET',
+          data: {
+            openId: openId,
+          },
+        }).then((res) => {
+          console.log(res.data);
+        }); 
+      }
+
+      // 测试跳转
       // const hasOpen = false;
       // if (!hasOpen) {
       //   Taro.reLaunch({

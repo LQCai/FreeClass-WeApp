@@ -8,17 +8,14 @@ import './index.scss';
 import ClassCard from '../../components/classCard/ClassCard';
 import { close, open } from '../../actions/classMenu';
 import '../../actions/judgeRole';
-import { hasOpenId } from '../../actions/openId';
+import wreq from '../../utils/request';
 
-
-@connect(({ classMenu, judgeRole, openId }) => ({
+@connect(({ classMenu, judgeRole }) => ({
   classMenu: classMenu.isOpen,
   judgeRole: judgeRole.actions,
-  openId: openId.openIdExist,
 }), (dispatch) => bindActionCreators({
   close,
   open,
-  hasOpenId,
 }, dispatch))
 
 class Index extends Component {
@@ -37,16 +34,68 @@ class Index extends Component {
     }
   }
 
-  componentWillMount() { }
+  componentWillMount() {
+    this.checkOpenId();
+  }
 
-  componentDidMount() { }
 
-  componentWillUnmount() { }
+  checkOpenId() {
+    const openId = Taro.getStorageSync('openId');
+    if (!openId) {
+      this.login();
+    } else {
+      //TODO 获取用户信息
+    }
+  }
 
-  componentDidShow() { }
 
-  componentDidHide() { }
+  /**
+   * 
+   * 请求登录
+   * 
+   * 将获取的code去请求后台获取openId,
+   * 再请求后台判断数据库中是否有此openId，
+   * 如果没有跳转授权页面,不将openId写入数据库
+   * 有则将openId存入storage
+   * 
+   */
+  login() {
+    //获取code,向后台请求获取openId
+    Taro.login().then(res => {
+      console.log(res.code)
+      const code = res.code;
 
+
+      wreq.request({
+        url: '',//后台尚未开工
+        method: 'POST',
+        data: {
+          code: code,
+        },
+      }).then((res) => {
+        const newOpenId = res.data.openId;
+        if (!newOpenId) {
+          Taro.reLaunch({
+            url: 'pages/auth/auth'
+          });
+        }
+        Taro.setStorageSync('openId', newOpenId);
+      }).catch((e) => {
+        console.log(e);
+      });
+
+
+      //测试跳转
+      // const hasOpen = false;
+      // if (!hasOpen) {
+      //   Taro.reLaunch({
+      //     url: '/pages/auth/auth',
+      //   });
+      // }
+
+
+    });
+  }
 
   tabClick(index) {
     this.setState({
@@ -56,7 +105,7 @@ class Index extends Component {
 
   render() {
     //课堂actionSheet的状态
-    let { classMenu, open, close, judgeRole, openId } = this.props;
+    let { classMenu, open, close, judgeRole } = this.props;
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://gooju.cn/simages/783845_mark.jpg',
@@ -79,15 +128,6 @@ class Index extends Component {
       },
     ];
 
-    // Taro.setStorage({
-    //   key: 'openId', data: '12312312321'
-    // }).then(res => console.log(res))
-
-    //这里打算处理获取openId缓存
-    const openIdNum = Taro.getStorageSync('openId');
-    if (openIdNum == '') {
-      hasOpenId(true);
-    }
 
 
     const tabList = [{ title: '我听的课' }, { title: '我教的课' }];
@@ -133,7 +173,6 @@ class Index extends Component {
               </View>
             </AtTabsPane>
           </AtTabs>
-          <Button openType='getUserInfo'>123</Button>
         </View>
         <AtActionSheet
           isOpened={classMenu}

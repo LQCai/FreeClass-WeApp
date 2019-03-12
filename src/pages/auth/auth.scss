@@ -1,0 +1,32 @@
+.auth {
+    .logo {
+        margin: 90px 0 90px 50px;
+        border-bottom: 1px solid #ccc;
+        text-align: center;
+        width: 650px;
+        height: 300px;
+        line-height: 450px;
+        .item {
+            width: 200px;
+            height: 200px;
+        }
+    }
+    .content {
+        margin-left: 50px;
+        margin-bottom: 90px;
+        text {
+            display: block;
+            color: #9d9d9d;
+            margin-top: 40px;
+        }
+    }
+    .button {
+        border-radius: 80px;
+        margin: 70px 50px;
+        font-size: 35px;
+        button {
+            color: #ffffff;
+            background-color: #3d50b4;
+        }
+    }
+}

@@ -1,1 +1,0 @@
-export const OPENID_EXIST = 'OPENID_EXIST';

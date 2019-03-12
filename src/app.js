@@ -86,7 +86,6 @@ class App extends Component {
         url: '',//后台尚未开工
         method: 'POST',
         data: {
-
         },
       }).then((res) => {
         //TODO 拿到openId后存入storage,然后跳转首页

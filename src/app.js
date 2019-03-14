@@ -20,9 +20,10 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/profile/profile',
       'pages/index/index',
       'pages/message/message',
-      'pages/profile/profile',
+      
       'pages/auth/auth',
     ],
     tabBar: {

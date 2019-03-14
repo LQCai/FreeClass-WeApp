@@ -1,0 +1,57 @@
+.profile{
+.line{
+    height:3rpx;
+    background:#c0c0c0;
+}
+.header{
+    margin-left:40rpx;
+    display:flex;
+    flex-direction:column;
+    .user{
+        margin:40rpx 0rpx 20rpx 0rpx;
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        .userName{
+            font-size:32rpx;
+        }
+        .userAvatar{
+            margin-left:400rpx
+        }
+    }
+    .data{
+        margin-bottom:20rpx;
+    }
+}
+.content{
+    margin:40rpx 20rpx 20rpx 40rpx;
+    display:flex;
+    flex-direction:row;
+    .box{
+        margin-right:20rpx;
+        .image{
+            width:40rpx;
+            height:40rpx;
+        }
+    }
+    .text{
+        font-size:30rpx;
+        color:#505050;
+    }
+    .distance2{
+        margin-left:510rpx;
+    }
+    .distance{
+        margin-left:450rpx;
+    }
+    .image-right{
+        width:35rpx;
+        height:35rpx
+    }
+}
+.line-part{
+    margin:0rpx 35rpx 20rpx 35rpx;
+    height:3rpx;
+    background:#c0c0c0
+}
+}

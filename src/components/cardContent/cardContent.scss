@@ -1,0 +1,83 @@
+.backgroundColor {
+  background: #e7e8e9;
+  height: 1200rpx;
+  .background {
+    background: #ffffff;
+    padding: 20rpx 20rpx 20rpx 20rpx;
+    display: flex;
+    flex-direction: column;
+    .title {
+      margin: 40rpx 0rpx 20rpx 0rpx;
+      font-size: 40rpx;
+      font-weight: 500;
+      display: block;
+      white-space: pre-wrap;
+    }
+    .publisher {
+      font-size: 26rpx;
+      font-weight: 300rpx;
+      color: #888888;
+    }
+    .content {
+      margin: 40rpx 0rpx 20rpx 0rpx;
+      .text {
+        font-size: 28rpx;
+        color: #888888;
+      }
+      .button {
+        width:120rpx;
+        margin: 40rpx 20rpx 20rpx 480rpx;
+        .buttonText {
+          font-size: 30rpx;
+          color: #888888;
+        }
+        .buttonImage {
+          width: 30rpx;
+          height: 30rpx;
+        }
+      }
+    }
+  }
+  .comment {
+    margin: 20rpx 0rpx 20rpx 0rpx;
+    .commentNumber {
+      padding: 20rpx 20rpx 20rpx 20rpx;
+      font-size: 26rpx;
+      font-weight: 300;
+    }
+    .commentContent {
+      // margin
+      background: #ffffff;
+      padding: 20rpx 20rpx 0rpx 20rpx;
+      font-size: 26rpx;
+      .commentPublisher {                            
+        display: flex;
+        flex-direction: row;
+        margin: 20rpx 0rpx 20rpx 0rpx;
+        font-weight: 300rpx;
+        color: #888888;
+        .commentText {
+          width: 660rpx;
+        }
+        .commentEllipsis {
+          width: 40rpx;
+          height: 40rpx;
+        }
+      }
+      .line{
+        height:3rpx;
+        margin:20rpx 20rpx 0rpx 20rpx;
+        background:#e7e8e9;
+      }
+    }
+    .commentLine {
+      height: 100rpx;
+    }
+  }
+  .buttonComment {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    border: none;
+  }
+}

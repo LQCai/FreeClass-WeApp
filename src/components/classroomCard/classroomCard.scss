@@ -1,0 +1,11 @@
+.homeWork{
+    margin:20rpx 0rpx 20rpx 0rpx;
+    .contentText{
+        display:-webkit-box;
+        white-space:pre-wrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient:vertical;
+    }
+}

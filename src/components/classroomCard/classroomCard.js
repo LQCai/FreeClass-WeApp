@@ -11,10 +11,14 @@ export default class ClassroomCard extends Taro.Component {
     return (
       <View className="homeWork">
         <AtCard
+        note={this.props.notes}
           title={this.props.title}
+          extra={this.props.extra}
           onClick={this.onClick.bind(this, "id")}
         >
-          {this.props.content}
+        <View className="contentText">
+        {this.props.content}
+        </View>
         </AtCard>
       </View>
     );

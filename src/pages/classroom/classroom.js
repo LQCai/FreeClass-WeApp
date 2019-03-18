@@ -9,10 +9,8 @@ import {
   AtListItem
 } from "taro-ui";
 import "./classroom.scss";
-import ClassroomTask from "../classroom/classroomTask/classroomTask";
-import ClassroomCard from "../classroom/classroomCard/classroomCard";
-import resources from "../../asset/classroom/resources.png";
-import link from "../../asset/classroom/link.png";
+import ClassroomTask from "../../components/classroomTask/classroomTask";
+import ClassroomCard from "../../components/classroomCard/classroomCard";
 
 export default class Classroom extends Taro.Component {
   constructor() {
@@ -26,12 +24,12 @@ export default class Classroom extends Taro.Component {
       current: value
     });
   }
-  onClick(e){
-  if(e=='id'){
-    console.log(e)
-  }else{
-    console.log(e)
-  }
+  onClick(e) {
+    if (e == "id") {
+      console.log(e);
+    } else {
+      console.log(e);
+    }
   }
   render() {
     const tabList = [{ title: "作业" }, { title: "资料" }, { title: "公告" }];
@@ -48,18 +46,21 @@ export default class Classroom extends Taro.Component {
           </View>
         </AtTabsPane>
         <AtTabsPane current={this.state.current} index={1}>
-          <View className='background'>
-            <View className="data">
-              <AtList>
-                <AtListItem title="课堂资源" arrow="right" thumb={resources} onClick={this.onClick.bind(this,'id')}/>
-                <AtListItem title="外链资源" arrow="right" thumb={link} onClick={this.onClick.bind(this,'id2')}/>
-              </AtList>
-            </View>
+          <View className="background">
+            <ClassroomCard
+              title="寒假放学通知"
+              content="在寒假期间哈哈哈哈哈哈哈哈哈哈哈哈嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿"
+              notes="发布人：张温兴 发布时间：03月15日 16:34"
+            />
           </View>
         </AtTabsPane>
         <AtTabsPane current={this.state.current} index={2}>
-          <View className='background'>
-          <ClassroomCard title='寒假放学通知' content='在寒假期间'/>
+          <View className="background">
+            <ClassroomCard
+              title="寒假放学通知"
+              content="在寒假期间哈哈哈哈哈哈哈哈哈哈哈哈嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿"
+              notes="发布人：张温兴 发布时间：03月15日 16:34"
+            />
           </View>
         </AtTabsPane>
       </AtTabs>

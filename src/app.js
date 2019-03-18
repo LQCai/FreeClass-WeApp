@@ -19,7 +19,10 @@ const store = configStore();
 class App extends Component {
   config = {
     pages: [
+      "pages/notice/notice",
+      "pages/studentWork/studentWork",
       "pages/classroom/classroom",
+      "pages/cardContent/cardContent",
       "pages/profile/profile",
       "pages/index/index",
       "pages/message/message",

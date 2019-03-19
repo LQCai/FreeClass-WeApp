@@ -8,24 +8,40 @@ export default class CardContent extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      isOpend: false
+      isOpend: false //判断是否打开动作面板
     };
   }
+  /*用于打开动作面板 */
   isOpend() {
     this.setState({
       isOpend: true
     });
   }
+  /*打开动作面板后点击取消触发，用于关闭动作面板 */
   handleCancel() {
     this.setState({
       isOpend: false
     });
   }
+  /*动作面板的回复和删除功能 */
   handleClick(e) {
     console.log(e);
     this.setState({
       isOpend: false
     });
+  }
+  /*跳转页面 */
+  jump(e) {
+    console.log(e);
+    if (e == "已读") {
+      Taro.navigateTo({
+        url: "../../pages/alreadyRead/alreadyRead"
+      });
+    } else {
+      Taro.navigateTo({
+        url: "../../pages/comment/comment"
+      });
+    }
   }
   render() {
     const popup = (
@@ -43,7 +59,7 @@ export default class CardContent extends Taro.Component {
       </AtActionSheet>
     );
     return (
-      <View class='backgroundColor'>
+      <View class="backgroundColor">
         <View className="background">
           <View className="title">
             本周六校外招聘会，有兴趣的同学现在找我报名，有派车还有午餐
@@ -60,7 +76,12 @@ export default class CardContent extends Taro.Component {
               http://job.xmut.edu.cn/front/message.jhtml?p=messageInfo&messageNo=2776&messageCode=XM1000011121
             </View>
             <View className="button">
-              <AtButton type="secondary" size="small" circle onClick={this.handleClick.bind(this, "id")}>
+              <AtButton
+                type="secondary"
+                size="small"
+                circle
+                onClick={this.jump.bind(this, "已读")}
+              >
                 <View class="buttonText">
                   153人已读
                   <Image src={right} className="buttonImage" />
@@ -81,7 +102,7 @@ export default class CardContent extends Taro.Component {
               />
             </View>
             好的
-            <View className='line'></View>
+            <View className="line" />
           </View>
           <View className="commentContent">
             <View className="commentPublisher">
@@ -93,12 +114,16 @@ export default class CardContent extends Taro.Component {
               />
             </View>
             好的
-            <View className='line'></View>
+            <View className="line" />
           </View>
           <View className="commentLine" />
         </View>
         <View className="buttonComment">
-          <AtButton type="secondary" size="normal">
+          <AtButton
+            type="secondary"
+            size="normal"
+            onClick={this.jump.bind(this, "评论")}
+          >
             + 添加评论
           </AtButton>
         </View>

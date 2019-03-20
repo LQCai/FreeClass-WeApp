@@ -5,26 +5,6 @@ import collection from "../../asset/profileImage/collection.png";
 import right from "../../asset/profileImage/right.png";
 import help from "../../asset/profileImage/help.png";
 import "./profile.scss";
-// class ProfileContent extends Taro.Component {
-//   componentDidMount() {
-//     console.log("sss",this.props.content);
-//   }
-//   render() {
-//     return (
-//       <View >
-//         <View className="content">
-//           <View className="box">
-//             <Image src={help} className="image" />
-//           </View>
-//           <View className="text">{this.props.content}</View>
-//           <View className="distance">
-//             <Image src={right} className="image-right" />
-//           </View>
-//         </View>
-//       </View>
-//     );
-//   }
-// }
 export default class Profile extends Taro.Component {
   componentDidMount() {
     console.log("s");

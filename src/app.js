@@ -20,9 +20,10 @@ class App extends Component {
   config = {
     pages: [
       "pages/notice/notice",
+      "pages/alreadyRead/alreadyRead",
+      "pages/comment/comment",
       "pages/studentWork/studentWork",
       "pages/classroom/classroom",
-      "pages/cardContent/cardContent",
       "pages/profile/profile",
       "pages/index/index",
       "pages/message/message",

@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@tarojs/components": "1.2.13",
-    "@tarojs/redux": "^1.2.16",
+    "@tarojs/redux": "^1.2.22",
     "@tarojs/redux-h5": "^1.2.16",
     "@tarojs/router": "1.2.13",
     "@tarojs/taro": "1.2.13",

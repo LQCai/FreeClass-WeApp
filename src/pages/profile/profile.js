@@ -11,8 +11,11 @@ export default class Profile extends Taro.Component {
   }
   //跳转到各个页面，通过传过来的e进行判断跳转哪一个页面
   jump(e){
-  if(e=="data"){
+  if(e=="personalData"){
     console.log(e)
+    Taro.navigateTo({
+      url: "../../pages/personalData/personalData"
+    });
   }
   else if(e=="collection"){
     console.log(e)
@@ -35,7 +38,7 @@ export default class Profile extends Taro.Component {
             </View>
           </View>
           <View className="data">
-            <AtButton type="secondary" size="small" onClick={this.jump.bind(this,"data")}>
+            <AtButton type="secondary" size="small" onClick={this.jump.bind(this,"personalData")}>
               编辑个人资料
             </AtButton>
           </View>

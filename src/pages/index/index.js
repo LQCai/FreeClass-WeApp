@@ -128,7 +128,7 @@ class Index extends Component {
     let { classMenu, open, close, judgeRole } = this.props;
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-      'http://gooju.cn/simages/783845_mark.jpg',
+      'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
     ];
 

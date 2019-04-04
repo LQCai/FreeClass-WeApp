@@ -1,8 +1,8 @@
 {
 	"miniprogramRoot": "dist/",
-	"projectname": "convenientionClass",
+	"projectname": "weApp",
 	"description": "my graduation project",
-	"appid": "touristappid",
+	"appid": "wx3cc030bd04048251",
 	"setting": {
 		"urlCheck": false,
 		"es6": false,
@@ -12,6 +12,8 @@
 		"autoAudits": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.6.2",
+	"libVersion": "2.6.4",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {}
 }

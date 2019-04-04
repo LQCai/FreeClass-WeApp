@@ -19,7 +19,10 @@ const store = configStore();
 class App extends Component {
   config = {
     pages: [
+      "pages/index/index",
+      "pages/message/message",
       "pages/profile/profile",
+      "pages/auth/auth",
       "pages/personalData/personalData",
       "pages/personalDataUpdate/personalDataUpdate",
       "pages/notice/notice",
@@ -27,9 +30,6 @@ class App extends Component {
       "pages/comment/comment",
       "pages/studentWork/studentWork",
       "pages/classroom/classroom",
-      "pages/index/index",
-      "pages/message/message",
-      "pages/auth/auth"
     ],
     tabBar: {
       color: "#595959",

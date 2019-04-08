@@ -3,6 +3,7 @@ import { View, Text, Button } from '@tarojs/components';
 import logo from '../../asset/freeClass.png';
 import './auth.scss';
 import wreq from '../../utils/request';
+import config from '../../config';
 
 
 export default class Auth extends Taro.Component {
@@ -12,12 +13,16 @@ export default class Auth extends Taro.Component {
      * 授权后获取用户信息
      */
     bindGetUserInfo = (e) => {
-        console.log(e);
-        if (e.detail.userInfo) {
+        const userInfo = e.detail.userInfo;
+        console.log(userInfo);
+
+        if (userInfo) {
             Taro.login().then(res => {
                 const code = res.code;
-                const openId = this.getOpenId(code);
-                this.getUserInfoWithOpenId(openId);
+                let openId = '';
+                this.getOpenId(code);
+                // this.getUserInfoWithOpenId(openId);
+                this.register(openId, userInfo);
             })
         }else {
             //未授权的操作
@@ -28,19 +33,23 @@ export default class Auth extends Taro.Component {
      * 获取openId（待完善）
      */
     getOpenId = (code) => {
+        // console.log("123");
         wreq.request({
-            url: '/getOpenID',
-            method: 'POST',
+            url: `${config.server.host}/user/wechat/getAuthOpenId`,
+            method: 'GET',
             data: {
                 code: code,
             }
         }).then(res => {
+            console.log("123");
+            openId = res.data.data.openId;
             console.log(res.data);
+            
         });
     }
 
     /**
-     * 获取用户信息（待完善）
+     * 获取用户信息（待完善）并注册
      */
     getUserInfoWithOpenId = (openId) => {
         wreq.request({
@@ -51,6 +60,28 @@ export default class Auth extends Taro.Component {
             }
         }).then(res => {
             console.log(res.data);
+            
+        });
+    }
+
+    /**
+     * 注册
+     */
+    register = (openId, userInfo) => {
+        console.log(this.openId);
+        wreq.request({
+            url: `${config.server.host}/user/account/register`,
+            method: 'POST',
+            data: {
+                openId: openId,
+                nickName: userInfo.nickName,
+                avatarUrl: userInfo.avatarUrl
+            }
+        }).then(res => {
+            console.log(res.data);
+            Taro.reLaunch({
+                url: '/pages/index/index'
+              });
         });
     }
 

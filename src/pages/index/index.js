@@ -9,6 +9,7 @@ import ClassCard from '../../components/classCard/ClassCard';
 import { close, open } from '../../actions/classMenu';
 import '../../actions/judgeRole';
 import wreq from '../../utils/request';
+import config from '../../config';
 
 @connect(({ classMenu, judgeRole }) => ({
   classMenu: classMenu.isOpen,
@@ -35,16 +36,14 @@ class Index extends Component {
   }
 
   componentWillMount() {
-    this.checkOpenId();
+    this.checkUserInfo();
   }
 
 
-  checkOpenId() {
-    const openId = Taro.getStorageSync('openId');
-    if (!openId) {
+  checkUserInfo() {
+    const userInfo = Taro.getStorageSync('userInfo');
+    if (!userInfo) {
       this.login();
-    } else {
-      this.getUserInfoWithOpenId(openId);
     }
   }
 
@@ -62,40 +61,50 @@ class Index extends Component {
    * 
    */
   login() {
+
+    //判断是否已授权
+    Taro.getSetting().then(res => {
+      if(!res.authSetting['scope.userInfo']) {
+        Taro.reLaunch({
+          url: '/pages/auth/auth'
+        });
+      }
+    })
+
     //获取code,向后台请求获取openId
     Taro.login().then(res => {
-      console.log(res.code)
       const code = res.code;
 
-
       wreq.request({
-        url: '',//后台尚未开工
-        method: 'POST',
+        url: `${config.server.host}/user/account/info`,
+        method: 'GET',
         data: {
           code: code,
         },
       }).then((res) => {
-        const openId = res.data.openId;
+        let openId = res.data.data.openId;
+        console.log(openId);
         //后台没返回openId(数据库中无此用户),跳转至授权页面
         if (!openId) {
           Taro.reLaunch({
-            url: 'pages/auth/auth'
+            url: '/pages/auth/auth'
           });
         }
 
-        Taro.setStorageSync('openId', openId);
+        //通过openId再获取用户信息
         this.getUserInfoWithOpenId(openId);
       }).catch((e) => {
         console.log(e);
       });
-
+    });
+  }
 
       /**
        * 获取用户信息
        */
       getUserInfoWithOpenId = (openId) => {
         wreq.request({
-          url: '/getUserInfo',
+          url: `${config.server.host}/user/account/info`,
           method: 'GET',
           data: {
             openId: openId,
@@ -104,18 +113,6 @@ class Index extends Component {
           console.log(res.data);
         }); 
       }
-
-      // 测试跳转
-      // const hasOpen = false;
-      // if (!hasOpen) {
-      //   Taro.reLaunch({
-      //     url: '/pages/auth/auth',
-      //   });
-      // }
-
-
-    });
-  }
 
   tabClick(index) {
     this.setState({

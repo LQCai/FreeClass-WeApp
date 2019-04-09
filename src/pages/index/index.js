@@ -51,13 +51,7 @@ class Index extends Component {
   /**
    * 
    * 请求登录
-   * 
-   * 将获取的code去请求后台获取openId,
-   * 再请求后台判断数据库中是否有此openId，
-   * 如果没有跳转授权页面,不将openId写入数据库
-   * 有则将openId存入storage
-   * 
-   * storage含有openId => 已授权  storage不含openId => 未授权
+   * (详见用例图)
    * 
    */
   login() {

@@ -47,6 +47,7 @@ export default class Auth extends Taro.Component {
                 const openId = resData.msg;
                 this.register(openId, wxUserInfo);
             }else {
+                console.log("123123");
                 Taro.reLaunch({
                     url: '/pages/index/index'
                   });

@@ -1,6 +1,10 @@
 const config = {
     server: {
         host: 'http://127.0.0.1/freeClass'
+    },
+    code: {
+        success: '0000',
+        fail: '500'
     }
 }
 

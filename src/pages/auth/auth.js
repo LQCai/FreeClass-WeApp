@@ -13,16 +13,16 @@ export default class Auth extends Taro.Component {
      * 授权后获取用户信息
      */
     bindGetUserInfo = (e) => {
-        const userInfo = e.detail.userInfo;
-        console.log(userInfo);
+        //获取微信用户信息
+        const wxUserInfo = e.detail.userInfo;
+        
+        console.log(wxUserInfo);
 
-        if (userInfo) {
+        if (wxUserInfo) {
+            Taro.setStorageSync('wxUserInfo', wxUserInfo);
             Taro.login().then(res => {
                 const code = res.code;
-                let openId = '';
                 this.getOpenId(code);
-                // this.getUserInfoWithOpenId(openId);
-                this.register(openId, userInfo);
             })
         }else {
             //未授权的操作
@@ -33,7 +33,6 @@ export default class Auth extends Taro.Component {
      * 获取openId（待完善）
      */
     getOpenId = (code) => {
-        // console.log("123");
         wreq.request({
             url: `${config.server.host}/user/wechat/getAuthOpenId`,
             method: 'GET',
@@ -41,26 +40,17 @@ export default class Auth extends Taro.Component {
                 code: code,
             }
         }).then(res => {
-            console.log("123");
-            openId = res.data.data.openId;
-            console.log(res.data);
-            
-        });
-    }
+            const resData = res.data;
 
-    /**
-     * 获取用户信息（待完善）并注册
-     */
-    getUserInfoWithOpenId = (openId) => {
-        wreq.request({
-            url: '/getUserInfo',
-            method: 'GET',
-            data: {
-                openId: openId,
+            if(resData.code != `${config.code.success}`) {
+                const wxUserInfo = Taro.getStorageSync('wxUserInfo');
+                const openId = resData.msg;
+                this.register(openId, wxUserInfo);
+            }else {
+                Taro.reLaunch({
+                    url: '/pages/index/index'
+                  });
             }
-        }).then(res => {
-            console.log(res.data);
-            
         });
     }
 
@@ -68,20 +58,26 @@ export default class Auth extends Taro.Component {
      * 注册
      */
     register = (openId, userInfo) => {
-        console.log(this.openId);
+        console.log(openId);
+        console.log(userInfo);
         wreq.request({
             url: `${config.server.host}/user/account/register`,
-            method: 'POST',
+            method: 'GET',
             data: {
                 openId: openId,
                 nickName: userInfo.nickName,
                 avatarUrl: userInfo.avatarUrl
             }
         }).then(res => {
-            console.log(res.data);
-            Taro.reLaunch({
-                url: '/pages/index/index'
-              });
+            const resData = res.data;
+
+            if(resData.code == `${config.code.success}`) {
+                Taro.reLaunch({
+                    url: '/pages/index/index'
+                  });
+            }else {
+                Taro.showToast("异常");
+            }
         });
     }
 

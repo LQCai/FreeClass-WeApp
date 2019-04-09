@@ -82,37 +82,23 @@ class Index extends Component {
           code: code,
         },
       }).then((res) => {
-        let openId = res.data.data.openId;
-        console.log(openId);
-        //后台没返回openId(数据库中无此用户),跳转至授权页面
-        if (!openId) {
+        const resData = res.data;
+        console.log(resData);
+        //后台没返回userInfo(数据库中无此用户),跳转至授权页面
+        if (resData.code != `${config.code.success}`) {
           Taro.reLaunch({
             url: '/pages/auth/auth'
           });
+        }else {
+          const userInfo = resData.data;
+          
+          Taro.setStorageSync('userInfo', userInfo);
         }
-
-        //通过openId再获取用户信息
-        this.getUserInfoWithOpenId(openId);
       }).catch((e) => {
         console.log(e);
       });
     });
   }
-
-      /**
-       * 获取用户信息
-       */
-      getUserInfoWithOpenId = (openId) => {
-        wreq.request({
-          url: `${config.server.host}/user/account/info`,
-          method: 'GET',
-          data: {
-            openId: openId,
-          },
-        }).then((res) => {
-          console.log(res.data);
-        }); 
-      }
 
   tabClick(index) {
     this.setState({

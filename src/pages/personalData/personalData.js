@@ -30,7 +30,7 @@ export default class PersonalData extends Taro.Component {
           />
           <AtListItem
             title="学号"
-            extraText={userInfo.serialNo}
+            extraText={userInfo.serialCode}
             arrow="right"
             onClick={this.handleClick.bind(this,"学号",userInfo.serialCode)}
           />

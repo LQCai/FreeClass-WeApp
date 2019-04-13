@@ -4,8 +4,16 @@ import logo from '../../asset/freeClass.png';
 import './auth.scss';
 import wreq from '../../utils/request';
 import config from '../../config';
+import { connect } from '@tarojs/redux';
+import { bindActionCreators } from 'redux';
+import { submitRegister, getOpenData } from '../../actions/user';
 
-
+@connect(({ user }) => ({
+    openData: user.openData
+}), (dispatch) => bindActionCreators({
+    getOpenData,
+    submitRegister
+}, dispatch))
 export default class Auth extends Taro.Component {
 
     /**
@@ -15,71 +23,30 @@ export default class Auth extends Taro.Component {
     bindGetUserInfo = (e) => {
         //获取微信用户信息
         const wxUserInfo = e.detail.userInfo;
-        
-        console.log(wxUserInfo);
 
         if (wxUserInfo) {
-            Taro.setStorageSync('wxUserInfo', wxUserInfo);
-            Taro.login().then(res => {
-                const code = res.code;
-                this.getOpenId(code);
-            })
-        }else {
-            //未授权的操作
+            this.props.getOpenData().catch((e) => {
+                console.log(e);
+            }).then(() => {
+                const openData = this.props.openData;
+               
+                console.log(openData);
+
+                if (openData.code != config.code.success) {
+                    this.props.submitRegister(openData.msg, wxUserInfo.nickName);
+                } else {
+                    Taro.reLaunch({
+                        url: '/pages/index/index'
+                    });
+                }
+
+            });
+        } else {
+            Taro.showToast({
+                title: '请授权后登录',
+                icon: 'none'
+            });
         }
-    }
-
-    /**
-     * 获取openId（待完善）
-     */
-    getOpenId = (code) => {
-        wreq.request({
-            url: `${config.server.host}/user/wechat/getAuthOpenId`,
-            method: 'GET',
-            data: {
-                code: code,
-            }
-        }).then(res => {
-            const resData = res.data;
-
-            if(resData.code != `${config.code.success}`) {
-                const wxUserInfo = Taro.getStorageSync('wxUserInfo');
-                const openId = resData.msg;
-                this.register(openId, wxUserInfo);
-            }else {
-                console.log("123123");
-                Taro.reLaunch({
-                    url: '/pages/index/index'
-                  });
-            }
-        });
-    }
-
-    /**
-     * 注册
-     */
-    register = (openId, userInfo) => {
-        console.log(openId);
-        console.log(userInfo);
-        wreq.request({
-            url: `${config.server.host}/user/account/register`,
-            method: 'GET',
-            data: {
-                openId: openId,
-                nickName: userInfo.nickName,
-                avatarUrl: userInfo.avatarUrl
-            }
-        }).then(res => {
-            const resData = res.data;
-
-            if(resData.code == `${config.code.success}`) {
-                Taro.reLaunch({
-                    url: '/pages/index/index'
-                  });
-            }else {
-                Taro.showToast("异常");
-            }
-        });
     }
 
     render() {

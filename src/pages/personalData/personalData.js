@@ -3,7 +3,13 @@ import { View, Text, OpenData } from "@tarojs/components";
 import { AtList, AtListItem } from "taro-ui";
 import "./personalData.scss";
 import logo from '../../asset/freeClass.png';
+import { connect } from '@tarojs/redux';
+import { bindActionCreators } from 'redux';
 
+@connect(({ user }) => ({
+  userInfo: user.userInfo
+}), (dispatch) => bindActionCreators({
+}, dispatch))
 export default class PersonalData extends Taro.Component {
   constructor() {
     super(...arguments);

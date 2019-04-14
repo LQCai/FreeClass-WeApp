@@ -10,7 +10,8 @@ import wreq from '../../utils/request';
 
 
 @connect(({ user }) => ({
-  updateResult: user.updateResult
+  updateResult: user.updateResult,
+  userInfo: user.userInfo
 }), (dispatch) => bindActionCreators({
   submitUpdate,
   getUserInfo
@@ -25,30 +26,48 @@ export default class PersonalDataUpdate extends Taro.Component {
     };
   }
 
-  handleChange(value) {
-    console.log("value", value.value)
+  componentWillMount() {
     this.setState({
-      value: value.value
+      text: this.$router.params.textName,
+      content: this.$router.params.content,
+      item: this.$router.params.itemName
     });
   }
-  
-  onSubmit(event, item, content) {
-    this.props.submitUpdate(Taro.getStorageSync('userInfo').openId, item, content).catch((e) => {
+
+  /**
+   * 将输入框数据修改后的数据赋给content
+   * 
+   * @param {*} inputText 
+   */
+  handleChange(inputText) {
+    this.setState({
+      content: inputText
+    });
+  }
+
+  /**
+   * 修改用户信息
+   */
+  updateInfo() {
+    this.props.submitUpdate(Taro.getStorageSync('userInfo').openId, this.state.item, this.state.content).catch((e) => {
       console.log(e);
     }).then(() => {
       const updateResult = this.props.updateResult;
 
-      if (updateResult.code == config.code.success) {
+      if (updateResult.code != config.code.success) {
         Taro.showToast({
           title: '修改失败',
           'icon': 'none'
         });
-      }else {
+      } else {
         const openId = Taro.getStorageSync('userInfo').openId;
         this.props.getUserInfo(openId).catch((e) => {
           console.log(e);
         }).then(() => {
-          Taro.setStorageSync('userInfo', this.props.userInfo.data).then(() => {
+          Taro.setStorage({
+            key: 'userInfo',
+            data: this.props.userInfo.data
+          }).then(() => {
             Taro.showToast({
               title: '修改成功',
               'icon': 'success'
@@ -65,20 +84,11 @@ export default class PersonalDataUpdate extends Taro.Component {
 
 
   render() {
-    this.setState({
-      text: this.$router.params.textName,
-      content: this.$router.params.content,
-      item: this.$router.params.itemName
-    });
-
     return (
       <View class="background">
         <View class="backgroundContent">
-
         </View>
         <AtForm
-          onSubmit={this.onSubmit.bind(this, item, content)}
-          onReset={this.onReset.bind(this)}
         >
           <AtInput
             name="value"
@@ -88,7 +98,7 @@ export default class PersonalDataUpdate extends Taro.Component {
             value={this.state.content}
             onChange={this.handleChange.bind(this)}
           >
-            <AtButton formType="submit" type="primary" size="small">
+            <AtButton type="primary" size="small" onClick={this.updateInfo.bind(this)}>
               保存
           </AtButton>
           </AtInput>

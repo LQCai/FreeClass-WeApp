@@ -82,7 +82,7 @@ export const submitRegister = (openId, nickName) => dispatch => new Promise(
                     type: USER_REGISTER,
                     payload: 'fail'
                 });
-            }else {
+            } else {
                 dispatch({
                     type: USER_REGISTER,
                     payload: 'success'
@@ -94,36 +94,57 @@ export const submitRegister = (openId, nickName) => dispatch => new Promise(
         })
     });
 
-    /**
-     * 提交信息修改
-     * 
-     * @param {*} openId 
-     * @param {*} item 
-     * @param {*} content 
-     */
-    export const submitUpdate = (openId, item, content) => dispatch => new Promise(
-        (resolve, reject) => {
-            const user = {
-                openId: openId,
-                item: content
-            };
+/**
+ * 提交信息修改
+ * 
+ * @param {*} openId 
+ * @param {*} item 
+ * @param {*} content 
+ */
+export const submitUpdate = (openId, item, content) => dispatch => new Promise(
+    (resolve, reject) => {
+        let userObject = {};
 
-            wreq.request({
-                url: `${config.server.host}/user/account/update`,
-                method: 'POST',
-                data: {
-                    user
-                }
-            }).then((res) => {
-                console.log(res);
-                dispatch({
-                    type: USER_UPDATE,
-                    payload: res
-                });
-                return resolve(res);
-            }).catch((e) => {
-                console.log(e);
-                return reject(e);
-            });
+        switch (item) {
+            case 'email':
+                userObject = {
+                    openId: openId,
+                    email: content
+                };
+                break;
+            case 'serialCode':
+                userObject = {
+                    openId: openId,
+                    serialCode: content
+                };
+                break;
+            case 'name':
+                userObject = {
+                    openId: openId,
+                    name: content
+                };
+                break;
+            default:
+                userObject = {};
+                break;
         }
-    );
+
+        wreq.request({
+            url: `${config.server.host}/user/account/update`,
+            method: 'POST',
+            data: {
+                user: userObject
+            }
+        }).then((res) => {
+            console.log(res.data);
+            dispatch({
+                type: USER_UPDATE,
+                payload: res.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);

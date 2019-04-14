@@ -13,7 +13,16 @@ import { bindActionCreators } from 'redux';
 export default class PersonalData extends Taro.Component {
   constructor() {
     super(...arguments);
+    this.setState({
+      userInfo: ""
+    });
   }
+  componentDidShow() {
+    this.setState({
+      userInfo: Taro.getStorageSync("userInfo")
+    });
+  }
+
   /*跳转进入个人资料编辑页面*/
   handleClick(item, content, text) {
     Taro.navigateTo({
@@ -22,29 +31,27 @@ export default class PersonalData extends Taro.Component {
     })
   }
   render() {
-    const userInfo = Taro.getStorageSync('userInfo');
-
     return (
       <View class="background">
         <View class="backgroundContent" />
         <AtList>
           <AtListItem
             title="姓名"
-            extraText={userInfo.name}
+            extraText={this.state.userInfo.name}
             arrow="right"
-            onClick={this.handleClick.bind(this, "name", userInfo.name, '姓名')}
+            onClick={this.handleClick.bind(this, "name", this.state.userInfo.name, '姓名')}
           />
           <AtListItem
             title="学号"
-            extraText={userInfo.serialCode}
+            extraText={this.state.userInfo.serialCode}
             arrow="right"
-            onClick={this.handleClick.bind(this, "serialCode", userInfo.serialCode, '学号')}
+            onClick={this.handleClick.bind(this, "serialCode", this.state.userInfo.serialCode, '学号')}
           />
           <AtListItem
             title="邮箱"
-            extraText={userInfo.email}
+            extraText={this.state.userInfo.email}
             arrow="right"
-            onClick={this.handleClick.bind(this, "email", userInfo.email, '邮箱')}
+            onClick={this.handleClick.bind(this, "email", this.state.userInfo.email, '邮箱')}
           />
         </AtList>
         <View class="backgroundContent" />

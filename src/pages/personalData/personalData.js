@@ -15,15 +15,15 @@ export default class PersonalData extends Taro.Component {
     super(...arguments);
   }
   /*跳转进入个人资料编辑页面*/
-  handleClick(e,c){
-    console.log("e",e,c)
-  Taro.navigateTo({
-    url:"../../pages/personalDataUpdate/personalDataUpdate?parameter="+e+"&content="+c
-  })
+  handleClick(item, content, text) {
+    Taro.navigateTo({
+      url: "../../pages/personalDataUpdate/personalDataUpdate?"
+        + "itemName=" + item + "&content=" + content + "&textName=" + text
+    })
   }
   render() {
     const userInfo = Taro.getStorageSync('userInfo');
-    
+
     return (
       <View class="background">
         <View class="backgroundContent" />
@@ -32,24 +32,24 @@ export default class PersonalData extends Taro.Component {
             title="姓名"
             extraText={userInfo.name}
             arrow="right"
-            onClick={this.handleClick.bind(this,"姓名",userInfo.name)}
+            onClick={this.handleClick.bind(this, "name", userInfo.name, '姓名')}
           />
           <AtListItem
             title="学号"
             extraText={userInfo.serialCode}
             arrow="right"
-            onClick={this.handleClick.bind(this,"学号",userInfo.serialCode)}
+            onClick={this.handleClick.bind(this, "serialCode", userInfo.serialCode, '学号')}
           />
           <AtListItem
             title="邮箱"
             extraText={userInfo.email}
             arrow="right"
-            onClick={this.handleClick.bind(this,"邮箱",userInfo.email)}
+            onClick={this.handleClick.bind(this, "email", userInfo.email, '邮箱')}
           />
         </AtList>
         <View class="backgroundContent" />
         <View className='logo-background'>
-        <image src={logo} />
+          <image src={logo} />
         </View>
       </View>
     );

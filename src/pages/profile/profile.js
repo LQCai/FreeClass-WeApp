@@ -25,13 +25,14 @@ export default class Profile extends Taro.Component {
   }
   }
   render() {
+    const userInfo = Taro.getStorageSync('userInfo');
     return (
       <View className="profile">
         <View className="line" />
         <View className="header">
           <View className="user">
             <View className="userName">
-              <OpenData type="userNickName" />
+              {userInfo.name}
             </View>
             <View className="userAvatar">
               <AtAvatar circle openData={{ type: "userAvatarUrl" }} />

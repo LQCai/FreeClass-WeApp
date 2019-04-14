@@ -24,15 +24,15 @@ export default class ClassCard extends Taro.Component {
   menu = (role) => {
     const { open, isTeacher, isStudent } = this.props;
     open();
-    switch(role) {
+    switch (role) {
       case 1:
-      isTeacher(role);
-      break;
+        isTeacher(role);
+        break;
       case 2:
-      isStudent(role);
-      break;
+        isStudent(role);
+        break;
       default:
-      break;
+        break;
     }
   }
 

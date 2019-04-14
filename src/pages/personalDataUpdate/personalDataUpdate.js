@@ -1,136 +1,108 @@
 import Taro, { render } from "@tarojs/taro";
-import { View, Text, OpenData } from "@tarojs/components";
-import { AtInput, AtForm, AtButton, AtList, AtListItem,AtCalendar } from "taro-ui";
+import { View } from "@tarojs/components";
+import { AtInput, AtForm, AtButton } from "taro-ui";
 import "./personalDataUpdate.scss";
-import checked from "../../asset/tick/tickBlue.png";
-import unchecked from "../../asset/tick/tickWhite .png";
+import { connect } from '@tarojs/redux';
+import { bindActionCreators } from 'redux';
+import { submitUpdate, getUserInfo } from '../../actions/user';
+import config from '../../config';
+import wreq from '../../utils/request';
 
+
+@connect(({ user }) => ({
+  updateResult: user.updateResult,
+  userInfo: user.userInfo
+}), (dispatch) => bindActionCreators({
+  submitUpdate,
+  getUserInfo
+}, dispatch))
 export default class PersonalDataUpdate extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      value: "",
-      title: "",
-      content:"",
-      isLoggedInStudent:"学生",
-      isLoggedInTeacher:"老师",
-      isTime:false,
+      item: "",
+      text: "",
+      content: ""
     };
   }
-  //获取个人资料页面传递过来的参数
+
   componentWillMount() {
-    const title = this.$router.params.parameter;
-    const content=this.$router.params.content;
-    if (title==="身份"){
-      if(content==="学生"){
-        this.setState({
-          title: title,
-          content:content,
-          isLoggedInStudent:checked,
-          isLoggedInTeacher:unchecked
+    this.setState({
+      text: this.$router.params.textName,
+      content: this.$router.params.content,
+      item: this.$router.params.itemName
+    });
+  }
+
+  /**
+   * 将输入框数据修改后的数据赋给content
+   * 
+   * @param {*} inputText 
+   */
+  handleChange(inputText) {
+    this.setState({
+      content: inputText
+    });
+  }
+
+  /**
+   * 修改用户信息
+   */
+  updateInfo() {
+    this.props.submitUpdate(Taro.getStorageSync('userInfo').openId, this.state.item, this.state.content).catch((e) => {
+      console.log(e);
+    }).then(() => {
+      const updateResult = this.props.updateResult;
+
+      if (updateResult.code != config.code.success) {
+        Taro.showToast({
+          title: '修改失败',
+          'icon': 'none'
         });
-      }else{
-        this.setState({
-          title: title,
-          content:content,
-          isLoggedInStudent:unchecked,
-          isLoggedInTeacher:checked
+      } else {
+        const openId = Taro.getStorageSync('userInfo').openId;
+        this.props.getUserInfo(openId).catch((e) => {
+          console.log(e);
+        }).then(() => {
+          Taro.setStorage({
+            key: 'userInfo',
+            data: this.props.userInfo.data
+          }).then(() => {
+            Taro.showToast({
+              title: '修改成功',
+              'icon': 'success'
+            }).then(() => {
+              Taro.reLaunch({
+                url: '/pages/personalData/personalData'
+              });
+            });
+          });
         });
       }
-    }else{
-      this.setState({
-        title: title,
-        content:content,
-        value:content
-      });
-    }
-    
-    console.log(title);
-  }
-  handleChange(value) {
-    console.log("value",value.value)
-    this.setState({
-      value:value.value
     });
   }
-  onSubmit(event) {
-    console.log(event);
-  }
-  handleClick(e){
-    console.log("e",e)
-    if(e==="学生"){
-      this.setState({
-        isLoggedInStudent:checked,
-        isLoggedInTeacher:unchecked
-      });
-    }else if(e==="老师"){
-      this.setState({
-        isLoggedInStudent:unchecked,
-        isLoggedInTeacher:checked
-      });
-  }else{
-    this.setState({
-      isTime:true
-    });
-  }
-}
+
+
   render() {
-    let content = null;//用于存放渲染不同的组件
-    if (this.state.title === "身份") {
-      
-      content = (
-        <AtList>
-          <AtListItem
-            title="学生"
-            thumb={this.state.isLoggedInStudent}
-            onClick={this.handleClick.bind(this, "学生")}
-          />
-          <AtListItem
-            title="老师"
-            thumb={this.state.isLoggedInTeacher}
-            onClick={this.handleClick.bind(this, "老师")}
-          />
-        </AtList>
-      );
-    } else if (this.state.title === "入学时间") {
-      content = (
-        <AtList>
-          <AtListItem
-            title="入学时间"
-            extraText={this.state.value}
-            onClick={this.handleClick.bind(this, "入学时间")}
-          />
-        </AtList>
-      );
-    } else {
-      content = (
-        <AtForm
-          onSubmit={this.onSubmit.bind(this)}
-          onReset={this.onReset.bind(this)}
-        >
-          <AtInput
-            name="value"
-            title={this.state.title}
-            type="text"
-            placeholder=""
-            value={this.state.value}
-            onChange={this.handleChange.bind(this)}
-          />
-        </AtForm>
-      );
-    }
     return (
       <View class="background">
         <View class="backgroundContent">
-          <AtButton formType="submit" type="primary" size="small">
-            提交
-          </AtButton>
         </View>
-        {content}
-        {this.state.isTime
-        ? <AtCalendar onDayClick={this.handleChange.bind(this)}/>
-        : <Text></Text>
-      }
+        <AtForm
+        >
+          <AtInput
+            name="value"
+            title={this.state.text}
+            type="text"
+            placeholder=""
+            value={this.state.content}
+            onChange={this.handleChange.bind(this)}
+          >
+            <AtButton type="primary" size="small" onClick={this.updateInfo.bind(this)}>
+              保存
+          </AtButton>
+          </AtInput>
+        </AtForm>
       </View>
     );
   }

@@ -1,4 +1,4 @@
-import Taro, { Component, getUserInfo } from '@tarojs/taro';
+import Taro, { Component } from '@tarojs/taro';
 import { View, Swiper, SwiperItem, Button, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
@@ -10,13 +10,19 @@ import { close, open } from '../../actions/classMenu';
 import '../../actions/judgeRole';
 import wreq from '../../utils/request';
 import config from '../../config';
+import { getOpenData, getUserInfo, userLogin } from '../../actions/user';
 
-@connect(({ classMenu, judgeRole }) => ({
+@connect(({ classMenu, judgeRole, user }) => ({
   classMenu: classMenu.isOpen,
   judgeRole: judgeRole.actions,
+  openData: user.openData,
+  userInfo: user.userInfo
 }), (dispatch) => bindActionCreators({
   close,
   open,
+  getUserInfo,
+  getOpenData,
+  userLogin,
 }, dispatch))
 
 class Index extends Component {
@@ -26,7 +32,6 @@ class Index extends Component {
     enablePullDownRefresh: true,
     backgroundTextStyle: 'dark',
   }
-
 
   constructor() {
     super(...arguments)
@@ -56,41 +61,37 @@ class Index extends Component {
    */
   login() {
 
+    const { getOpenData, getUserInfo } = this.props;
+
     //判断是否已授权
     Taro.getSetting().then(res => {
-      if(!res.authSetting['scope.userInfo']) {
+      if (!res.authSetting['scope.userInfo']) {
         Taro.reLaunch({
           url: '/pages/auth/auth'
         });
+      } else {
+        getOpenData().catch((e) => {
+          console.log(e);
+        }).then(() => {
+          let { openData } = this.props;
+
+          if (openData.code != config.code.success) {
+            Taro.reLaunch({
+              url: '/pages/auth/auth'
+            });
+          } else {
+            getUserInfo(openData.openId).catch((e) => {
+              console.log(e);
+            }).then(() => {
+              Taro.showToast({
+                'title': '登录成功',
+                'icon': 'success'
+              });
+              Taro.setStorageSync('userInfo', this.props.userInfo.data);
+            });
+          }
+        });
       }
-    })
-
-    //获取code,向后台请求获取openId
-    Taro.login().then(res => {
-      const code = res.code;
-
-      wreq.request({
-        url: `${config.server.host}/user/account/info`,
-        method: 'GET',
-        data: {
-          code: code,
-        },
-      }).then((res) => {
-        const resData = res.data;
-        console.log(resData);
-        //后台没返回userInfo(数据库中无此用户),跳转至授权页面
-        if (resData.code != `${config.code.success}`) {
-          Taro.reLaunch({
-            url: '/pages/auth/auth'
-          });
-        }else {
-          const userInfo = resData.data;
-          
-          Taro.setStorageSync('userInfo', userInfo);
-        }
-      }).catch((e) => {
-        console.log(e);
-      });
     });
   }
 

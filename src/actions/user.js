@@ -2,6 +2,7 @@ import {
     OPEN_DATA,
     USER_INFO,
     USER_REGISTER,
+    USER_UPDATE,
 } from '../canstants/user';
 import config from '../config';
 import wreq from '../utils/request';
@@ -92,3 +93,37 @@ export const submitRegister = (openId, nickName) => dispatch => new Promise(
             return reject(e);
         })
     });
+
+    /**
+     * 提交信息修改
+     * 
+     * @param {*} openId 
+     * @param {*} item 
+     * @param {*} content 
+     */
+    export const submitUpdate = (openId, item, content) => dispatch => new Promise(
+        (resolve, reject) => {
+            const user = {
+                openId: openId,
+                item: content
+            };
+
+            wreq.request({
+                url: `${config.server.host}/user/account/update`,
+                method: 'POST',
+                data: {
+                    user
+                }
+            }).then((res) => {
+                console.log(res);
+                dispatch({
+                    type: USER_UPDATE,
+                    payload: res
+                });
+                return resolve(res);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
+        }
+    );

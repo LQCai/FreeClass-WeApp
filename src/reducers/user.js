@@ -1,13 +1,15 @@
 import {
     OPEN_DATA,
     USER_INFO,
-    USER_REGISTER
+    USER_REGISTER,
+    USER_UPDATE
 } from '../canstants/user';
 
 const INITIAL_STATE = {
     openData: {},
     userInfo: {},
     register: {},
+    updateResult: "",
 };
 
 export default function user(state = INITIAL_STATE, action) {
@@ -29,6 +31,11 @@ export default function user(state = INITIAL_STATE, action) {
                 ...state,
                 register: payload
             };
+        case USER_UPDATE:
+            return {
+                ...state,
+                updateResult: payload
+            }
         default:
             return state;
     }

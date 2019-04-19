@@ -7,12 +7,7 @@ import configStore from "./store/index";
 
 import "taro-ui/dist/style/index.scss";
 import "./app.scss";
-
-// 如果需要在 h5 环境中开启 React Devtools
-// 取消以下注释：
-// if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
-//   require('nerv-devtools')
-// }
+import wreq from './utils/request';
 
 const store = configStore();
 
@@ -79,3 +74,60 @@ class App extends Component {
 }
 
 Taro.render(<App />, document.getElementById("app"));
+
+
+wreq.setInterceptor(
+  (config) => {
+    const newConfig = config;
+    console.log('config', newConfig);
+    return newConfig;
+  },
+  (res) => {
+    // 请求成功时进行拦截
+    // 当状态码为0000时更新缓存以及store中的token
+    console.log('res', res);
+    if (res.data.status === '0000') {
+      const newToken = res.data.token;
+      const userInfo = _.get(store.getState(), 'user.userInfo', {});
+      if (!newToken) return res;
+      store.dispatch({
+        type: USER_GET_ALL,
+        payload: {
+          ...userInfo, token: newToken,
+        },
+      });
+      Taro.setStorage({
+        key: 'token',
+        data: newToken,
+      }).catch((e) => {
+        console.error(e);
+      });
+    }
+    return res;
+  },
+  (res) => {
+    // 当请求失败时进行拦截
+    // const { dispatch } = store;
+    const { message } = res.data.msg;
+    if (message) {
+      Taro.showToast({
+        icon: 'none',
+        title: message,
+      });
+    }
+    // if (_.get(res, 'data.status') === '1002') {
+    //   Taro.removeStorage({ key: 'token' })
+    //     .then(() => {
+    //       dispatch({
+    //         type: USER_LOG_OUT,
+    //       });
+    //       Taro.showToast({
+    //         icon: 'none',
+    //         title: '登录信息失效，请重新登录',
+    //       });
+    //     })
+    //     .catch(e => console.error(e));
+    // }
+    return res;
+  },
+);

@@ -38,7 +38,7 @@ export default class ClassCard extends Taro.Component {
 
 
   render() {
-    let { role, teacherName, name, peopleCount, code } = this.props;
+    let { role, teacherName, name, peopleCount, code, classId, classType } = this.props;
 
     let roleName = '学生';
     switch (role) {

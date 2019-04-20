@@ -77,15 +77,15 @@ export const submitRegister = (openId, nickName) => dispatch => new Promise(
                 user: user
             }
         }).then((res) => {
-            if (res.code != config.code.success) {
+            if (res.data.code != config.code.success) {
                 dispatch({
                     type: USER_REGISTER,
-                    payload: 'fail'
+                    payload: false
                 });
             } else {
                 dispatch({
                     type: USER_REGISTER,
-                    payload: 'success'
+                    payload: true
                 });
             }
             return resolve(res);

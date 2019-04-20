@@ -9,7 +9,8 @@ import { bindActionCreators } from 'redux';
 import { submitRegister, getOpenData } from '../../actions/user';
 
 @connect(({ user }) => ({
-    openData: user.openData
+    openData: user.openData,
+    isRegister: user.register
 }), (dispatch) => bindActionCreators({
     getOpenData,
     submitRegister
@@ -33,7 +34,25 @@ export default class Auth extends Taro.Component {
                 console.log(openData);
 
                 if (openData.code != config.code.success) {
-                    this.props.submitRegister(openData.msg, wxUserInfo.nickName);
+                    this.props.submitRegister(openData.msg, wxUserInfo.nickName).catch((e) => {
+                        console.log(e);
+                    }).then(() => {
+                        console.log(this.props.isRegister);
+                        if (this.props.isRegister) {
+                            Taro.showToast({
+                                title: '注册成功',
+                                icon: 'success'
+                            });
+                            Taro.reLaunch({
+                                url: '/pages/index/index'
+                            });
+                        }else {
+                            Taro.showToast({
+                                title: '注册失败,请重试',
+                                icon: 'none'
+                            });
+                        }
+                    });
                 } else {
                     Taro.reLaunch({
                         url: '/pages/index/index'

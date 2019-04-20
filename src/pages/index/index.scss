@@ -1,14 +1,18 @@
 .index {
     background-color: #ffffff;
+
     .swiper {
         height: 380px;
-            .swiper-image {
-                width: 100%;
-                height: 100%;
-            }
+
+        .swiper-image {
+            width: 100%;
+            height: 100%;
+        }
     }
+
     .class-list-pane {
         position: relative;
+
         .class-control {
             position: absolute;
             left: 88%;
@@ -22,48 +26,77 @@
             justify-content: center;
             align-items: center;
         }
+
         .at-tab {
             .class-list {
                 margin-top: 20px;
+
+                .class-card {
+                    position: relative;
+                    margin-top: 20px;
+
+                    .code {
+                        position: absolute;
+                        left: 80%;
+                        top: 180px;
+                        font-size: 26px;
+                    }
+
+                    .menu {
+                        position: absolute;
+                        left: 88%;
+                        top: 20px;
+                    }
+                }
             }
+        }
+    }
+
+    .modal {
+        .modal-line {
+            background-color: darkgray;
+            height: 1px;
+        }
+        .modal-item {
+            text-align: center;
+            font-size: 35px;
+            font-weight: 500;
+            text-decoration-color: #6190E8;
         }
     }
 }
 
 // atTabs组件重写
 .at-tabs__item {
-    position:relative;
-    padding:24rpx 24rpx;
-    color:#333;
-    font-size:28rpx;
-    -o-text-overflow:ellipsis;
-    text-overflow:ellipsis;
-    overflow:hidden;
-    -webkit-box-flex:none;
-    -webkit-flex:none;
-    -ms-flex:none;
-    flex:none;
+    position: relative;
+    padding: 24rpx 24rpx;
+    color: #333;
+    font-size: 28rpx;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-box-flex: none;
+    -webkit-flex: none;
+    -ms-flex: none;
+    flex: none;
     width: 200px;
 
 }
+
 .at-tabs__item--active {
-    color:#6190E8;
+    color: #6190E8;
 }
+
 .at-tabs-pane {
-    display:inline-block;
-    width:100%;
-    -webkit-box-sizing:border-box;
-    box-sizing:border-box;
+    display: inline-block;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
+
 .at-modal__content {
     display: flex;
     display: -webkit-flex;
     justify-content: center;
     align-items: center;
-    }
-    
-
-    
-    
-    
-
+}

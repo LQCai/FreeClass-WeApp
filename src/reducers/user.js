@@ -8,7 +8,7 @@ import {
 const INITIAL_STATE = {
     openData: {},
     userInfo: {},
-    register: {},
+    register: false,
     updateResult: "",
 };
 

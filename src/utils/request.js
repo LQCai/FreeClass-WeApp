@@ -4,6 +4,7 @@ class WrappedRequest {
   constructor() {
     this.beforeRequest = config => config;
     this.afterRequest = res => res;
+    this.afterFail = err => err;
   }
 
   request(config) {
@@ -17,9 +18,10 @@ class WrappedRequest {
           reject(res);
         },
         success: (res) => {
-          const status = res.data.status ? parseInt(res.data.status, 10) : 0;
-          if (res.status > 299 || res.status < 200 || status >= 1000) {
-            return reject(res);
+          const code = res.data.code ? parseInt(res.data.code, 10) : 0;
+          console.log('code'+code);
+          if (res.status > 299 || res.status < 200 || code >= 1000) {
+            return reject(this.afterFail(res));
           }
           return resolve(this.afterRequest(res));
         },
@@ -33,9 +35,10 @@ class WrappedRequest {
     });
   }
 
-  setInterceptor(before, after) {
+  setInterceptor(before, after, afterFail) {
     this.beforeRequest = before;
     this.afterRequest = after;
+    this.afterFail = afterFail;
   }
 }
 

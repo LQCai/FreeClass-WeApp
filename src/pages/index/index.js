@@ -2,27 +2,32 @@ import Taro, { Component } from '@tarojs/taro';
 import { View, Swiper, SwiperItem, Button, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
-import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon } from 'taro-ui';
+import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon, AtCard, AtModal, AtModalHeader } from 'taro-ui';
 
 import './index.scss';
-import ClassCard from '../../components/classCard/ClassCard';
-import { close, open } from '../../actions/classMenu';
+import { close, open, showClassItem, closeClassItem } from '../../actions/classMenu';
 import '../../actions/judgeRole';
 import wreq from '../../utils/request';
 import config from '../../config';
 import { getOpenData, getUserInfo, userLogin } from '../../actions/user';
+import { getClassList, deleteClass } from '../../actions/classInfo';
 
-@connect(({ classMenu, judgeRole, user }) => ({
+@connect(({ classMenu, user, classInfo }) => ({
   classMenu: classMenu.isOpen,
-  judgeRole: judgeRole.actions,
+  classItemInfo: classMenu.classItemInfo,
   openData: user.openData,
-  userInfo: user.userInfo
+  userInfo: user.userInfo,
+  classList: classInfo.classList,
 }), (dispatch) => bindActionCreators({
   close,
   open,
+  showClassItem,
+  closeClassItem,
   getUserInfo,
   getOpenData,
   userLogin,
+  getClassList,
+  deleteClass
 }, dispatch))
 
 class Index extends Component {
@@ -35,21 +40,58 @@ class Index extends Component {
 
   constructor() {
     super(...arguments)
-    this.state = {
+    this.setState({
+      userInfo: Taro.getStorageSync("userInfo"),
       current: 0,
-    }
+      classItem: {
+        isOpen: false,
+        classId: '',
+        type: ''
+      },
+      addModalState: false,
+      deleteModalState: false,
+      deleteClassId: '',
+      deleteClassName: ''
+    });
   }
 
-  componentWillMount() {
+  componentDidShow() {
     this.checkUserInfo();
+    this.props.getClassList(this.state.userInfo.id);
   }
 
 
   checkUserInfo() {
-    const userInfo = Taro.getStorageSync('userInfo');
-    if (!userInfo) {
+    const userInfo = this.state.userInfo;
+    if (Object.keys(userInfo).length == 0) {
       this.login();
     }
+  }
+
+  showModal() {
+    this.setState({
+      addModalState: true
+    });
+    console.log(this.state);
+  }
+  closeModal() {
+    this.setState({
+      addModalState: false
+    });
+    console.log(this.state);
+  }
+
+  showDeleteModal(classId, className) {
+    this.setState({
+      deleteModalState: true,
+      deleteClassId: classId,
+      deleteClassName: className
+    });
+  }
+  closeDeleteModal() {
+    this.setState({
+      deleteModalState: false
+    });
   }
 
 
@@ -83,11 +125,15 @@ class Index extends Component {
             getUserInfo(openData.openId).catch((e) => {
               console.log(e);
             }).then(() => {
-              Taro.showToast({
-                'title': '登录成功',
-                'icon': 'success'
+              Taro.setStorage({
+                key: 'userInfo',
+                data: this.props.userInfo.data
+              }).then(() => {
+                // Taro.showToast({
+                //   'title': '登录成功',
+                //   'icon': 'success'
+                // });
               });
-              Taro.setStorageSync('userInfo', this.props.userInfo.data);
             });
           }
         });
@@ -101,34 +147,88 @@ class Index extends Component {
     })
   }
 
+  showClassDetail(ClassId, role) {
+    Taro.navigateTo({
+      url: "/pages/classroom/classroom?"
+        + "classId=" + ClassId + "$role" + role
+    });
+  }
+
+  navigateToJoin() {
+    this.closeModal();
+    Taro.navigateTo({
+      url: "/pages/joinClass/joinClass"
+    });
+  }
+
+  navigateToCreate() {
+    this.closeModal();
+    Taro.navigateTo({
+      url: "/pages/createClass/createClass"
+    });
+  }
+
+  classItemEvent(index, role) {
+    const classInfo = this.props.classItemInfo.classInfo;
+    if (role == config.role.teacher) {
+      // 编辑课堂
+      if (index == 0) {
+        this.props.closeClassItem();
+        Taro.navigateTo({
+          url: '/pages/classEdit/classEdit?'
+            + 'classId=' + classInfo.id
+            + '&className=' + classInfo.name
+            + '&topping=' + classInfo.topping
+        });
+        // 删除课堂
+      } else if (index == 1) {
+        this.showDeleteModal(classInfo.id, classInfo.name);
+        console.log(classInfo);
+        this.props.closeClassItem();
+      }
+    } else if (role == config.role.student) {
+      // 退出课堂
+      if (index == 0) {
+
+      }
+    } else {
+      Taro.showToast({
+        title: '异常',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  }
+
+  submitDelete() {
+    this.props.deleteClass(this.state.userInfo.id, this.state.deleteClassId, this.state.deleteClassName).then(() => {
+      Taro.showToast({
+        title: '删除成功',
+        icon: 'success',
+        duration: 2000
+      }).then(() => {
+        Taro.reLaunch({
+          url: '/pages/index/index'
+        });
+      });
+    }).catch((e) => {
+      console.log(e);
+    })
+  }
+
   render() {
     //课堂actionSheet的状态
-    let { classMenu, open, close, judgeRole } = this.props;
+    let { classItemInfo, showClassItem, closeClassItem, classList, deleteClass } = this.props;
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
     ];
 
-    const classList = [
-      {
-        name: 'Taro小课堂',
-        peopleCount: '10',
-        role: 2,
-        teacherName: '教师: lqcai',
-        code: 'ZZNJX9'
-      },
-      {
-        name: 'fitness',
-        peopleCount: '20',
-        role: 1,
-        code: 'SXW4W2'
-      },
-    ];
+    const myTeachingClassList = classList.myTeachingClassList;
+    const myStudyingClassList = classList.myStudyingClassList;
 
-
-
-    const tabList = [{ title: '我听的课' }, { title: '我教的课' }];
+    const tabList = [{ title: '我教的课' }, { title: '我听的课' }];
 
     return (
       <View className='index'>
@@ -140,50 +240,103 @@ class Index extends Component {
           ))}
         </Swiper>
         <View className='class-list-pane'>
-          <View className='class-control'>
+          <View className='class-control' onClick={this.showModal}>
             <AtIcon value='add' size='20' color='#6190E8' />
           </View>
           <AtTabs className='at-tab' current={this.state.current} tabList={tabList} onClick={this.tabClick.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} className='at-tabs__item' >
+
+              {/* 我教的课 */}
               <View className='class-list'>
-                {classList.map((course, index) => (
-                  <ClassCard key={index}
-                    peopleCount={course.peopleCount}
-                    name={course.name}
-                    role={course.role}
-                    teacherName={course.teacherName}
-                    code={course.code}
-                  />
-                ))}
+                {
+                  (myTeachingClassList || []).map((classInfo) => (
+                    <View className='class-card' key={classInfo.id}>
+                      <AtCard onClick={this.showClassDetail.bind(this, classInfo.id, config.role.teacher)}
+                        note={classInfo.peopleCount + '人'}
+                        title={classInfo.name}
+                      >
+                        {'角色:' + '   教师'}
+                      </AtCard>
+                      <Text className='code'>
+                        {classInfo.invitationCode}
+                      </Text>
+                      <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo, config.role.teacher)}>
+                        <AtIcon value='menu' />
+                      </View>
+                    </View>
+                  ))
+                }
               </View>
             </AtTabsPane>
+
+            {/* 我听的课 */}
             <AtTabsPane current={this.state.current} index={1} className='at-tabs__item' >
               <View className='class-list'>
-                {classList.map((course, index) => (
-                  <ClassCard key={index}
-                    peopleCount={course.peopleCount}
-                    name={course.name}
-                    role={course.role}
-                    teacherName={course.teacherName}
-                    code={course.code}
-                  />
+                {(myStudyingClassList || []).map((classInfo) => (
+                  <View className='class-card' key={classInfo.id}>
+                    <AtCard onClick={this.showClassDetail.bind(this, classInfo.id, config.role.student)}
+                      note={classInfo.peopleCount + '人'}
+                      title={classInfo.name}
+                    >
+                      {'角色:' + '   学生' + '   姓名:' + classInfo.teacherName}
+                    </AtCard>
+                    <Text className='code'>
+                      {classInfo.invitationCode}
+                    </Text>
+                    <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo.id, config.role.student)}>
+                      <AtIcon value='menu' />
+                    </View>
+                  </View>
                 ))}
               </View>
             </AtTabsPane>
           </AtTabs>
         </View>
+
+        {/* 课堂弹出的菜单 */}
         <AtActionSheet
-          isOpened={classMenu}
+          isOpened={classItemInfo.isOpen}
           cancelText='取消'
-          onCancel={close}
-          onClose={close}
-          onClick={open}>
-          {judgeRole.map((menu, index) => (
-            <AtActionSheetItem key={index}>
-              {menu.title}
-            </AtActionSheetItem>
+          onCancel={closeClassItem}
+          onClose={closeClassItem}>
+
+          {classItemInfo.item.map((aasItem, index) => (
+            <View key={index} onClick={this.classItemEvent.bind(this, index, classItemInfo.role)}>
+              <AtActionSheetItem>
+                {aasItem.name}
+              </AtActionSheetItem>
+            </View>
           ))}
         </AtActionSheet>
+
+        {/* 创建/加入课堂模态框 */}
+        <AtModal className='modal'
+          isOpened={this.state.addModalState}
+          onClose={this.closeModal}
+          onCancel={this.closeModal}
+        >
+          <View onClick={this.navigateToCreate.bind(this)}>
+            <AtModalHeader className='modal-item'>创建课堂</AtModalHeader>
+          </View>
+          <View className='modal-line'></View>
+          <View onClick={this.navigateToJoin.bind(this)}>
+            <AtModalHeader className='modal-item' >加入课堂</AtModalHeader>
+          </View>
+        </AtModal>
+
+        {/* 删除课堂模态框 */}
+        <View>
+          <AtModal
+            className='modal'
+            content={`确认删除` + this.state.deleteClassName + `?`}
+            cancelText='取消'
+            confirmText='确认'
+            isOpened={this.state.deleteModalState}
+            onClose={this.closeDeleteModal}
+            onCancel={this.closeDeleteModal}
+            onConfirm={this.submitDelete}
+          />
+        </View>
       </View>
     )
   }

@@ -72,8 +72,8 @@ export default class PersonalDataUpdate extends Taro.Component {
               title: '修改成功',
               'icon': 'success'
             }).then(() => {
-              Taro.reLaunch({
-                url: '/pages/personalData/personalData'
+              Taro.navigateBack({
+                delta: 1
               });
             });
           });

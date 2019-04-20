@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro';
 import { View, Swiper, SwiperItem, Button, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
-import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon, AtCard } from 'taro-ui';
+import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon, AtCard, AtModal, AtModalContent } from 'taro-ui';
 
 import './index.scss';
 import { close, open, showClassItem, closeClassItem } from '../../actions/classMenu';
@@ -46,7 +46,8 @@ class Index extends Component {
         isOpen: false,
         classId: '',
         type: ''
-      }
+      },
+      modalState: false,
     });
   }
 
@@ -61,7 +62,20 @@ class Index extends Component {
     if (Object.keys(userInfo).length == 0) {
       this.login();
     }
-  };
+  }
+
+  showModal() {
+    this.setState({
+      modalState: true
+    });
+    console.log(this.state);
+  }
+  closeModal() {
+    this.setState({
+      modalState: false
+    });
+    console.log(this.state);
+  }
 
 
   /**
@@ -119,6 +133,20 @@ class Index extends Component {
     });
   }
 
+  navigateToJoin() {
+    this.closeModal();
+    Taro.navigateTo({
+      url: "/pages/joinClass/joinClass"
+    });
+  }
+
+  navigateToCreate() {
+    this.closeModal();
+    Taro.navigateTo({
+      url: "/pages/createClass/createClass"
+    });
+  }
+
   render() {
     //课堂actionSheet的状态
     let { classItemInfo, showClassItem, closeClassItem } = this.props;
@@ -144,13 +172,13 @@ class Index extends Component {
           ))}
         </Swiper>
         <View className='class-list-pane'>
-          <View className='class-control'>
+          <View className='class-control' onClick={this.showModal}>
             <AtIcon value='add' size='20' color='#6190E8' />
           </View>
           <AtTabs className='at-tab' current={this.state.current} tabList={tabList} onClick={this.tabClick.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} className='at-tabs__item' >
 
-
+              {/* 我教的课 */}
               <View className='class-list'>
                 {
                   (myTeachingClassList || []).map((classInfo) => (
@@ -201,13 +229,26 @@ class Index extends Component {
           cancelText='取消'
           onCancel={closeClassItem}
           onClose={closeClassItem}>
-          
+
           {classItemInfo.item.map((aasItem, index) => (
             <AtActionSheetItem key={index}>
               {aasItem.name}
             </AtActionSheetItem>
           ))}
         </AtActionSheet>
+        <AtModal className='modal'
+          isOpened={this.state.modalState}
+          onClose={this.closeModal}
+          onCancel={this.closeModal}
+        >
+          <View onClick={this.navigateToCreate.bind(this)}>
+            <AtModalContent className='modal-item'>创建课堂</AtModalContent>
+          </View>
+          <View className='modal-line'></View>
+          <View onClick={this.navigateToJoin.bind(this)}>
+            <AtModalContent className='modal-item' >加入课堂</AtModalContent>
+          </View>
+        </AtModal>
       </View>
     )
   }

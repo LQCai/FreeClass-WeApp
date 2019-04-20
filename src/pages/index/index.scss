@@ -51,6 +51,19 @@
             }
         }
     }
+
+    .modal {
+        .modal-line {
+            background-color: #333;
+            height: 1px;
+        }
+        .modal-item {
+            text-align: center;
+            font-size: 35px;
+            font-weight: bold;
+            text-decoration-color: #6190E8;
+        }
+    }
 }
 
 // atTabs组件重写

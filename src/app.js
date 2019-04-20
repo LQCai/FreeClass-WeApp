@@ -25,6 +25,8 @@ class App extends Component {
       "pages/comment/comment",
       "pages/studentWork/studentWork",
       "pages/classroom/classroom",
+      "pages/joinClass/joinClass",
+      "pages/createClass/createClass",
     ],
     tabBar: {
       color: "#595959",

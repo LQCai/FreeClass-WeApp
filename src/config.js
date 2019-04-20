@@ -6,7 +6,8 @@ const config = {
     },
     code: {
         success: '0000',
-        fail: '500'
+        fail: '500',
+        classMax: '1201',
     },
     role: {
         teacher: '0',

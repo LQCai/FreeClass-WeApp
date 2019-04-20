@@ -11,11 +11,16 @@ const INITAL_STATE = {
     classList: [],
 }
 
-export default function classInfo (state = INITAL_STATE, action) {
+export default function classInfo(state = INITAL_STATE, action) {
     const type = action.type;
     const payload = action.payload;
     switch (type) {
         case CLASS_LIST:
+            return {
+                ...state,
+                classList: payload,
+            };
+        case CLASS_CREATE:
             return {
                 ...state,
                 classList: payload,

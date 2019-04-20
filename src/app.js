@@ -88,33 +88,34 @@ wreq.setInterceptor(
     // 请求成功时进行拦截
     // 当状态码为0000时更新缓存以及store中的token
     console.log('res', res);
-    if (res.data.status === '0000') {
-      const newToken = res.data.token;
-      const userInfo = _.get(store.getState(), 'user.userInfo', {});
-      if (!newToken) return res;
-      store.dispatch({
-        type: USER_GET_ALL,
-        payload: {
-          ...userInfo, token: newToken,
-        },
-      });
-      Taro.setStorage({
-        key: 'token',
-        data: newToken,
-      }).catch((e) => {
-        console.error(e);
-      });
-    }
+    // if (res.data.status === '0000') {
+    //   const newToken = res.data.token;
+    //   const userInfo = _.get(store.getState(), 'user.userInfo', {});
+    //   if (!newToken) return res;
+    //   store.dispatch({
+    //     type: USER_GET_ALL,
+    //     payload: {
+    //       ...userInfo, token: newToken,
+    //     },
+    //   });
+    //   Taro.setStorage({
+    //     key: 'token',
+    //     data: newToken,
+    //   }).catch((e) => {
+    //     console.error(e);
+    //   });
+    // }
     return res;
   },
   (res) => {
     // 当请求失败时进行拦截
     // const { dispatch } = store;
-    const { message } = res.data.msg;
-    if (message) {
+    const { msg } = res.data;
+    console.log(msg);
+    if (msg) {
       Taro.showToast({
         icon: 'none',
-        title: message,
+        title: msg,
       });
     }
     // if (_.get(res, 'data.status') === '1002') {

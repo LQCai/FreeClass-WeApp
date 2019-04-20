@@ -27,4 +27,31 @@ export const getClassList = (userId) => dispatch => new Promise(
             console.log(e);
             return reject(e);
         });
-    });
+    }
+);
+
+export const createClass = (userId, className, topping) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/class/create`,
+            method: 'POST',
+            data: {
+                class: {
+                    teacherId: userId,
+                    className: className,
+                    peopleMaximum: 100,
+                    topping: topping
+                }
+            }
+        }).then((res) => {
+                dispatch({
+                    type: CLASS_CREATE,
+                    payload: res.data
+                });
+                return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);

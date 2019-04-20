@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro';
 import { View, Swiper, SwiperItem, Button, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
-import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon, AtCard, AtModal, AtModalContent } from 'taro-ui';
+import { AtTabs, AtTabsPane, AtActionSheet, AtActionSheetItem, AtIcon, AtCard, AtModal, AtModalHeader } from 'taro-ui';
 
 import './index.scss';
 import { close, open, showClassItem, closeClassItem } from '../../actions/classMenu';
@@ -161,7 +161,6 @@ class Index extends Component {
 
     const tabList = [{ title: '我教的课' }, { title: '我听的课' }];
 
-
     return (
       <View className='index'>
         <Swiper indicatorDots autoplay circular className='swiper'>
@@ -242,11 +241,11 @@ class Index extends Component {
           onCancel={this.closeModal}
         >
           <View onClick={this.navigateToCreate.bind(this)}>
-            <AtModalContent className='modal-item'>创建课堂</AtModalContent>
+            <AtModalHeader className='modal-item'>创建课堂</AtModalHeader>
           </View>
           <View className='modal-line'></View>
           <View onClick={this.navigateToJoin.bind(this)}>
-            <AtModalContent className='modal-item' >加入课堂</AtModalContent>
+            <AtModalHeader className='modal-item' >加入课堂</AtModalHeader>
           </View>
         </AtModal>
       </View>

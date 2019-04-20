@@ -17,7 +17,7 @@ export const close = () => {
     }
 }
 
-export const showClassItem = (classId, role) => {
+export const showClassItem = (classInfo, role) => {
     let item = [];
     if (role == config.role.teacher) {
         item = [
@@ -26,7 +26,7 @@ export const showClassItem = (classId, role) => {
                 action: ''
             },
             {
-                name: '退出班级',
+                name: '删除班级',
                 action: ''
             }
         ];
@@ -43,7 +43,7 @@ export const showClassItem = (classId, role) => {
         type: CLASS_ITEM_INFO,
         payload: {
             isOpen: true,
-            classId: classId,
+            classInfo: classInfo,
             role: role,
             item: item
         }
@@ -55,7 +55,7 @@ export const closeClassItem = () => {
         type: CLASS_ITEM_INFO,
         payload: {
             isOpen: false,
-            classId: '',
+            classInfo: {},
             role: '',
             item: []
         }

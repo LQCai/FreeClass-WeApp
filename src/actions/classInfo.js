@@ -55,3 +55,31 @@ export const createClass = (userId, className, topping) => dispatch => new Promi
         });
     }
 );
+
+
+export const editClass = (classId, userId, className, topping) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/class/update`,
+            method: 'PUT',
+            data: {
+                class: {
+                    id: classId,
+                    teacherId: userId,
+                    className: className,
+                    peopleMaximum: 100,
+                    topping: topping
+                }
+            }
+        }).then((res) => {
+                dispatch({
+                    type: CLASS_UPDATE,
+                    payload: res.data
+                });
+                return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);

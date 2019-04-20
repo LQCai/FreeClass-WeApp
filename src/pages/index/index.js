@@ -147,6 +147,36 @@ class Index extends Component {
     });
   }
 
+  classItemEvent(index, role) {
+    if (role == config.role.teacher) {
+      // 编辑课堂
+      if (index == 0) {
+        const classInfo = this.props.classItemInfo.classInfo;
+        this.props.closeClassItem();
+        Taro.navigateTo({
+          url: '/pages/classEdit/classEdit?'
+            + 'classId=' + classInfo.id
+            + '&className=' + classInfo.name
+            + '&topping=' + classInfo.topping
+        });
+        // 删除课堂
+      } else if (index == 1) {
+
+      }
+    } else if (role == config.role.student) {
+      // 退出课堂
+      if (index == 0) {
+
+      }
+    } else {
+      Taro.showToast({
+        title: '异常',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  }
+
   render() {
     //课堂actionSheet的状态
     let { classItemInfo, showClassItem, closeClassItem } = this.props;
@@ -191,7 +221,7 @@ class Index extends Component {
                       <Text className='code'>
                         {classInfo.invitationCode}
                       </Text>
-                      <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo.id, config.role.teacher)}>
+                      <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo, config.role.teacher)}>
                         <AtIcon value='menu' />
                       </View>
                     </View>
@@ -223,6 +253,8 @@ class Index extends Component {
             </AtTabsPane>
           </AtTabs>
         </View>
+
+        {/* 课堂弹出的菜单 */}
         <AtActionSheet
           isOpened={classItemInfo.isOpen}
           cancelText='取消'
@@ -230,11 +262,15 @@ class Index extends Component {
           onClose={closeClassItem}>
 
           {classItemInfo.item.map((aasItem, index) => (
-            <AtActionSheetItem key={index}>
-              {aasItem.name}
-            </AtActionSheetItem>
+            <View key={index} onClick={this.classItemEvent.bind(this, index, classItemInfo.role)}>
+              <AtActionSheetItem>
+                {aasItem.name}
+              </AtActionSheetItem>
+            </View>
           ))}
         </AtActionSheet>
+
+        {/* 创建/加入课堂模态框 */}
         <AtModal className='modal'
           isOpened={this.state.modalState}
           onClose={this.closeModal}

@@ -21,9 +21,8 @@ export default class ClassEdit extends Taro.Component {
         this.setState({
             topping: {
                 checked: false,
-                value: 1
+                value: 2
             },
-            toppingValue: 2,
             className: '',
             classId: '',
             userId: Taro.getStorageSync('userInfo').id
@@ -34,13 +33,21 @@ export default class ClassEdit extends Taro.Component {
         this.setState({
             classId: this.$router.params.classId,
             className: this.$router.params.className,
-            toppingValue: this.$router.params.topping,
             topping: {
                 checked: false,
-                value: 1
+                value: 2
             },
         });
+        if (this.$router.params.topping === '1') {
+            this.setState({
+                topping: {
+                    checked: true,
+                    value: 1
+                }
+            })
+        }
         console.log(this.$router.params);
+        console.log(this.state);
     }
 
     changeTopping() {
@@ -49,7 +56,7 @@ export default class ClassEdit extends Taro.Component {
             this.setState({
                 topping: {
                     checked: true,
-                    value: 2
+                    value: 1
                 }
             });
         } else {
@@ -57,7 +64,7 @@ export default class ClassEdit extends Taro.Component {
             this.setState({
                 topping: {
                     checked: false,
-                    value: 1
+                    value: 2
                 }
             });
         }
@@ -86,6 +93,7 @@ export default class ClassEdit extends Taro.Component {
     }
 
     render() {
+        console.log(this.state);
         return (
             <View className='class-edit'>
                 <View>

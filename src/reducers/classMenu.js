@@ -10,7 +10,13 @@ const INITAL_STATE = {
         isOpen: false,
         classId: '',
         role: '',
-        item: []
+        item: [],
+        classInfo: {
+            id: '',
+            invitationCode: '',
+            name: '',
+            peopleCount: 0
+        }
     }
 }
 

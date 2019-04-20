@@ -10,7 +10,7 @@ import '../../actions/judgeRole';
 import wreq from '../../utils/request';
 import config from '../../config';
 import { getOpenData, getUserInfo, userLogin } from '../../actions/user';
-import { getClassList } from '../../actions/classInfo';
+import { getClassList, deleteClass } from '../../actions/classInfo';
 
 @connect(({ classMenu, user, classInfo }) => ({
   classMenu: classMenu.isOpen,
@@ -27,6 +27,7 @@ import { getClassList } from '../../actions/classInfo';
   getOpenData,
   userLogin,
   getClassList,
+  deleteClass
 }, dispatch))
 
 class Index extends Component {
@@ -47,7 +48,10 @@ class Index extends Component {
         classId: '',
         type: ''
       },
-      modalState: false,
+      addModalState: false,
+      deleteModalState: false,
+      deleteClassId: '',
+      deleteClassName: ''
     });
   }
 
@@ -66,15 +70,28 @@ class Index extends Component {
 
   showModal() {
     this.setState({
-      modalState: true
+      addModalState: true
     });
     console.log(this.state);
   }
   closeModal() {
     this.setState({
-      modalState: false
+      addModalState: false
     });
     console.log(this.state);
+  }
+
+  showDeleteModal(classId, className) {
+    this.setState({
+      deleteModalState: true,
+      deleteClassId: classId,
+      deleteClassName: className
+    });
+  }
+  closeDeleteModal() {
+    this.setState({
+      deleteModalState: false
+    });
   }
 
 
@@ -108,11 +125,15 @@ class Index extends Component {
             getUserInfo(openData.openId).catch((e) => {
               console.log(e);
             }).then(() => {
-              Taro.showToast({
-                'title': '登录成功',
-                'icon': 'success'
+              Taro.setStorage({
+                key: 'userInfo',
+                data: this.props.userInfo.data
+              }).then(() => {
+                // Taro.showToast({
+                //   'title': '登录成功',
+                //   'icon': 'success'
+                // });
               });
-              Taro.setStorageSync('userInfo', this.props.userInfo.data);
             });
           }
         });
@@ -148,10 +169,10 @@ class Index extends Component {
   }
 
   classItemEvent(index, role) {
+    const classInfo = this.props.classItemInfo.classInfo;
     if (role == config.role.teacher) {
       // 编辑课堂
       if (index == 0) {
-        const classInfo = this.props.classItemInfo.classInfo;
         this.props.closeClassItem();
         Taro.navigateTo({
           url: '/pages/classEdit/classEdit?'
@@ -161,7 +182,9 @@ class Index extends Component {
         });
         // 删除课堂
       } else if (index == 1) {
-
+        this.showDeleteModal(classInfo.id, classInfo.name);
+        console.log(classInfo);
+        this.props.closeClassItem();
       }
     } else if (role == config.role.student) {
       // 退出课堂
@@ -177,17 +200,33 @@ class Index extends Component {
     }
   }
 
+  submitDelete() {
+    this.props.deleteClass(this.state.userInfo.id, this.state.deleteClassId, this.state.deleteClassName).then(() => {
+      Taro.showToast({
+        title: '删除成功',
+        icon: 'success',
+        duration: 2000
+      }).then(() => {
+        Taro.reLaunch({
+          url: '/pages/index/index'
+        });
+      });
+    }).catch((e) => {
+      console.log(e);
+    })
+  }
+
   render() {
     //课堂actionSheet的状态
-    let { classItemInfo, showClassItem, closeClassItem } = this.props;
+    let { classItemInfo, showClassItem, closeClassItem, classList, deleteClass } = this.props;
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
     ];
 
-    const myTeachingClassList = this.props.classList.myTeachingClassList;
-    const myStudyingClassList = this.props.classList.myStudyingClassList;
+    const myTeachingClassList = classList.myTeachingClassList;
+    const myStudyingClassList = classList.myStudyingClassList;
 
     const tabList = [{ title: '我教的课' }, { title: '我听的课' }];
 
@@ -272,7 +311,7 @@ class Index extends Component {
 
         {/* 创建/加入课堂模态框 */}
         <AtModal className='modal'
-          isOpened={this.state.modalState}
+          isOpened={this.state.addModalState}
           onClose={this.closeModal}
           onCancel={this.closeModal}
         >
@@ -284,6 +323,20 @@ class Index extends Component {
             <AtModalHeader className='modal-item' >加入课堂</AtModalHeader>
           </View>
         </AtModal>
+
+        {/* 删除课堂模态框 */}
+        <View>
+          <AtModal
+            className='modal'
+            content={`确认删除` + this.state.deleteClassName + `?`}
+            cancelText='取消'
+            confirmText='确认'
+            isOpened={this.state.deleteModalState}
+            onClose={this.closeDeleteModal}
+            onCancel={this.closeDeleteModal}
+            onConfirm={this.submitDelete}
+          />
+        </View>
       </View>
     )
   }

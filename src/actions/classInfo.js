@@ -44,11 +44,11 @@ export const createClass = (userId, className, topping) => dispatch => new Promi
                 }
             }
         }).then((res) => {
-                dispatch({
-                    type: CLASS_CREATE,
-                    payload: res.data
-                });
-                return resolve(res.data);
+            dispatch({
+                type: CLASS_CREATE,
+                payload: res.data
+            });
+            return resolve(res.data);
         }).catch((e) => {
             console.log(e);
             return reject(e);
@@ -72,14 +72,43 @@ export const editClass = (classId, userId, className, topping) => dispatch => ne
                 }
             }
         }).then((res) => {
-                dispatch({
-                    type: CLASS_UPDATE,
-                    payload: res.data
-                });
-                return resolve(res.data);
+            dispatch({
+                type: CLASS_UPDATE,
+                payload: res.data
+            });
+            return resolve(res.data);
         }).catch((e) => {
             console.log(e);
             return reject(e);
         });
     }
 );
+
+export const deleteClass = (userId, classId, className) => dispatch => new Promise(
+    (resolve, reject) => {
+        console.log('userId:' + userId + ' classId:' + classId + ' className:' + className);
+        wreq.request({
+            url: `${config.server.host}/user/class/delete`,
+            method: 'DELETE',
+            data: {
+                deleteData: {
+                    userId: userId,
+                    classId: classId,
+                    className: className,
+                }
+            },
+            header: {
+                'content-type': 'application/json'
+            }
+        }).then((res) => {
+            dispatch({
+                type: CLASS_DELETE,
+                payload: res.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+)

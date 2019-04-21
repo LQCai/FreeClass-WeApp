@@ -112,3 +112,31 @@ export const deleteClass = (userId, classId, className) => dispatch => new Promi
         });
     }
 )
+
+
+export const joinClass = (userId, code) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/class/join`,
+            method: 'POST',
+            data: {
+                joinData: {
+                    userId: userId,
+                    code: code
+                }
+            },
+            header: {
+                'content-type': 'application/json'
+            }
+        }).then((res) => {
+            dispatch({
+                type: CLASS_JOIN,
+                payload: res.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+)

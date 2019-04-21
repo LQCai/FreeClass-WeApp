@@ -41,8 +41,8 @@ export default class PushItem extends Taro.Component {
 
         if (role == config.role.teacher) {
             return (
-                <View>
-                    <AtButton>{this.state.actionName}</AtButton>
+                <View className='pushItem'>
+                    <AtButton type='primary' className='button'>{this.state.actionName}</AtButton>
                 </View>
             );
         }

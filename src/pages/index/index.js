@@ -200,7 +200,7 @@ class Index extends Component {
   showClassDetail(ClassId, role) {
     Taro.navigateTo({
       url: "/pages/classroom/classroom?"
-        + "classId=" + ClassId + "$role" + role
+        + "classId=" + ClassId + "&role=" + role
     });
   }
 

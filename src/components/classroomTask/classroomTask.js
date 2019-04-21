@@ -4,7 +4,6 @@ import { AtAvatar, AtButton, AtTabs, AtTabsPane } from "taro-ui";
 import "./classroomTask.scss";
 import ClassroomCard from "../classroomCard/classroomCard";
 import config from '../../config';
-import PushItem from '../pushItem/pushItem';
 
 export default class ClassroomTask extends Taro.Component {
   constructor() {
@@ -40,10 +39,6 @@ export default class ClassroomTask extends Taro.Component {
         tabList={tabList}
         onClick={this.handleClick.bind(this)}
       >
-        <PushItem
-        role={role}
-        action={config.action.homework}
-        />
 
         <View>
           <AtTabsPane current={this.state.current} index={0}>

@@ -11,6 +11,8 @@ import {
 import "./classroom.scss";
 import ClassroomTask from "../../components/classroomTask/classroomTask";
 import ClassroomCard from "../../components/classroomCard/classroomCard";
+import PushItem from '../../components/pushItem/pushItem';
+import config from '../../config';
 
 export default class Classroom extends Taro.Component {
   constructor() {
@@ -55,14 +57,22 @@ export default class Classroom extends Taro.Component {
       >
         <AtTabsPane current={this.state.current} index={0}>
           <View>
+            <PushItem
+              role={role}
+              action={config.action.homework}
+            />
             <ClassroomTask
-            classId= {classId}
-            role= {role}
-             />
+              classId={classId}
+              role={role}
+            />
           </View>
         </AtTabsPane>
         <AtTabsPane current={this.state.current} index={1}>
           <View className="background">
+            <PushItem
+              role={role}
+              action={config.action.material}
+            />
             <ClassroomCard
               title="寒假放学通知"
               content="在寒假期间哈哈哈哈哈哈哈哈哈哈哈哈嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿"
@@ -72,6 +82,10 @@ export default class Classroom extends Taro.Component {
         </AtTabsPane>
         <AtTabsPane current={this.state.current} index={2}>
           <View className="background">
+            <PushItem
+              role={role}
+              action={config.action.announcement}
+            />
             <ClassroomCard
               title="寒假放学通知"
               content="在寒假期间哈哈哈哈哈哈哈哈哈哈哈哈嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿"
@@ -81,6 +95,10 @@ export default class Classroom extends Taro.Component {
         </AtTabsPane>
         <AtTabsPane current={this.state.current} index={3}>
           <View className="background">
+            <PushItem
+              role={role}
+              action={config.action.attendance}
+            />
             <ClassroomCard
               title="寒假放学通知"
               content="在寒假期间哈哈哈哈哈哈哈哈哈哈哈哈嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿"

@@ -10,7 +10,7 @@ import '../../actions/judgeRole';
 import wreq from '../../utils/request';
 import config from '../../config';
 import { getOpenData, getUserInfo, userLogin } from '../../actions/user';
-import { getClassList, deleteClass } from '../../actions/classInfo';
+import { getClassList, deleteClass, quitClass } from '../../actions/classInfo';
 
 @connect(({ classMenu, user, classInfo }) => ({
   classMenu: classMenu.isOpen,
@@ -27,7 +27,8 @@ import { getClassList, deleteClass } from '../../actions/classInfo';
   getOpenData,
   userLogin,
   getClassList,
-  deleteClass
+  deleteClass,
+  quitClass
 }, dispatch))
 
 class Index extends Component {
@@ -51,7 +52,10 @@ class Index extends Component {
       addModalState: false,
       deleteModalState: false,
       deleteClassId: '',
-      deleteClassName: ''
+      deleteClassName: '',
+      quitModalState: false,
+      quitClassId: '',
+      quitClassName: ''
     });
   }
 
@@ -110,6 +114,28 @@ class Index extends Component {
   closeDeleteModal() {
     this.setState({
       deleteModalState: false
+    });
+  }
+
+  /**
+ * 控制退出确认模态框显示
+ * @param {*} classId 
+ * @param {*} className 
+ */
+  showQuitModal(classId, className) {
+    this.setState({
+      quitModalState: true,
+      quitClassId: classId,
+      quitClassName: className
+    });
+  }
+
+  /**
+   * 控制退出确认模态框关闭
+   */
+  closeQuitModal() {
+    this.setState({
+      quitModalState: false
     });
   }
 
@@ -224,7 +250,9 @@ class Index extends Component {
     } else if (role == config.role.student) {
       // 退出课堂
       if (index == 0) {
-
+        console.log(classInfo);
+        this.showQuitModal(classInfo.id, classInfo.name);
+        this.props.closeClassItem();
       }
     } else {
       Taro.showToast({
@@ -254,9 +282,28 @@ class Index extends Component {
     })
   }
 
+  /**
+   * 提交退出课堂
+   */
+  submitQuit() {
+    this.props.quitClass(this.state.userInfo.id, this.state.quitClassId).then(() => {
+      Taro.showToast({
+        title: '删除成功',
+        icon: 'success',
+        duration: 2000
+      }).then(() => {
+        Taro.reLaunch({
+          url: '/pages/index/index'
+        });
+      });
+    }).catch((e) => {
+      console.log(e);
+    })
+  }
+
   render() {
     //课堂actionSheet的状态
-    let { classItemInfo, showClassItem, closeClassItem, classList, deleteClass } = this.props;
+    let { classItemInfo, showClassItem, closeClassItem, classList } = this.props;
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
@@ -321,7 +368,7 @@ class Index extends Component {
                     <Text className='code'>
                       {classInfo.invitationCode}
                     </Text>
-                    <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo.id, config.role.student)}>
+                    <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo, config.role.student)}>
                       <AtIcon value='menu' />
                     </View>
                   </View>
@@ -373,6 +420,20 @@ class Index extends Component {
             onClose={this.closeDeleteModal}
             onCancel={this.closeDeleteModal}
             onConfirm={this.submitDelete}
+          />
+        </View>
+
+        {/* 退出课堂模态框 */}
+        <View>
+          <AtModal
+            className='modal'
+            content={`确认退出` + this.state.quitClassName + `?`}
+            cancelText='取消'
+            confirmText='确认'
+            isOpened={this.state.quitModalState}
+            onClose={this.closeQuitModal}
+            onCancel={this.closeQuitModal}
+            onConfirm={this.submitQuit}
           />
         </View>
       </View>

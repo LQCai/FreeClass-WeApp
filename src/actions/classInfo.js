@@ -140,3 +140,31 @@ export const joinClass = (userId, code) => dispatch => new Promise(
         });
     }
 )
+
+
+export const quitClass = (userId, classId) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/class/quit`,
+            method: 'PUT',
+            data: {
+                quitData: {
+                    userId: userId,
+                    classId: classId
+                }
+            },
+            header: {
+                'content-type': 'application/json'
+            }
+        }).then((res) => {
+            dispatch({
+                type: CLASS_QUIT,
+                payload: res.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);

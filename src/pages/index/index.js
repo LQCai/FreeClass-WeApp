@@ -61,6 +61,9 @@ class Index extends Component {
   }
 
 
+  /**
+   * 确认用户信息是否缓存，以再判定是否要登录（这里好像还没处理好）
+   */
   checkUserInfo() {
     const userInfo = this.state.userInfo;
     if (Object.keys(userInfo).length == 0) {
@@ -68,12 +71,19 @@ class Index extends Component {
     }
   }
 
+  /**
+   * 显示创建\加入模态框
+   */
   showModal() {
     this.setState({
       addModalState: true
     });
     console.log(this.state);
   }
+
+  /**
+   * 关闭创建\加入模态框
+   */
   closeModal() {
     this.setState({
       addModalState: false
@@ -81,6 +91,11 @@ class Index extends Component {
     console.log(this.state);
   }
 
+  /**
+   * 控制删除确认模态框显示
+   * @param {*} classId 
+   * @param {*} className 
+   */
   showDeleteModal(classId, className) {
     this.setState({
       deleteModalState: true,
@@ -88,6 +103,10 @@ class Index extends Component {
       deleteClassName: className
     });
   }
+
+  /**
+   * 控制删除确认模态框关闭
+   */
   closeDeleteModal() {
     this.setState({
       deleteModalState: false
@@ -147,6 +166,11 @@ class Index extends Component {
     })
   }
 
+  /**
+   * 跳转指定课堂详细页面
+   * @param {*} ClassId 
+   * @param {*} role 
+   */
   showClassDetail(ClassId, role) {
     Taro.navigateTo({
       url: "/pages/classroom/classroom?"
@@ -154,6 +178,9 @@ class Index extends Component {
     });
   }
 
+  /**
+   * 跳转加入课堂页面
+   */
   navigateToJoin() {
     this.closeModal();
     Taro.navigateTo({
@@ -161,6 +188,9 @@ class Index extends Component {
     });
   }
 
+  /**
+   * 跳转创建课堂页面
+   */
   navigateToCreate() {
     this.closeModal();
     Taro.navigateTo({
@@ -168,6 +198,11 @@ class Index extends Component {
     });
   }
 
+  /**
+   * 指定课堂弹出事件
+   * @param {*} index 
+   * @param {*} role 
+   */
   classItemEvent(index, role) {
     const classInfo = this.props.classItemInfo.classInfo;
     if (role == config.role.teacher) {
@@ -200,6 +235,9 @@ class Index extends Component {
     }
   }
 
+  /**
+   * 提交删除课堂
+   */
   submitDelete() {
     this.props.deleteClass(this.state.userInfo.id, this.state.deleteClassId, this.state.deleteClassName).then(() => {
       Taro.showToast({

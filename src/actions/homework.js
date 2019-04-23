@@ -30,23 +30,36 @@ export const getHomeworkList = (classId) => dispatch => new Promise(
 );
 
 
-export const postHomework = (userId) => dispatch => new Promise(
-    (resolve, reject) => {
-        wreq.request({
-            url: `${config.server.host}/user/class/list`,
-            method: 'GET',
-            data: {
-                id: userId
-            }
-        }).then((res) => {
-            dispatch({
-                type: HOMEWORK_POST,
-                payload: res.data.data
+export const postHomework = (
+    teacherId,
+    title,
+    classId,
+    content,
+    deadline,
+    url) => dispatch => new Promise(
+        (resolve, reject) => {
+            wreq.request({
+                url: `${config.server.host}/user/homework/post`,
+                method: 'POST',
+                data: {
+                    teacherId: teacherId,
+                    homeworkName: title,
+                    classId: classId,
+                    homeworkIntroduction: content,
+                    sendByEmail: 2,
+                    fullScore: 100,
+                    deadline: deadline,
+                    // annex: url
+                }
+            }).then((res) => {
+                dispatch({
+                    type: HOMEWORK_POST,
+                    payload: res.data.data
+                });
+                return resolve(res.data);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
             });
-            return resolve(res.data);
-        }).catch((e) => {
-            console.log(e);
-            return reject(e);
-        });
-    }
-);
+        }
+    );

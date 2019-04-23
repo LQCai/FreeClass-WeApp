@@ -22,14 +22,19 @@ export default class PostHomework extends Taro.Component {
         this.state = {
             title: '',
             content: '',
-            files: [{ url: '' }],
+            files: [],
             dateSel: '2019-04-01',
-            timeSel: '00:00:00'
+            timeSel: '00:00:00',
+            classId: '',
+            teacherId: ''
         };
     }
 
     componentDidShow() {
-
+        this.setState({
+            classId: this.$router.params.classId,
+            teacherId: this.$router.params.teacherId
+        })
     }
 
     onTimeChange = e => {
@@ -44,9 +49,12 @@ export default class PostHomework extends Taro.Component {
     }
 
     onFileChange(files) {
-        this.setState({
-            files
-        })
+        console.log(files);
+        if (files) {
+            this.setState({
+                files: [files[files.length - 1]],
+            })
+        }
     }
 
     titleChange(titleValue) {
@@ -63,10 +71,22 @@ export default class PostHomework extends Taro.Component {
         console.log(this.state);
     }
 
+    onSubmitPost() {
+        const data = this.state;
+        this.props.postHomework(data.teacherId,
+            data.title,
+            data.classId,
+            data.content,
+            data.dateSel + ' ' + data.timeSel,
+            data.files[0])
+    }
+
     render() {
         return (
             <View >
-                <AtForm>
+                <AtForm
+                    onSubmit={this.onSubmitPost.bind(this)}
+                >
                     <AtInput
                         title='作业标题'
                         onChange={this.titleChange.bind(this)}
@@ -96,6 +116,8 @@ export default class PostHomework extends Taro.Component {
                     </View>
                     <View>
                         <AtImagePicker
+                            count={1}
+                            // showAddBtn={this.state.fileButton}
                             files={this.state.files}
                             onChange={this.onFileChange.bind(this)}
                         />

@@ -13,6 +13,7 @@ import ClassroomTask from "../../components/classroomTask/classroomTask";
 import ClassroomCard from "../../components/classroomCard/classroomCard";
 import PushItem from '../../components/pushItem/pushItem';
 import config from '../../config';
+import Homework from '../../components/homework/homework';
 
 export default class Classroom extends Taro.Component {
   constructor() {
@@ -55,18 +56,25 @@ export default class Classroom extends Taro.Component {
         onClick={this.handleClick.bind(this)}
         swipeable={false}
       >
+      {/* 作业 */}
         <AtTabsPane current={this.state.current} index={0}>
           <View>
-            <PushItem
-              role={role}
-              action={config.action.homework}
+            
+            <Homework
+            classId={classId}
+            role={role}
             />
-            <ClassroomTask
+          
+            {/* <ClassroomTask
               classId={classId}
               role={role}
-            />
+            /> */}
+
+
+
           </View>
         </AtTabsPane>
+        {/* 资料 */}
         <AtTabsPane current={this.state.current} index={1}>
           <View className="background">
             <PushItem
@@ -80,6 +88,7 @@ export default class Classroom extends Taro.Component {
             />
           </View>
         </AtTabsPane>
+        {/* 公告 */}
         <AtTabsPane current={this.state.current} index={2}>
           <View className="background">
             <PushItem
@@ -93,6 +102,7 @@ export default class Classroom extends Taro.Component {
             />
           </View>
         </AtTabsPane>
+        {/* 考勤 */}
         <AtTabsPane current={this.state.current} index={3}>
           <View className="background">
             <PushItem

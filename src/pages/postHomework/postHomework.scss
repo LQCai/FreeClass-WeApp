@@ -1,0 +1,18 @@
+.picker {
+    padding: 24px 0;
+    border-bottom:1px #e2ecf4 solid;
+    .picker-label {
+      display: inline-block;
+      margin-right:16px;
+      width:172px;
+      font-size:32px;
+      line-height:1.5;
+      vertical-align:middle;
+      text-align: left;
+      margin-left: 5%;
+    }
+    .picker-value {
+      font-size: 32px;
+      margin-right: 10%;
+    }
+  }

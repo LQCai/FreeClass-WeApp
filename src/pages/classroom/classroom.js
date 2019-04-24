@@ -6,7 +6,8 @@ import {
   AtTabs,
   AtTabsPane,
   AtActionSheet,
-  AtActionSheetItem
+  AtActionSheetItem,
+  AtModal
 } from "taro-ui";
 import "./classroom.scss";
 import ClassroomTask from "../../components/classroomTask/classroomTask";
@@ -17,13 +18,16 @@ import Homework from '../../components/homework/homework';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
 import { showHomeworkItem, closeHomeworkItem } from '../../actions/classMenu';
+import { deleteHomework, getHomeworkList } from '../../actions/homework';
 import moment from 'moment';
 
 @connect(({ classMenu }) => ({
   homeworkItemInfo: classMenu.homeworkItemInfo
 }), (dispatch) => bindActionCreators({
   showHomeworkItem,
-  closeHomeworkItem
+  closeHomeworkItem,
+  deleteHomework,
+  getHomeworkList
 }, dispatch))
 export default class Classroom extends Taro.Component {
   constructor() {
@@ -31,7 +35,13 @@ export default class Classroom extends Taro.Component {
     this.state = {
       current: 0,
       userId: '',
-      itemHomeworkInfo: {}
+      itemHomeworkInfo: {
+        modal: false,
+        homework: {
+          id: '',
+          name: ''
+        }
+      }
     };
   }
 
@@ -57,6 +67,9 @@ export default class Classroom extends Taro.Component {
     }
   }
 
+  /**
+   * 跳转编辑作业界面
+   */
   editHomework() {
     const homeworkInfo = this.props.homeworkItemInfo.homeworkInfo;
     const teacherId = this.state.userId;
@@ -73,6 +86,58 @@ export default class Classroom extends Taro.Component {
         + '&introduction=' + homeworkInfo.introduction
         + '&teacherId=' + teacherId
         + '&classId=' + classId
+    });
+  }
+
+  /**
+   * 提交删除作业
+   */
+  deleteHomework() {
+    const deleteData = {
+      id: this.state.itemHomeworkInfo.homework.id,
+      teacherId: this.state.userId,
+      classId: this.$router.params.classId
+    }
+
+    this.props.deleteHomework(deleteData).then(() => {
+      Taro.showToast({
+        title: '删除成功',
+        icon: 'none'
+      }).then(() => {
+        this.closehomeworkModal();
+        this.props.getHomeworkList(this.$router.params.classId);
+      });
+    }).catch((e) => {
+      console.log(e);
+    })
+  }
+
+  /**
+   * 显示删除作业模态框
+   * @param {*} homeworkInfo 
+   */
+  showhomeworkModal(homeworkInfo) {
+    this.props.closeHomeworkItem();
+    this.setState({
+      itemHomeworkInfo: {
+        modal: true,
+        homework: homeworkInfo
+      }
+    });
+  }
+
+  /**
+   * 关闭删除作业模态框
+   */
+  closehomeworkModal() {
+    this.setState({
+      itemHomeworkInfo: {
+        modal: false,
+        homework: {
+          id: '',
+          name: ''
+        }
+      }
     });
   }
 
@@ -146,6 +211,7 @@ export default class Classroom extends Taro.Component {
             </AtTabsPane>
           </AtTabs>
         </View>
+        {/* 编辑作业模态框 */}
         <View>
           <AtActionSheet
             isOpened={this.props.homeworkItemInfo.sheet}
@@ -158,12 +224,25 @@ export default class Classroom extends Taro.Component {
                 编辑作业
                         </AtActionSheetItem>
             </View>
-            <View >
+            <View onClick={this.showhomeworkModal.bind(this, this.props.homeworkItemInfo.homeworkInfo)}>
               <AtActionSheetItem>
                 删除作业
                         </AtActionSheetItem>
             </View>
           </AtActionSheet>
+        </View>
+        {/* 删除作业模态框 */}
+        <View>
+          <AtModal
+            className='modal'
+            content={`确认删除 "` + this.state.itemHomeworkInfo.homework.name + `" ?`}
+            cancelText='取消'
+            confirmText='确认'
+            isOpened={this.state.itemHomeworkInfo.modal}
+            onClose={this.closehomeworkModal}
+            onCancel={this.closehomeworkModal}
+            onConfirm={this.deleteHomework}
+          />
         </View>
       </View>
     );

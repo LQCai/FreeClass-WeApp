@@ -1,8 +1,23 @@
-.background{
-    width:100%;
-    height:1100rpx;
-    background:#FAFBFC;
-    .data{
-        margin:20rpx 20rpx 20rpx 20rpx;
+.background {
+    width: 100%;
+    height: 1100rpx;
+    background: #FAFBFC;
+
+    .data {
+        margin: 20rpx 20rpx 20rpx 20rpx;
+    }
+}
+
+.modal {
+    .modal-line {
+        background-color: darkgray;
+        height: 1px;
+    }
+
+    .modal-item {
+        text-align: center;
+        font-size: 35px;
+        font-weight: 500;
+        text-decoration-color: #6190E8;
     }
 }

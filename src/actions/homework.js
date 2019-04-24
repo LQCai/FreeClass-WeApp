@@ -107,3 +107,25 @@ export const editHomework = (
             });
         }
     );
+
+
+export const deleteHomework = (deleteData) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/homework/delete`,
+            method: 'DELETE',
+            data: {
+                deleteData: deleteData
+            }
+        }).then((res) => {
+            dispatch({
+                type: HOMEWORK_DELETE,
+                payload: res.data.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);

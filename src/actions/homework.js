@@ -7,6 +7,8 @@ import {
 } from '../canstants/homework';
 import wreq from '../utils/request';
 import config from '../config';
+import Taro from '@tarojs/taro';
+
 
 export const getHomeworkList = (classId) => dispatch => new Promise(
     (resolve, reject) => {
@@ -38,23 +40,23 @@ export const postHomework = (
     deadline,
     url) => dispatch => new Promise(
         (resolve, reject) => {
-            wreq.request({
+            Taro.uploadFile({
                 url: `${config.server.host}/user/homework/post`,
-                method: 'POST',
-                data: {
+                filePath: url,
+                name: 'annex',
+                formData: {
                     teacherId: teacherId,
                     homeworkName: title,
                     classId: classId,
                     homeworkIntroduction: content,
                     sendByEmail: 2,
                     fullScore: 100,
-                    deadline: deadline,
-                    // annex: url
+                    deadline: deadline
                 }
             }).then((res) => {
                 dispatch({
                     type: HOMEWORK_POST,
-                    payload: res.data.data
+                    payload: res.data
                 });
                 return resolve(res.data);
             }).catch((e) => {

@@ -73,12 +73,19 @@ export default class PostHomework extends Taro.Component {
 
     onSubmitPost() {
         const data = this.state;
-        this.props.postHomework(data.teacherId,
-            data.title,
-            data.classId,
-            data.content,
-            data.dateSel + ' ' + data.timeSel,
-            data.files[0])
+        if (data.files.length == 0) {
+            Taro.showToast({
+                title: '请上传附件',
+                icon: 'none'
+            });
+        } else {
+            this.props.postHomework(data.teacherId,
+                data.title,
+                data.classId,
+                data.content,
+                data.dateSel + ' ' + data.timeSel,
+                data.files[0].url)
+        }
     }
 
     render() {

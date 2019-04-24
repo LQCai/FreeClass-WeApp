@@ -30,6 +30,7 @@ class App extends Component {
       "pages/classEdit/classEdit",
       "pages/postHomework/postHomework",
       "pages/editHomework/editHomework",
+      "pages/homeworkDetail/homeworkDetail",
     ],
     tabBar: {
       color: "#595959",

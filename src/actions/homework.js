@@ -3,13 +3,18 @@ import {
     HOMEWORK_POST,
     HOMEWORK_SUBMIT,
     HOMEWORK_EDIT,
-    HOMEWORK_DELETE
+    HOMEWORK_DELETE,
+    HOMEWORK_SUBMIT_LIST
 } from '../canstants/homework';
 import wreq from '../utils/request';
 import config from '../config';
 import Taro from '@tarojs/taro';
 
 
+/**
+ * 获取作业列表
+ * @param {*} classId 
+ */
 export const getHomeworkList = (classId) => dispatch => new Promise(
     (resolve, reject) => {
         wreq.request({
@@ -31,7 +36,15 @@ export const getHomeworkList = (classId) => dispatch => new Promise(
     }
 );
 
-
+/**
+ * 发布作业
+ * @param {*} teacherId 
+ * @param {*} title 
+ * @param {*} classId 
+ * @param {*} content 
+ * @param {*} deadline 
+ * @param {*} url 
+ */
 export const postHomework = (
     teacherId,
     title,
@@ -66,6 +79,16 @@ export const postHomework = (
         }
     );
 
+/**
+ * 修改发布作业
+ * @param {*} teacherId 
+ * @param {*} classId 
+ * @param {*} name 
+ * @param {*} id 
+ * @param {*} introduction 
+ * @param {*} deadline 
+ * @param {*} url 
+ */
 export const editHomework = (
     teacherId,
     classId,
@@ -109,6 +132,10 @@ export const editHomework = (
     );
 
 
+/**
+ * 删除作业
+ * @param {*} deleteData 
+ */
 export const deleteHomework = (deleteData) => dispatch => new Promise(
     (resolve, reject) => {
         wreq.request({

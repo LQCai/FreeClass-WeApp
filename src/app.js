@@ -28,6 +28,8 @@ class App extends Component {
       "pages/joinClass/joinClass",
       "pages/createClass/createClass",
       "pages/classEdit/classEdit",
+      "pages/postHomework/postHomework",
+      "pages/editHomework/editHomework",
     ],
     tabBar: {
       color: "#595959",

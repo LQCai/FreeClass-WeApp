@@ -4,11 +4,13 @@ import classMenu from './classMenu';
 import judgeRole from './judgeRole';
 import user from './user';
 import classInfo from './classInfo';
+import homework from './homework';
 
 export default combineReducers({
     counter,
     classMenu,
     judgeRole,
     user,
-    classInfo
+    classInfo,
+    homework
 });

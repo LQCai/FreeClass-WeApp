@@ -23,7 +23,7 @@ export default class CreateClass extends Taro.Component {
             className: '',
             topping: {
                 checked: false,
-                value: 1
+                value: 2
             },
             userId: Taro.getStorageSync('userInfo').id
         });
@@ -35,7 +35,7 @@ export default class CreateClass extends Taro.Component {
             this.setState({
                 topping: {
                     checked: true,
-                    value: 2
+                    value: 1
                 }
             });
         } else {
@@ -43,7 +43,7 @@ export default class CreateClass extends Taro.Component {
             this.setState({
                 topping: {
                     checked: false,
-                    value: 1
+                    value: 2
                 }
             });
         }

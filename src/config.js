@@ -10,8 +10,14 @@ const config = {
         classMax: '1201',
     },
     role: {
-        teacher: '0',
-        student: '1'
+        teacher: '1',
+        student: '2'
+    },
+    action: {
+        homework: '1',
+        material: '2',
+        announcement: '3',
+        attendance: '4'
     }
 }
 

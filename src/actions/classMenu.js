@@ -1,7 +1,8 @@
 import {
     CLASS_MENU_OPEN,
     CLASS_MENU_CLOES,
-    CLASS_ITEM_INFO
+    CLASS_ITEM_INFO,
+    HOMEWORK_ITEM_INFO
 } from '../canstants/classMenu';
 import config from '../config';
 
@@ -58,6 +59,39 @@ export const closeClassItem = () => {
             classInfo: {},
             role: '',
             item: []
+        }
+    }
+};
+
+
+export const showHomeworkItem = (homeworkInfo, role) => {
+    return {
+        type: HOMEWORK_ITEM_INFO,
+        payload: {
+            sheet: true,
+            homeworkInfo: homeworkInfo,
+            role: role
+        }
+    }
+};
+
+/**
+ * 收起作业的sheet
+ */
+export const closeHomeworkItem = () => {
+    return {
+        type: HOMEWORK_ITEM_INFO,
+        payload: {
+            sheet: false,
+            homeworkInfo: {
+                annexUrl: '',
+                created: '',
+                deadline: '',
+                id: '',
+                introduction: '',
+                name: ''
+            },
+            role: ''
         }
     }
 };

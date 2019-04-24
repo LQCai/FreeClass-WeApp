@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { getHomeworkList } from '../../actions/homework';
 import PushItem from '../pushItem/pushItem';
 import config from '../../config';
+import { AtCard, AtIcon } from 'taro-ui';
 
 @connect(({ homework }) => ({
     homeworkList: homework.homeworkList
@@ -31,15 +32,16 @@ export default class Homework extends Taro.Component {
         if (this.props.role == config.role.teacher) {
             Taro.navigateTo({
                 url: '/pages/postHomework/postHomework?teacherId='
-                + this.state.userId
-                + '&classId='
-                + this.props.classId
-            })
+                    + this.state.userId
+                    + '&classId='
+                    + this.props.classId
+            });
         }
     }
 
     render() {
         const role = this.props.role;
+        const homeworkList = this.props.homeworkList;
 
         return (
             <View >
@@ -49,7 +51,23 @@ export default class Homework extends Taro.Component {
                         action={config.action.homework}
                     />
                 </View>
-                <Text> Homework </Text>
+                <View>
+                    {homeworkList.map((homework) => (
+                        <View
+                        className = 'homeworkItem' 
+                        key={homework.id}>
+                            <AtCard
+                                title={homework.name}
+                            >
+                                <View>{`截至：${homework.deadline}`}</View>
+                                <View>{homework.introduction.substr(0, 30) + '...'}</View>
+                            </AtCard>
+                            <View className='homeworkItemMenu'>
+                            <AtIcon value='menu'></AtIcon>
+                            </View>
+                        </View>
+                    ))}
+                </View>
             </View>
         );
     }

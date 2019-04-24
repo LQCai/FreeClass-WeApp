@@ -17,7 +17,7 @@ import Homework from '../../components/homework/homework';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
 import { showHomeworkItem, closeHomeworkItem } from '../../actions/classMenu';
-
+import moment from 'moment';
 
 @connect(({ classMenu }) => ({
   homeworkItemInfo: classMenu.homeworkItemInfo
@@ -29,12 +29,17 @@ export default class Classroom extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      current: 0
+      current: 0,
+      userId: '',
+      itemHomeworkInfo: {}
     };
   }
 
 
   componentDidShow() {
+    this.setState({
+      userId: Taro.getStorageSync('userInfo').id
+    });
     console.log(this.$router.params);
   }
 
@@ -50,6 +55,25 @@ export default class Classroom extends Taro.Component {
     } else {
       console.log(e);
     }
+  }
+
+  editHomework() {
+    const homeworkInfo = this.props.homeworkItemInfo.homeworkInfo;
+    const teacherId = this.state.userId;
+    const classId = this.$router.params.classId;
+
+    const deadlineDate = moment(homeworkInfo.deadline).format('YYYY-MM-DD');
+    const deadlineTime = moment(homeworkInfo.deadline).format('HH:mm:ss');
+    Taro.navigateTo({
+      url: '/pages/editHomework/editHomework?id=' + homeworkInfo.id
+        + '&name=' + homeworkInfo.name
+        + '&dateSel=' + deadlineDate
+        + '&timeSel=' + deadlineTime
+        + '&annexUrl=' + homeworkInfo.annexUrl
+        + '&introduction=' + homeworkInfo.introduction
+        + '&teacherId=' + teacherId
+        + '&classId=' + classId
+    });
   }
 
 
@@ -76,14 +100,6 @@ export default class Classroom extends Taro.Component {
                   classId={classId}
                   role={role}
                 />
-
-                {/* <ClassroomTask
-              classId={classId}
-              role={role}
-            /> */}
-
-
-
               </View>
             </AtTabsPane>
             {/* 资料 */}
@@ -137,7 +153,7 @@ export default class Classroom extends Taro.Component {
             onCancel={this.props.closeHomeworkItem}
             onClose={this.props.closeHomeworkItem}>
 
-            <View >
+            <View onClick={this.editHomework}>
               <AtActionSheetItem>
                 编辑作业
                         </AtActionSheetItem>

@@ -65,3 +65,45 @@ export const postHomework = (
             });
         }
     );
+
+export const editHomework = (
+    teacherId,
+    classId,
+    name,
+    id,
+    introduction,
+    deadline,
+    url) => dispatch => new Promise(
+        (resolve, reject) => {
+            console.log(teacherId);
+            console.log(classId);
+            console.log(name);
+            console.log(id);
+            console.log(introduction);
+            console.log(deadline);
+            Taro.uploadFile({
+                url: `${config.server.host}/user/homework/edit`,
+                filePath: url,
+                name: 'annex',
+                formData: {
+                    teacherId: teacherId,
+                    classId: classId,
+                    homeworkName: name,
+                    id: id,
+                    homeworkIntroduction: introduction,
+                    sendByEmail: 2,
+                    fullScore: 100,
+                    deadline: deadline
+                }
+            }).then((res) => {
+                dispatch({
+                    type: HOMEWORK_EDIT,
+                    payload: res.data
+                });
+                return resolve(res.data);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
+        }
+    );

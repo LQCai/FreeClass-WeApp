@@ -6,19 +6,22 @@ import { bindActionCreators } from 'redux';
 import { getHomeworkList } from '../../actions/homework';
 import PushItem from '../pushItem/pushItem';
 import config from '../../config';
-import { AtCard, AtIcon } from 'taro-ui';
+import { AtCard, AtIcon, AtActionSheetItem, AtActionSheet } from 'taro-ui';
+import { showHomeworkItem } from '../../actions/classMenu';
 
 @connect(({ homework }) => ({
     homeworkList: homework.homeworkList
 }), (dispatch) => bindActionCreators({
-    getHomeworkList
+    getHomeworkList,
+    showHomeworkItem
 }, dispatch))
 export default class Homework extends Taro.Component {
 
     constructor() {
         super(...arguments);
         this.state = {
-            userId: Taro.getStorageSync("userInfo").id
+            userId: Taro.getStorageSync("userInfo").id,
+            sheet: false
         };
     }
 
@@ -39,6 +42,18 @@ export default class Homework extends Taro.Component {
         }
     }
 
+    closeSheet() {
+        this.setState({
+            sheet: false
+        });
+    }
+
+    openSheet(homework) {
+        this.setState({
+            sheet: true
+        });
+    }
+
     render() {
         const role = this.props.role;
         const homeworkList = this.props.homeworkList;
@@ -54,17 +69,24 @@ export default class Homework extends Taro.Component {
                 <View>
                     {homeworkList.map((homework) => (
                         <View
-                        className = 'homeworkItem' 
-                        key={homework.id}>
+                            // onClick={}
+                            className='homeworkItem'
+                            key={homework.id}>
                             <AtCard
                                 title={homework.name}
                             >
                                 <View>{`截至：${homework.deadline}`}</View>
                                 <View>{homework.introduction.substr(0, 30) + '...'}</View>
                             </AtCard>
-                            <View className='homeworkItemMenu'>
-                            <AtIcon value='menu'></AtIcon>
-                            </View>
+                            {
+                                role == config.role.teacher
+                                    ?
+                                    <View className='homeworkItemMenu' onClick={this.props.showHomeworkItem.bind(this, homework, role)}>
+                                        <AtIcon value='menu'></AtIcon>
+                                    </View>
+                                    :
+                                    <View></View>
+                            }
                         </View>
                     ))}
                 </View>

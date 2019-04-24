@@ -1,7 +1,8 @@
 import {
     CLASS_MENU_OPEN,
     CLASS_MENU_CLOES,
-    CLASS_ITEM_INFO
+    CLASS_ITEM_INFO,
+    HOMEWORK_ITEM_INFO
 } from '../canstants/classMenu';
 
 const INITAL_STATE = {
@@ -17,6 +18,18 @@ const INITAL_STATE = {
             name: '',
             peopleCount: 0
         }
+    },
+    homeworkItemInfo: {
+        sheet: false,
+        homeworkInfo: {
+            annexUrl: '',
+            created: '',
+            deadline: '',
+            id: '',
+            introduction: '',
+            name: ''
+        },
+        role: ''
     }
 }
 
@@ -38,6 +51,11 @@ export default function classMenu(state = INITAL_STATE, action) {
             return {
                 ...state,
                 classItemInfo: payload
+            };
+        case HOMEWORK_ITEM_INFO:
+            return {
+                ...state,
+                homeworkItemInfo: payload
             };
         default:
             return state;

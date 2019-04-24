@@ -84,7 +84,17 @@ export default class PostHomework extends Taro.Component {
                 data.classId,
                 data.content,
                 data.dateSel + ' ' + data.timeSel,
-                data.files[0].url)
+                data.files[0].url).then((res) => {
+                    console.log(res);
+                    if (res.code != config.code.success) {
+                        Taro.showToast({
+                            title: `${res}`,
+                            icon: 'none'
+                        })
+                    }
+                }).catch((e) => {
+                    console.log(e);
+                })
         }
     }
 

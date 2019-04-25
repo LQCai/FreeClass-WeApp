@@ -4,7 +4,8 @@ import {
     HOMEWORK_SUBMIT,
     HOMEWORK_EDIT,
     HOMEWORK_DELETE,
-    HOMEWORK_SUBMIT_LIST
+    HOMEWORK_SUBMIT_LIST,
+    HOMEWORK_SUBMIT_INFO
 } from '../canstants/homework';
 import wreq from '../utils/request';
 import config from '../config';
@@ -156,3 +157,96 @@ export const deleteHomework = (deleteData) => dispatch => new Promise(
         });
     }
 );
+
+
+/**
+ * 获取学生提交作业列表
+ * @param {*} classId 
+ * @param {*} homeworkId 
+ */
+export const getSubmitList = (classId, homeworkId) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/homework/studentList`,
+            method: 'GET',
+            data: {
+                classId: classId,
+                homeworkId: homeworkId
+            }
+        }).then((res) => {
+            dispatch({
+                type: HOMEWORK_SUBMIT_LIST,
+                payload: res.data.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);
+
+/**
+ * 获取学生提交作业状态信息
+ * @param {*} classId 
+ * @param {*} homeworkId 
+ */
+export const getHomeworkSubmitInfo = (studentId, homeworkId) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/homework/submitStatus`,
+            method: 'GET',
+            data: {
+                studentId: studentId,
+                homeworkId: homeworkId
+            }
+        }).then((res) => {
+            dispatch({
+                type: HOMEWORK_SUBMIT_INFO,
+                payload: res.data.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);
+
+/**
+ * 提交作业
+ * @param {*} studentId 
+ * @param {*} classId 
+ * @param {*} homeworkId 
+ * @param {*} content 
+ * @param {*} url 
+ */
+export const submitHomework = (
+    studentId,
+    classId,
+    homeworkId,
+    content,
+    url) => dispatch => new Promise(
+        (resolve, reject) => {
+            Taro.uploadFile({
+                url: `${config.server.host}/user/homework/submit`,
+                filePath: url,
+                name: 'annex',
+                formData: {
+                    studentId: studentId,
+                    classId: classId,
+                    homeworkId: homeworkId,
+                    homeworkContent: content
+                }
+            }).then((res) => {
+                dispatch({
+                    type: HOMEWORK_SUBMIT,
+                    payload: res.data
+                });
+                return resolve(res.data);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
+        }
+    );

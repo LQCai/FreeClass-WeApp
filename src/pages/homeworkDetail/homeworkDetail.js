@@ -170,7 +170,7 @@ export default class HomeworkDetail extends Taro.Component {
 
         return (
             <View>
-                {this.state.homeworkList.length > 0
+                {this.$router.params.role == config.role.teacher
                     ?
                     <View>
                         <AtTabs current={this.state.current} tabList={tabList} onClick={this.changeCurrent.bind(this)}>

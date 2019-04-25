@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro';
 import { View, Text, Image } from '@tarojs/components';
 import './homeworkDetail.scss'
 import homework from '../../reducers/homework';
-import { AtForm, AtInput, AtTextarea, AtImagePicker, AtButton } from 'taro-ui';
+import { AtForm, AtCard, AtTextarea, AtImagePicker, AtButton, AtTabs, AtTabsPane } from 'taro-ui';
 import { getSubmitList, getHomeworkSubmitInfo, submitHomework } from '../../actions/homework';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
@@ -38,7 +38,8 @@ export default class HomeworkDetail extends Taro.Component {
             submitContent: '',
             button: false,
             fileButton: true,
-            textarea: false
+            textarea: false,
+            current: 0
         };
     }
 
@@ -104,6 +105,12 @@ export default class HomeworkDetail extends Taro.Component {
         }
     }
 
+    changeCurrent(value) {
+        this.setState({
+            current: value
+        })
+    }
+
     contentChange(event) {
         this.setState({
             submitContent: event.target.value
@@ -159,14 +166,74 @@ export default class HomeworkDetail extends Taro.Component {
     }
 
     render() {
-        const role = this.$router.params.role;
+        const tabList = [{ title: '全部' }, { title: '已交' }, { title: '未交 ' }]
 
         return (
             <View>
-                {homeworkList.length > 0
+                {this.state.homeworkList.length > 0
                     ?
                     <View>
-
+                        <AtTabs current={this.state.current} tabList={tabList} onClick={this.changeCurrent.bind(this)}>
+                            {/* 全部提交作业列表 */}
+                            <AtTabsPane current={this.state.current} index={0}>
+                                {this.state.homeworkList.map((homeworkSubmit) => (
+                                    <View key={homeworkSubmit.studentId}>
+                                        <View className='card'>
+                                            <AtCard
+                                                title={homeworkSubmit.studentCode + ' ' + homeworkSubmit.studentName}
+                                                extra={homeworkSubmit.status == 1 ? '已交' : '未交'}
+                                            >
+                                                <Text>
+                                                    {homeworkSubmit.status == 1 ? '提交时间：' + homeworkSubmit.created : '。。。'}
+                                                </Text>
+                                            </AtCard>
+                                        </View>
+                                    </View>
+                                ))}
+                            </AtTabsPane>
+                            {/* 已交列表 */}
+                            <AtTabsPane current={this.state.current} index={1}>
+                                {this.state.homeworkList.map((homeworkSubmit) => (
+                                    homeworkSubmit.status == 1
+                                        ?
+                                        <View key={homeworkSubmit.studentId}>
+                                            <View className='card'>
+                                                <AtCard
+                                                    title={homeworkSubmit.studentCode + ' ' + homeworkSubmit.studentName}
+                                                    extra={homeworkSubmit.status == 1 ? '已交' : '未交'}
+                                                >
+                                                    <Text>
+                                                        {homeworkSubmit.status == 1 ? '提交时间：' + homeworkSubmit.created : '。。。'}
+                                                    </Text>
+                                                </AtCard>
+                                            </View>
+                                        </View>
+                                        :
+                                        <View></View>
+                                ))}
+                            </AtTabsPane>
+                            {/* 未交列表 */}
+                            <AtTabsPane current={this.state.current} index={2}>
+                                {this.state.homeworkList.map((homeworkSubmit) => (
+                                    homeworkSubmit.status == 2
+                                        ?
+                                        <View key={homeworkSubmit.studentId}>
+                                            <View className='card'>
+                                                <AtCard
+                                                    title={homeworkSubmit.studentCode + ' ' + homeworkSubmit.studentName}
+                                                    extra={homeworkSubmit.status == 1 ? '已交' : '未交'}
+                                                >
+                                                    <Text>
+                                                        {homeworkSubmit.status == 1 ? '提交时间：' + homeworkSubmit.created : '。。。'}
+                                                    </Text>
+                                                </AtCard>
+                                            </View>
+                                        </View>
+                                        :
+                                        <View></View>
+                                ))}
+                            </AtTabsPane>
+                        </AtTabs>
                     </View>
                     :
                     <View>

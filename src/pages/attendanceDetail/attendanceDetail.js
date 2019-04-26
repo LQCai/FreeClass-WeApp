@@ -5,7 +5,7 @@ import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
 import { getAttendanceRealTimeInfo, stopAttendance, dropAttendance, checkIn } from '../../actions/attendance';
 import config from '../../config';
-import { AtButton, AtForm, AtInput } from 'taro-ui';
+import { AtButton, AtForm, AtInput, AtModal } from 'taro-ui';
 
 
 @connect(({ attendance }) => ({
@@ -21,7 +21,8 @@ export default class AttendanceDetail extends Taro.Component {
     componentWillMount() {
         this.props.getAttendanceRealTimeInfo(this.$router.params.id, this.$router.params.classId);
         this.setState({
-            checkInput: ''
+            checkInput: '',
+            modal: false
         })
     }
 
@@ -32,14 +33,9 @@ export default class AttendanceDetail extends Taro.Component {
                     const realTimeInfo = this.props.attendance.attendanceRealInfo;
 
                     if (realTimeInfo.status == 3) {
-                        Taro.showToast({
-                            title: '考勤截止',
-                            icon: 'none'
-                        }).then(() => {
-                            Taro.navigateBack({
-                                delta: 1
-                            });
-                        })
+                        this.setState({
+                            modal: true
+                        });
                     }
                 }).catch((e) => {
                     console.log(e);
@@ -119,6 +115,16 @@ export default class AttendanceDetail extends Taro.Component {
         });
     }
 
+    confirm() {
+        this.setState({
+            modal: false
+        });
+
+        Taro.navigateBack({
+            delta: 1
+        });
+    }
+
     render() {
         const realTimeInfo = this.props.attendance.attendanceRealInfo;
         const role = this.$router.params.role;
@@ -141,17 +147,17 @@ export default class AttendanceDetail extends Taro.Component {
                                 <View className=''>
                                     {realTimeInfo.checkCount}/{realTimeInfo.studentCount}
                                 </View>
-                                <View>
+                                <View className='button'>
                                     <AtButton
-                                    onClick={this.dropAttendance}
-                                    className='drop'
-                                    type='secondary' 
-                                    size='small'>放弃</AtButton>
-                                    <AtButton 
-                                    onClick={this.stopAttendance}
-                                    className='stop' 
-                                    type='primary' 
-                                    size='small'>结束</AtButton>
+                                        onClick={this.dropAttendance}
+                                        className='drop'
+                                        type='secondary'
+                                        size='small'>放弃</AtButton>
+                                    <AtButton
+                                        onClick={this.stopAttendance}
+                                        className='stop'
+                                        type='primary'
+                                        size='small'>结束</AtButton>
                                 </View>
                             </View>
                         </View>
@@ -171,6 +177,12 @@ export default class AttendanceDetail extends Taro.Component {
 
                         </View>
                 }
+                <AtModal
+                    isOpened={this.state.modal}
+                    title='考勤已截止'
+                    confirmText='确认'
+                    onConfirm={this.confirm}
+                />
             </View>
         );
     }

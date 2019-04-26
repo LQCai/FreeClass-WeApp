@@ -90,21 +90,15 @@ export const editAnnounce = (
 
 /**
  * 删除公告
- * @param {*} id 
- * @param {*} classId 
- * @param {*} teacherId 
+ * 
  */
-export const deleteAnnounce = (id, classId, teacherId) => dispatch => new Promise(
+export const deleteAnnounce = (deleteData) => dispatch => new Promise(
     (resolve, reject) => {
         wreq.request({
             url: `${config.server.host}/user/announcement/delete`,
             method: 'DELETE',
             data: {
-                deleteData: {
-                    id: id,
-                    classId: classId,
-                    teacherId: teacherId
-                }
+                deleteData: deleteData
             }
         }).then((res) => {
             dispatch({

@@ -18,7 +18,7 @@ import Homework from '../../components/homework/homework';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
 import { showHomeworkItem, closeHomeworkItem, showAnnounceItem, closeAnnounceItem } from '../../actions/classMenu';
-import { deleteHomework, getHomeworkList } from '../../actions/homework';
+import { deleteAnnounce, getAnnounceList } from '../../actions/announce';
 import moment from 'moment';
 import Attendance from "../../components/attendance/attendance";
 import Announce from "../../components/announce/announce";
@@ -28,11 +28,11 @@ import Announce from "../../components/announce/announce";
   announceItemInfo: classMenu.announceItemInfo
 }), (dispatch) => bindActionCreators({
   showHomeworkItem,
-  closeHomeworkItem,
-  deleteHomework,
-  getHomeworkList,
+  deleteAnnounce,
   showAnnounceItem,
-  closeAnnounceItem
+  closeAnnounceItem,
+  closeHomeworkItem,
+  getAnnounceList
 }, dispatch))
 export default class Classroom extends Taro.Component {
   constructor() {
@@ -51,7 +51,7 @@ export default class Classroom extends Taro.Component {
         modal: false,
         announce: {
           id: '',
-          name: ''
+          title: ''
         }
       }
     };
@@ -159,18 +159,18 @@ export default class Classroom extends Taro.Component {
    */
   deleteAnnounce() {
     const deleteData = {
-      id: this.state.itemAnnounceInfo.homework.id,
+      id: this.state.itemAnnounceInfo.announce.id,
       teacherId: this.state.userId,
       classId: this.$router.params.classId
     }
 
-    this.props.deleteHomework(deleteData).then(() => {
+    this.props.deleteAnnounce(deleteData).then(() => {
       Taro.showToast({
         title: '删除成功',
         icon: 'none'
       }).then(() => {
-        this.closehomeworkModal();
-        this.props.getHomeworkList(this.$router.params.classId);
+        this.closeAnnounceModal();
+        this.props.getAnnounceList(this.$router.params.classId);
       });
     }).catch((e) => {
       console.log(e);
@@ -200,7 +200,7 @@ export default class Classroom extends Taro.Component {
    * @param {*} announceInfo 
    */
   showAnnounceModal(announceInfo) {
-    this.props.closeHomeworkItem();
+    this.props.closeAnnounceItem();
     this.setState({
       itemAnnounceInfo: {
         modal: true,
@@ -218,7 +218,7 @@ export default class Classroom extends Taro.Component {
         modal: false,
         announce: {
           id: '',
-          name: ''
+          title: ''
         }
       }
     });
@@ -326,7 +326,7 @@ export default class Classroom extends Taro.Component {
         <View>
           <AtModal
             className='modal'
-            content={`确认删除 "` + this.state.itemAnnounceInfo.announce.name + `" ?`}
+            content={`确认删除 "` + this.state.itemAnnounceInfo.announce.title + `" ?`}
             cancelText='取消'
             confirmText='确认'
             isOpened={this.state.itemAnnounceInfo.modal}

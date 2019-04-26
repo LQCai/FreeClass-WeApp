@@ -178,6 +178,24 @@ export default class Classroom extends Taro.Component {
   }
 
   /**
+   * 跳转编辑公告界面
+   */
+  editAnnounce() {
+    const announceInfo = this.props.announceItemInfo.announceInfo;
+    const teacherId = this.state.userId;
+    const classId = this.$router.params.classId;
+
+    Taro.navigateTo({
+      url: '/pages/editAnnounce/editAnnounce?id=' + announceInfo.id
+        + '&title=' + announceInfo.title
+        + '&annexUrl=' + announceInfo.annexUrl
+        + '&content=' + announceInfo.content
+        + '&teacherId=' + teacherId
+        + '&classId=' + classId
+    });
+  }
+
+  /**
    * 显示删除公告模态框
    * @param {*} announceInfo 
    */

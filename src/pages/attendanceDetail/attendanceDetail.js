@@ -110,7 +110,7 @@ export default class AttendanceDetail extends Taro.Component {
      * 学生签到
      */
     submitCheck() {
-        this.props.checkIn(this.$router.params.id, this.$router.params.classId, this.$router.params.userId).then(() => {
+        this.props.checkIn(this.$router.params.id, this.$router.params.classId, this.$router.params.userId, this.state.checkInput).then(() => {
             Taro.showToast({
                 title: '签到成功',
                 icon: 'success'

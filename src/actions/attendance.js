@@ -159,11 +159,8 @@ export const dropAttendance = (attendanceId, classId, teacherId) => dispatch => 
  * @param {*} classId 
  * @param {*} studentId 
  */
-export const checkIn = (attendanceId, classId, studentId) => dispatch => new Promise(
+export const checkIn = (attendanceId, classId, studentId, code) => dispatch => new Promise(
     (resolve, reject) => {
-        console.log(attendanceId);
-        console.log(classId);
-        console.log(studentId);
         wreq.request({
             url: `${config.server.host}/user/attendance/checkIn`,
             method: 'POST',
@@ -171,7 +168,8 @@ export const checkIn = (attendanceId, classId, studentId) => dispatch => new Pro
                 checkData: {
                     attendanceId: attendanceId,
                     classId: classId,
-                    studentId: studentId
+                    studentId: studentId,
+                    code: code
                 }
             }
         }).then((res) => {

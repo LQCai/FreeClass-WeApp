@@ -3,7 +3,9 @@ import {
     ATTENDANCE_DROP,
     ATTENDANCE_LIST,
     ATTENDANCE_START_DIGITAL,
-    ATTENDANCE_STOP
+    ATTENDANCE_STOP,
+    ATTENDANCE_INFO_REAL_TIME,
+    ATTENDANCE_CHECK_IN
 } from '../canstants/attendance';
 
 const INITAL_STATE = {
@@ -11,7 +13,9 @@ const INITAL_STATE = {
     checkList: [],
     startDigitalResult: {},
     stopResult: {},
-    dropResult: {}
+    dropResult: {},
+    attendanceRealInfo: {},
+    checkResult: {}
 }
 
 export default function attendance(state = INITAL_STATE, action) {
@@ -42,6 +46,16 @@ export default function attendance(state = INITAL_STATE, action) {
             return {
                 ...state,
                 checkList: payload,
+            }
+        case ATTENDANCE_INFO_REAL_TIME:
+            return {
+                ...state,
+                attendanceRealInfo: payload,
+            }
+        case ATTENDANCE_CHECK_IN:
+            return {
+                ...state,
+                checkResult: payload,
             }
         default:
             return state

@@ -3,7 +3,9 @@ import {
     ATTENDANCE_DROP,
     ATTENDANCE_LIST,
     ATTENDANCE_START_DIGITAL,
-    ATTENDANCE_STOP
+    ATTENDANCE_STOP,
+    ATTENDANCE_INFO_REAL_TIME,
+    ATTENDANCE_CHECK_IN
 } from '../canstants/attendance';
 import wreq from '../utils/request';
 import config from '../config';
@@ -63,3 +65,125 @@ export const getAttendanceList = (classId) => dispatch => new Promise(
         });
     }
 );
+
+/**
+ * 获取实时考勤信息
+ */
+export const getAttendanceRealTimeInfo = (attendanceId, classId) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/attendance/startingInfo`,
+            method: 'GET',
+            data: {
+                attendanceId: attendanceId,
+                classId: classId
+            }
+        }).then((res) => {
+            dispatch({
+                type: ATTENDANCE_INFO_REAL_TIME,
+                payload: res.data.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);
+
+/**
+ * 停止考勤
+ * @param {*} attendanceId 
+ * @param {*} classId 
+ * @param {*} teacherId 
+ */
+export const stopAttendance = (attendanceId, classId, teacherId) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/attendance/stop`,
+            method: 'PUT',
+            data: {
+                stopData: {
+                    attendanceId: attendanceId,
+                    classId: classId,
+                    teacherId: teacherId
+                }
+            }
+        }).then((res) => {
+            dispatch({
+                type: ATTENDANCE_STOP,
+                payload: res.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);
+
+/**
+ * 放弃考勤
+ * @param {*} attendanceId 
+ * @param {*} classId 
+ * @param {*} teacherId 
+ */
+export const dropAttendance = (attendanceId, classId, teacherId) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/attendance/drop`,
+            method: 'DELETE',
+            data: {
+                dropData: {
+                    attendanceId: attendanceId,
+                    classId: classId,
+                    teacherId: teacherId
+                }
+            }
+        }).then((res) => {
+            dispatch({
+                type: ATTENDANCE_DROP,
+                payload: res.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);
+
+/**
+ * 学生签到
+ * @param {*} attendanceId 
+ * @param {*} classId 
+ * @param {*} studentId 
+ */
+export const checkIn = (attendanceId, classId, studentId) => dispatch => new Promise(
+    (resolve, reject) => {
+        console.log(attendanceId);
+        console.log(classId);
+        console.log(studentId);
+        wreq.request({
+            url: `${config.server.host}/user/attendance/checkIn`,
+            method: 'POST',
+            data: {
+                checkData: {
+                    attendanceId: attendanceId,
+                    classId: classId,
+                    studentId: studentId
+                }
+            }
+        }).then((res) => {
+            dispatch({
+                type: ATTENDANCE_CHECK_IN,
+                payload: res.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);
+

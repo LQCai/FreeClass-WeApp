@@ -35,17 +35,34 @@ export default class Attendance extends Taro.Component {
         this.props.startDigtal(this.state.classId, this.state.userId).then(() => {
             Taro.navigateTo({
                 url: '/pages/attendanceDetail/attendanceDetail?id=' + this.props.attendance.startDigitalResult.id
+                    + '&classId=' + this.state.classId
                     + '&role=' + this.state.role
                     + '&userId=' + this.state.userId
+                    + '&status=' + 1
             });
         });
     }
 
+    /**
+     * 显示考勤详情
+     */
+    showDetail(id, status) {
+        if (status == 1) {
+            Taro.navigateTo({
+                url: '/pages/attendanceDetail/attendanceDetail?id=' + id
+                    + '&classId=' + this.state.classId
+                    + '&role=' + this.state.role
+                    + '&userId=' + this.state.userId
+                    + '&status=' + status
+            });
+        } else {
+
+        }
+    }
+
     render() {
         const role = this.props.role;
-        const classId = this.props.classId;
 
-        console.log(this.props.attendance.attendanceList);
         return (
             <View>
                 <View onClick={this.startAttendance}>
@@ -57,8 +74,9 @@ export default class Attendance extends Taro.Component {
                 <View>
                     {this.props.attendance.attendanceList.map((attendanceInfo) => (
                         <View
-                        className='card' 
-                        key={attendanceInfo.id}>
+                            onClick={this.showDetail.bind(this, attendanceInfo.id, attendanceInfo.status)}
+                            className='card'
+                            key={attendanceInfo.id}>
                             <AtCard
                                 title={attendanceInfo.name}
                                 extra={attendanceInfo.status == 1 ? '进行中' : '截止'}

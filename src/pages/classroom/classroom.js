@@ -20,6 +20,8 @@ import { bindActionCreators } from 'redux';
 import { showHomeworkItem, closeHomeworkItem } from '../../actions/classMenu';
 import { deleteHomework, getHomeworkList } from '../../actions/homework';
 import moment from 'moment';
+import Attendance from "../../components/attendance/attendance";
+import Announce from "../../components/announce/announce";
 
 @connect(({ classMenu }) => ({
   homeworkItemInfo: classMenu.homeworkItemInfo
@@ -144,7 +146,7 @@ export default class Classroom extends Taro.Component {
 
 
   render() {
-    const tabList = [{ title: "作业" }, { title: "资料" }, { title: "公告" }, { title: "考勤" }];
+    const tabList = [{ title: "作业" }, { title: "公告" }, { title: "考勤" }];
     const classId = this.$router.params.classId;
     const role = this.$router.params.role;
 
@@ -160,52 +162,27 @@ export default class Classroom extends Taro.Component {
             {/* 作业 */}
             <AtTabsPane current={this.state.current} index={0}>
               <View>
-
                 <Homework
                   classId={classId}
                   role={role}
                 />
               </View>
             </AtTabsPane>
-            {/* 资料 */}
+            {/* 公告 */}
             <AtTabsPane current={this.state.current} index={1}>
               <View className="background">
-                <PushItem
+                <Announce
                   role={role}
-                  action={config.action.material}
-                />
-                <ClassroomCard
-                  title="寒假放学通知"
-                  content="在寒假期间哈哈哈哈哈哈哈哈哈哈哈哈嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿"
-                  notes="发布人：张温兴 发布时间：03月15日 16:34"
-                />
-              </View>
-            </AtTabsPane>
-            {/* 公告 */}
-            <AtTabsPane current={this.state.current} index={2}>
-              <View className="background">
-                <PushItem
-                  role={role}
-                  action={config.action.announcement}
-                />
-                <ClassroomCard
-                  title="寒假放学通知"
-                  content="在寒假期间哈哈哈哈哈哈哈哈哈哈哈哈嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿"
-                  notes="发布人：张温兴 发布时间：03月15日 16:34"
+                  classId={classId}
                 />
               </View>
             </AtTabsPane>
             {/* 考勤 */}
-            <AtTabsPane current={this.state.current} index={3}>
+            <AtTabsPane current={this.state.current} index={2}>
               <View className="background">
-                <PushItem
+                <Attendance
+                  classId={classId}
                   role={role}
-                  action={config.action.attendance}
-                />
-                <ClassroomCard
-                  title="寒假放学通知"
-                  content="在寒假期间哈哈哈哈哈哈哈哈哈哈哈哈嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿"
-                  notes="发布人：张温兴 发布时间：03月15日 16:34"
                 />
               </View>
             </AtTabsPane>

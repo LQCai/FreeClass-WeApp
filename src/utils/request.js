@@ -19,7 +19,7 @@ class WrappedRequest {
         },
         success: (res) => {
           const code = res.data.code ? parseInt(res.data.code, 10) : 0;
-          console.log('code'+code);
+          console.log('code' + code);
           if (res.status > 299 || res.status < 200 || code >= 1000) {
             return reject(this.afterFail(res));
           }

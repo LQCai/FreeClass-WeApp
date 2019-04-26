@@ -194,13 +194,14 @@ class Index extends Component {
 
   /**
    * 跳转指定课堂详细页面
-   * @param {*} ClassId 
+   * @param {*} classId 
    * @param {*} role 
    */
-  showClassDetail(ClassId, role) {
+  showClassDetail(classId, role) {
     Taro.navigateTo({
       url: "/pages/classroom/classroom?"
-        + "classId=" + ClassId + "&role=" + role
+        + "classId=" + classId
+        + "&role=" + role
     });
   }
 
@@ -303,15 +304,12 @@ class Index extends Component {
 
   render() {
     //课堂actionSheet的状态
-    let { classItemInfo, showClassItem, closeClassItem, classList } = this.props;
+    let { classItemInfo, showClassItem, closeClassItem } = this.props;
     const images = [
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
       'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
     ];
-
-    const myTeachingClassList = classList.myTeachingClassList;
-    const myStudyingClassList = classList.myStudyingClassList;
 
     const tabList = [{ title: '我教的课' }, { title: '我听的课' }];
 
@@ -334,22 +332,26 @@ class Index extends Component {
               {/* 我教的课 */}
               <View className='class-list'>
                 {
-                  (myTeachingClassList || []).map((classInfo) => (
-                    <View className='class-card' key={classInfo.id}>
-                      <AtCard onClick={this.showClassDetail.bind(this, classInfo.id, config.role.teacher)}
-                        note={classInfo.peopleCount + '人'}
-                        title={classInfo.name}
-                      >
-                        {'角色:' + '   教师'}
-                      </AtCard>
-                      <Text className='code'>
-                        {classInfo.invitationCode}
-                      </Text>
-                      <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo, config.role.teacher)}>
-                        <AtIcon value='menu' />
+                  this.props.classList.myTeachingClassList.length > 0
+                    ?
+                    this.props.classList.myTeachingClassList.map((classInfo) => (
+                      <View className='class-card' key={classInfo.id}>
+                        <AtCard onClick={this.showClassDetail.bind(this, classInfo.id, config.role.teacher)}
+                          note={classInfo.peopleCount + '人'}
+                          title={classInfo.name}
+                        >
+                          {'角色:' + '   教师'}
+                        </AtCard>
+                        <Text className='code'>
+                          {classInfo.invitationCode}
+                        </Text>
+                        <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo, config.role.teacher)}>
+                          <AtIcon value='menu' />
+                        </View>
                       </View>
-                    </View>
-                  ))
+                    ))
+                    :
+                    <View className='text'><Text>您还未创建课堂,点击右侧 "+" 创建吧...</Text></View>
                 }
               </View>
             </AtTabsPane>
@@ -357,22 +359,28 @@ class Index extends Component {
             {/* 我听的课 */}
             <AtTabsPane current={this.state.current} index={1} className='at-tabs__item' >
               <View className='class-list'>
-                {(myStudyingClassList || []).map((classInfo) => (
-                  <View className='class-card' key={classInfo.id}>
-                    <AtCard onClick={this.showClassDetail.bind(this, classInfo.id, config.role.student)}
-                      note={classInfo.peopleCount + '人'}
-                      title={classInfo.name}
-                    >
-                      {'角色:' + '   学生' + '   姓名:' + classInfo.teacherName}
-                    </AtCard>
-                    <Text className='code'>
-                      {classInfo.invitationCode}
-                    </Text>
-                    <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo, config.role.student)}>
-                      <AtIcon value='menu' />
-                    </View>
-                  </View>
-                ))}
+                {
+                  this.props.classList.myStudyingClassList.length > 0
+                    ?
+                    this.props.classList.myStudyingClassList.map((classInfo) => (
+                      <View className='class-card' key={classInfo.id}>
+                        <AtCard onClick={this.showClassDetail.bind(this, classInfo.id, config.role.student)}
+                          note={classInfo.peopleCount + '人'}
+                          title={classInfo.name}
+                        >
+                          {'角色:' + '   学生' + '   姓名:' + classInfo.teacherName}
+                        </AtCard>
+                        <Text className='code'>
+                          {classInfo.invitationCode}
+                        </Text>
+                        <View className='menu' onClick={this.props.showClassItem.bind(this, classInfo, config.role.student)}>
+                          <AtIcon value='menu' />
+                        </View>
+                      </View>
+                    ))
+                    :
+                    <View className='text'><Text>您还未加入任何课堂,点击右侧 "+" 加入吧...</Text></View>
+                }
               </View>
             </AtTabsPane>
           </AtTabs>

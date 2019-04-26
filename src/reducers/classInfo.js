@@ -8,7 +8,10 @@ import {
 } from '../canstants/classInfo';
 
 const INITAL_STATE = {
-    classList: [],
+    classList: {
+        myStudyingClassList: [],
+        myTeachingClassList: []
+    },
 }
 
 export default function classInfo(state = INITAL_STATE, action) {

@@ -64,7 +64,7 @@ export default class Homework extends Taro.Component {
                 + '&name=' + homework.name
                 + '&introduction=' + homework.introduction
                 + '&annexUrl=' + homework.annexUrl
-                + '&deadline=' + homework.deadline 
+                + '&deadline=' + homework.deadline
         })
     }
 
@@ -81,31 +81,41 @@ export default class Homework extends Taro.Component {
                     />
                 </View>
                 <View>
-                    {homeworkList.map((homework) => (
-                        <View
-                            className='homeworkItem'
-                            key={homework.id}>
-                            <View
-                                onClick={this.showHomeworkDetail.bind(this, homework, role)}
-                            >
-                                <AtCard
-                                    title={homework.name}
-                                >
-                                    <View>{`截至：${homework.deadline}`}</View>
-                                    <View>{homework.introduction.substr(0, 30) + '...'}</View>
-                                </AtCard>
-                            </View>
-                            {
-                                role == config.role.teacher
-                                    ?
-                                    <View className='homeworkItemMenu' onClick={this.props.showHomeworkItem.bind(this, homework, role)}>
-                                        <AtIcon value='menu'></AtIcon>
+                    {
+                        homeworkList.length > 0
+                            ?
+                            homeworkList.map((homework) => (
+                                <View
+                                    className='homeworkItem'
+                                    key={homework.id}>
+                                    <View
+                                        onClick={this.showHomeworkDetail.bind(this, homework, role)}
+                                    >
+                                        <AtCard
+                                            title={homework.name}
+                                        >
+                                            <View>{`截至：${homework.deadline}`}</View>
+                                            <View>{homework.introduction.substr(0, 30) + '...'}</View>
+                                        </AtCard>
                                     </View>
-                                    :
-                                    <View></View>
-                            }
-                        </View>
-                    ))}
+                                    {
+                                        role == config.role.teacher
+                                            ?
+                                            <View className='homeworkItemMenu' onClick={this.props.showHomeworkItem.bind(this, homework, role)}>
+                                                <AtIcon value='menu'></AtIcon>
+                                            </View>
+                                            :
+                                            <View></View>
+                                    }
+                                </View>
+                            ))
+                            :
+                            role == config.role.teacher
+                                ?
+                                <View className='text'><Text>您尚未发布作业...</Text></View>
+                                :
+                                <View className='text'><Text>暂无作业...</Text></View>
+                    }
                 </View>
             </View>
         );

@@ -57,6 +57,7 @@
             background-color: darkgray;
             height: 1px;
         }
+
         .modal-item {
             text-align: center;
             font-size: 35px;
@@ -99,4 +100,10 @@
     display: -webkit-flex;
     justify-content: center;
     align-items: center;
+}
+
+.text {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 80%;
 }

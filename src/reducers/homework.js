@@ -3,7 +3,9 @@ import {
     HOMEWORK_POST,
     HOMEWORK_SUBMIT,
     HOMEWORK_EDIT,
-    HOMEWORK_DELETE
+    HOMEWORK_DELETE,
+    HOMEWORK_SUBMIT_LIST,
+    HOMEWORK_SUBMIT_INFO
 } from '../canstants/homework';
 
 const INITAL_STATE = {
@@ -11,7 +13,9 @@ const INITAL_STATE = {
     postResult: "",
     submitResult: "",
     editResult: "",
-    deleteResult: ""
+    deleteResult: "",
+    homeworkSubmitList: [],
+    homeworkSubmitInfo: {}
 }
 
 export default function homework(state = INITAL_STATE, action) {
@@ -43,6 +47,16 @@ export default function homework(state = INITAL_STATE, action) {
             return {
                 ...state,
                 deleteResult: payload,
+            }
+        case HOMEWORK_SUBMIT_LIST:
+            return {
+                ...state,
+                homeworkSubmitList: payload
+            }
+        case HOMEWORK_SUBMIT_INFO:
+            return {
+                ...state,
+                homeworkSubmitInfo: payload
             }
         default:
             return state

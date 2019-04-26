@@ -54,6 +54,20 @@ export default class Homework extends Taro.Component {
         });
     }
 
+    showHomeworkDetail(homework, role) {
+        Taro.navigateTo({
+            url: '/pages/homeworkDetail/homeworkDetail?'
+                + 'classId=' + this.props.classId
+                + '&id=' + homework.id
+                + '&role=' + role
+                + '&userId=' + this.state.userId
+                + '&name=' + homework.name
+                + '&introduction=' + homework.introduction
+                + '&annexUrl=' + homework.annexUrl
+                + '&deadline=' + homework.deadline 
+        })
+    }
+
     render() {
         const role = this.props.role;
         const homeworkList = this.props.homeworkList;
@@ -69,15 +83,18 @@ export default class Homework extends Taro.Component {
                 <View>
                     {homeworkList.map((homework) => (
                         <View
-                            // onClick={}
                             className='homeworkItem'
                             key={homework.id}>
-                            <AtCard
-                                title={homework.name}
+                            <View
+                                onClick={this.showHomeworkDetail.bind(this, homework, role)}
                             >
-                                <View>{`截至：${homework.deadline}`}</View>
-                                <View>{homework.introduction.substr(0, 30) + '...'}</View>
-                            </AtCard>
+                                <AtCard
+                                    title={homework.name}
+                                >
+                                    <View>{`截至：${homework.deadline}`}</View>
+                                    <View>{homework.introduction.substr(0, 30) + '...'}</View>
+                                </AtCard>
+                            </View>
                             {
                                 role == config.role.teacher
                                     ?

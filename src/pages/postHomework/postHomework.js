@@ -52,7 +52,7 @@ export default class PostHomework extends Taro.Component {
         console.log(files);
         if (files) {
             this.setState({
-                files: [files[files.length - 1]],
+                files: files.length > 0 ? [files[files.length - 1]] : [],
             })
         }
     }

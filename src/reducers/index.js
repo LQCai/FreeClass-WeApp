@@ -5,6 +5,7 @@ import judgeRole from './judgeRole';
 import user from './user';
 import classInfo from './classInfo';
 import homework from './homework';
+import attendance from './attendance';
 
 export default combineReducers({
     counter,
@@ -12,5 +13,6 @@ export default combineReducers({
     judgeRole,
     user,
     classInfo,
-    homework
+    homework,
+    attendance
 });

@@ -9,9 +9,9 @@ class WrappedRequest {
 
   request(config) {
     return new Promise((resolve, reject) => {
-      Taro.showLoading({
-        mask: true,
-      });
+      // Taro.showLoading({
+      //   mask: true,
+      // });
       Taro.request({
         ...this.beforeRequest(config),
         fail: (res) => {
@@ -19,14 +19,14 @@ class WrappedRequest {
         },
         success: (res) => {
           const code = res.data.code ? parseInt(res.data.code, 10) : 0;
-          console.log('code'+code);
+          console.log('code' + code);
           if (res.status > 299 || res.status < 200 || code >= 1000) {
             return reject(this.afterFail(res));
           }
           return resolve(this.afterRequest(res));
         },
         complete: () => {
-          Taro.hideLoading();
+          // Taro.hideLoading();
         },
       }).catch((e) => {
         console.log('fail here', e);

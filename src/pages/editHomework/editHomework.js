@@ -29,7 +29,8 @@ export default class EditHomework extends Taro.Component {
             introduction: '',
             dateSel: '2019-04-01',
             timeSel: '00:00:00',
-            annex: [{ 'url': '' }]
+            annex: [{ 
+                'url': '' }]
         };
     }
 
@@ -62,7 +63,7 @@ export default class EditHomework extends Taro.Component {
         console.log(files);
         if (files) {
             this.setState({
-                annex: [files[files.length - 1]],
+                annex: files.length > 0 ? [files[files.length - 1]] : [],
             })
         }
     }

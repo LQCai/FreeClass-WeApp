@@ -17,19 +17,22 @@ import config from '../../config';
 import Homework from '../../components/homework/homework';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
-import { showHomeworkItem, closeHomeworkItem } from '../../actions/classMenu';
+import { showHomeworkItem, closeHomeworkItem, showAnnounceItem, closeAnnounceItem } from '../../actions/classMenu';
 import { deleteHomework, getHomeworkList } from '../../actions/homework';
 import moment from 'moment';
 import Attendance from "../../components/attendance/attendance";
 import Announce from "../../components/announce/announce";
 
 @connect(({ classMenu }) => ({
-  homeworkItemInfo: classMenu.homeworkItemInfo
+  homeworkItemInfo: classMenu.homeworkItemInfo,
+  announceItemInfo: classMenu.announceItemInfo
 }), (dispatch) => bindActionCreators({
   showHomeworkItem,
   closeHomeworkItem,
   deleteHomework,
-  getHomeworkList
+  getHomeworkList,
+  showAnnounceItem,
+  closeAnnounceItem
 }, dispatch))
 export default class Classroom extends Taro.Component {
   constructor() {
@@ -40,6 +43,13 @@ export default class Classroom extends Taro.Component {
       itemHomeworkInfo: {
         modal: false,
         homework: {
+          id: '',
+          name: ''
+        }
+      },
+      itemAnnounceInfo: {
+        modal: false,
+        announce: {
           id: '',
           name: ''
         }
@@ -144,6 +154,59 @@ export default class Classroom extends Taro.Component {
   }
 
 
+  /**
+   * 提交删除公告
+   */
+  deleteAnnounce() {
+    const deleteData = {
+      id: this.state.itemAnnounceInfo.homework.id,
+      teacherId: this.state.userId,
+      classId: this.$router.params.classId
+    }
+
+    this.props.deleteHomework(deleteData).then(() => {
+      Taro.showToast({
+        title: '删除成功',
+        icon: 'none'
+      }).then(() => {
+        this.closehomeworkModal();
+        this.props.getHomeworkList(this.$router.params.classId);
+      });
+    }).catch((e) => {
+      console.log(e);
+    })
+  }
+
+  /**
+   * 显示删除公告模态框
+   * @param {*} announceInfo 
+   */
+  showAnnounceModal(announceInfo) {
+    this.props.closeHomeworkItem();
+    this.setState({
+      itemAnnounceInfo: {
+        modal: true,
+        announce: announceInfo
+      }
+    });
+  }
+
+  /**
+   * 关闭删除公告模态框
+   */
+  closeAnnounceModal() {
+    this.setState({
+      itemAnnounceInfo: {
+        modal: false,
+        announce: {
+          id: '',
+          name: ''
+        }
+      }
+    });
+  }
+
+
 
   render() {
     const tabList = [{ title: "作业" }, { title: "公告" }, { title: "考勤" }];
@@ -219,6 +282,39 @@ export default class Classroom extends Taro.Component {
             onClose={this.closehomeworkModal}
             onCancel={this.closehomeworkModal}
             onConfirm={this.deleteHomework}
+          />
+        </View>
+        {/* 编辑公告弹出框 */}
+        <View>
+          <AtActionSheet
+            isOpened={this.props.announceItemInfo.sheet}
+            cancelText='取消'
+            onCancel={this.props.closeAnnounceItem}
+            onClose={this.props.closeAnnounceItem}>
+
+            <View onClick={this.editAnnounce}>
+              <AtActionSheetItem>
+                编辑公告
+                        </AtActionSheetItem>
+            </View>
+            <View onClick={this.showAnnounceModal.bind(this, this.props.announceItemInfo.announceInfo)}>
+              <AtActionSheetItem>
+                删除公告
+                        </AtActionSheetItem>
+            </View>
+          </AtActionSheet>
+        </View>
+        {/* 删除公告模态框 */}
+        <View>
+          <AtModal
+            className='modal'
+            content={`确认删除 "` + this.state.itemAnnounceInfo.announce.name + `" ?`}
+            cancelText='取消'
+            confirmText='确认'
+            isOpened={this.state.itemAnnounceInfo.modal}
+            onClose={this.closeAnnounceModal}
+            onCancel={this.closeAnnounceModal}
+            onConfirm={this.deleteAnnounce}
           />
         </View>
       </View>

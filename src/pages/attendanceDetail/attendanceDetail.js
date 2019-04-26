@@ -22,7 +22,8 @@ export default class AttendanceDetail extends Taro.Component {
         this.props.getAttendanceRealTimeInfo(this.$router.params.id, this.$router.params.classId);
         this.setState({
             checkInput: '',
-            modal: false
+            modal: false,
+            stopModal: false
         })
     }
 
@@ -32,9 +33,17 @@ export default class AttendanceDetail extends Taro.Component {
                 this.props.getAttendanceRealTimeInfo(this.$router.params.id, this.$router.params.classId).then(() => {
                     const realTimeInfo = this.props.attendance.attendanceRealInfo;
 
+                    // 当考勤结束时提示退出本页面
                     if (realTimeInfo.status == 3) {
                         this.setState({
                             modal: true
+                        });
+                    }
+
+                    // 当全员考勤后提示是否终止考勤
+                    if (realTimeInfo.studentCount > 0 && realTimeInfo.studentCount == realTimeInfo.checkCount) {
+                        this.setState({
+                            stopModal: true
                         });
                     }
                 }).catch((e) => {
@@ -125,10 +134,21 @@ export default class AttendanceDetail extends Taro.Component {
         });
     }
 
+    /**
+     * 取消终止考勤，并停止定时器
+     */
+    cancelStop() {
+        if (this.state.timer != null) {
+            clearInterval(this.state.timer);
+            this.setState({
+                stopModal: false
+            });
+        }
+    }
+
     render() {
         const realTimeInfo = this.props.attendance.attendanceRealInfo;
         const role = this.$router.params.role;
-        const userId = this.$router.params.userId;
 
         return (
             <View>
@@ -182,6 +202,15 @@ export default class AttendanceDetail extends Taro.Component {
                     title='考勤已截止'
                     confirmText='确认'
                     onConfirm={this.confirm}
+                />
+
+                <AtModal
+                    isOpened={this.state.stopModal}
+                    title='课堂内人员到齐，是否终止考勤?'
+                    confirmText='确认'
+                    cancelText="取消"
+                    onCancel={this.cancelStop}
+                    onConfirm={this.stopAttendance}
                 />
             </View>
         );

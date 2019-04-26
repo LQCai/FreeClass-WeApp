@@ -9,9 +9,9 @@ class WrappedRequest {
 
   request(config) {
     return new Promise((resolve, reject) => {
-      Taro.showLoading({
-        mask: true,
-      });
+      // Taro.showLoading({
+      //   mask: true,
+      // });
       Taro.request({
         ...this.beforeRequest(config),
         fail: (res) => {

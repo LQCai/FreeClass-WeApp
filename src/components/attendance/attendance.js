@@ -56,7 +56,12 @@ export default class Attendance extends Taro.Component {
                     + '&status=' + status
             });
         } else {
-
+            Taro.navigateTo({
+                url: '/pages/attendanceRecord/attendanceRecord?id=' + id
+                    + '&classId=' + this.state.classId
+                    + '&role=' + this.state.role
+                    + '&userId=' + this.state.userId
+            });
         }
     }
 

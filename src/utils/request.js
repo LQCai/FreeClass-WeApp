@@ -26,7 +26,7 @@ class WrappedRequest {
           return resolve(this.afterRequest(res));
         },
         complete: () => {
-          Taro.hideLoading();
+          // Taro.hideLoading();
         },
       }).catch((e) => {
         console.log('fail here', e);

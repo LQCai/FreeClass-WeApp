@@ -187,3 +187,30 @@ export const checkIn = (attendanceId, classId, studentId) => dispatch => new Pro
     }
 );
 
+/**
+ * 获取指定考勤签到记录
+ * @param {*} attendanceId 
+ * @param {*} classId 
+ */
+export const getCheckList = (attendanceId, classId) => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/attendance/checkList`,
+            method: 'GET',
+            data: {
+                attendanceId: attendanceId,
+                classId: classId
+            }
+        }).then((res) => {
+            dispatch({
+                type: ATTENDANCE_CHECK_LIST,
+                payload: res.data.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);
+

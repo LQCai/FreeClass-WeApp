@@ -2,7 +2,7 @@ const config = {
     server: {
         // host: 'http://127.0.0.1/freeClass'
         // host: 'http://192.168.43.220/freeClass'
-        host: 'https://www.starchild.cn:8443/freeClass'
+        host: 'https://www.starchild.cn/freeClass'
     },
     code: {
         success: '0000',

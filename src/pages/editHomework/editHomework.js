@@ -29,8 +29,9 @@ export default class EditHomework extends Taro.Component {
             introduction: '',
             dateSel: '2019-04-01',
             timeSel: '00:00:00',
-            annex: [{ 
-                'url': '' }]
+            annex: [{
+                'url': ''
+            }]
         };
     }
 
@@ -96,9 +97,9 @@ export default class EditHomework extends Taro.Component {
                 data.name,
                 data.id,
                 data.introduction,
-                data.dateSel + ' ' + data.timeSel,
+                data.dateSel + ' ' + data.timeSel + ":00",
                 data.annex[0].url).then((res) => {
-                    const resObj = JSON.parse(res);
+                    const resObj = typeof res === 'string' ? JSON.parse(res) : res;
                     if (resObj.code != config.code.success) {
                         Taro.showToast({
                             title: `${resObj.msg}`,

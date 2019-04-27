@@ -83,7 +83,7 @@ export default class EditAnnounce extends Taro.Component {
                 data.classId,
                 data.content,
                 data.annex[0].url).then((res) => {
-                    const resObj = JSON.parse(res);
+                    const resObj = typeof res === 'string' ? JSON.parse(res) : res;
                     if (resObj.code != config.code.success) {
                         Taro.showToast({
                             title: `${resObj.msg}`,

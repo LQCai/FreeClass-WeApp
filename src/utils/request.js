@@ -9,9 +9,9 @@ class WrappedRequest {
 
   request(config) {
     return new Promise((resolve, reject) => {
-      // Taro.showLoading({
-      //   mask: true,
-      // });
+      Taro.showLoading({
+        mask: true,
+      });
       Taro.request({
         ...this.beforeRequest(config),
         fail: (res) => {
@@ -26,7 +26,7 @@ class WrappedRequest {
           return resolve(this.afterRequest(res));
         },
         complete: () => {
-          // Taro.hideLoading();
+          Taro.hideLoading();
         },
       }).catch((e) => {
         console.log('fail here', e);

@@ -19,6 +19,7 @@ import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
 import { showHomeworkItem, closeHomeworkItem, showAnnounceItem, closeAnnounceItem } from '../../actions/classMenu';
 import { deleteAnnounce, getAnnounceList } from '../../actions/announce';
+import { deleteHomework, getHomeworkList } from '../../actions/homework';
 import moment from 'moment';
 import Attendance from "../../components/attendance/attendance";
 import Announce from "../../components/announce/announce";
@@ -29,6 +30,8 @@ import Announce from "../../components/announce/announce";
 }), (dispatch) => bindActionCreators({
   showHomeworkItem,
   deleteAnnounce,
+  deleteHomework,
+  getHomeworkList,
   showAnnounceItem,
   closeAnnounceItem,
   closeHomeworkItem,

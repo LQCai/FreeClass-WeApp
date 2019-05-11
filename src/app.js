@@ -49,10 +49,10 @@ class App extends Component {
           text: "课程"
         },
         {
-          iconPath: "./asset/tabbar/message.png",
-          selectedIconPath: "./asset/tabbar/message_active.png",
+          iconPath: "./asset/tabbar/detection.png",
+          selectedIconPath: "./asset/tabbar/detection_active.png",
           pagePath: "pages/message/message",
-          text: "消息"
+          text: "发现"
         },
         {
           iconPath: "./asset/tabbar/user.png",

@@ -52,8 +52,10 @@ export const postHomework = (
     classId,
     content,
     deadline,
+    formId,
     url) => dispatch => new Promise(
         (resolve, reject) => {
+            console.log(formId);
             Taro.uploadFile({
                 url: `${config.server.host}/user/homework/post`,
                 filePath: url,
@@ -65,6 +67,7 @@ export const postHomework = (
                     homeworkIntroduction: content,
                     sendByEmail: 2,
                     fullScore: 100,
+                    formId: formId,
                     deadline: deadline
                 }
             }).then((res) => {

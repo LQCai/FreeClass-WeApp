@@ -71,7 +71,9 @@ export default class PostHomework extends Taro.Component {
         console.log(this.state);
     }
 
-    onSubmitPost() {
+    onSubmitPost(e) {
+        const formId = e.detail.formId;
+        console.log(formId);
         const data = this.state;
         if (data.files.length == 0) {
             Taro.showToast({
@@ -84,8 +86,9 @@ export default class PostHomework extends Taro.Component {
                 data.classId,
                 data.content,
                 data.dateSel + ' ' + data.timeSel + ":00",
+                formId,
                 data.files[0].url).then((res) => {
-                    const resObj = JSON.parse(res);
+                    const resObj = typeof res === 'string' ? JSON.parse(res) : res;
                     if (resObj.code != config.code.success) {
                         Taro.showToast({
                             title: `${resObj.msg}`,
@@ -113,6 +116,7 @@ export default class PostHomework extends Taro.Component {
         return (
             <View >
                 <AtForm
+                    reportSubmit={true}
                     onSubmit={this.onSubmitPost.bind(this)}
                 >
                     <AtInput

@@ -29,6 +29,7 @@ export default class AttendanceDetail extends Taro.Component {
 
     componentDidMount() {
         this.setState({
+            // 定时
             timer: setInterval(() => {
                 this.props.getAttendanceRealTimeInfo(this.$router.params.id, this.$router.params.classId).then(() => {
                     const realTimeInfo = this.props.attendance.attendanceRealInfo;
@@ -49,7 +50,7 @@ export default class AttendanceDetail extends Taro.Component {
                 }).catch((e) => {
                     console.log(e);
                 });
-            }, 5000)
+            }, 3000)
         });
     }
 

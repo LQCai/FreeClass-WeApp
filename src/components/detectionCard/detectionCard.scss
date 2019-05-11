@@ -1,0 +1,16 @@
+.list-img {
+    width: 30%;
+    max-height: 200px;
+    max-width: 200px;
+    padding-right: 5px;
+    object-fit: cover
+}
+.name {
+    color: #6190E8;
+}
+.time {
+    font-size: 80%;
+    .time-text {
+        color: gray;
+    }
+}

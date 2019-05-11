@@ -36,6 +36,9 @@ class App extends Component {
       "pages/postAnnounce/postAnnounce",
       "pages/announceDetail/announceDetail",
       "pages/editAnnounce/editAnnounce",
+      "pages/detection/detection",
+      "pages/postDetection/postDetection",
+      "pages/detectionDetail/detectionDetail",
     ],
     tabBar: {
       color: "#595959",
@@ -51,7 +54,7 @@ class App extends Component {
         {
           iconPath: "./asset/tabbar/detection.png",
           selectedIconPath: "./asset/tabbar/detection_active.png",
-          pagePath: "pages/message/message",
+          pagePath: "pages/detection/detection",
           text: "发现"
         },
         {

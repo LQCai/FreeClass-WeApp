@@ -10,7 +10,8 @@ import {
 } from '../canstants/detection';
 
 const INITAL_STATE = {
-    detectionList: []
+    detectionList: [],
+    postResult: {}
 }
 
 export default function detection(state = INITAL_STATE, action) {
@@ -23,7 +24,11 @@ export default function detection(state = INITAL_STATE, action) {
                 ...state,
                 detectionList: payload,
             }
-
+        case DETECTION_POST:
+            return {
+                ...state,
+                postResult: payload,
+            }
         default:
             return state
     }

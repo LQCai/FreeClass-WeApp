@@ -49,7 +49,7 @@ export default class Detection extends Taro.Component {
     }
 
     updateList() {
-        this.props.getDetectionList(this.state.pageIndex).then(() => {
+        this.props.getDetectionList(0).then(() => {
             this.setState(({
                 articleList: this.props.detection.detectionList,
                 pageIndex: 0,

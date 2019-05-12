@@ -1,13 +1,22 @@
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { AtTextarea, AtForm, AtImagePicker, AtButton } from 'taro-ui';
+import { connect } from '@tarojs/redux';
+import { bindActionCreators } from 'redux';
+import { postDetection } from '../../actions/detection';
 
+@connect(({ detection }) => ({
+    detection
+}), (dispatch) => bindActionCreators({
+    postDetection
+}, dispatch))
 export default class PostDetection extends Taro.Component {
     constructor() {
         super(...arguments)
         this.state = {
             text: '',
-            images: []
+            images: [],
+            userId: Taro.getStorageSync("userInfo").id
         }
     }
     handleTextChange(event) {
@@ -28,7 +37,11 @@ export default class PostDetection extends Taro.Component {
         }
     }
     submit() {
-
+        this.props.postDetection(
+            this.state.text,
+            this.state.userId,
+            this.state.images
+        )
     }
 
     render() {

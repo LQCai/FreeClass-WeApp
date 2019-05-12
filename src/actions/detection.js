@@ -36,3 +36,55 @@ export const getDetectionList = (pageIndex) => dispatch => new Promise(
         });
     }
 );
+
+/**
+ * 发布动态
+ * @param {*} content 
+ * @param {*} userId 
+ * @param {*} images 
+ */
+export const postDetection = (
+    content,
+    userId,
+    images) => dispatch => new Promise(
+        (resolve, reject) => {
+            if (images.length <= 0) {
+                wreq.request({
+                    url: `${config.server.host}/user/article/add`,
+                    method: 'POST',
+                    data: {
+                        userId: userId,
+                        content: content
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: DETECTION_LIST,
+                        payload: res.data.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
+                });
+            } else {
+                Taro.uploadFile({
+                    url: `${config.server.host}/user/article/add`,
+                    filePath: images[i],
+                    name: 'images',
+                    formData: {
+                        userId: userId,
+                        content: content
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: DETECTION_POST,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
+                });
+            }
+        }
+    );

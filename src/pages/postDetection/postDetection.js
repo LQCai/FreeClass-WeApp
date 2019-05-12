@@ -16,7 +16,6 @@ export default class PostDetection extends Taro.Component {
         })
     }
     onImageChange(files) {
-        console.log(files);
         if (files.length > 3) {
             Taro.showToast({
                 title: '只允许上传3帐图片',

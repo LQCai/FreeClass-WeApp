@@ -25,8 +25,6 @@ export default class DetectionCard extends Taro.Component {
                     <Text className='time-text'>
                         {time}
                     </Text>
-                    <Text className='comment-text'>评论:{commentCount}</Text>
-                    <Text className='star-text'>收藏:{star}</Text>
                 </View>
             </View>
         );

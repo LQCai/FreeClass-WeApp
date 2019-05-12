@@ -18,9 +18,18 @@ export default class Detection extends Taro.Component {
         enablePullDownRefresh: true,
         backgroundTextStyle: 'dark'
     }
-    componentWillMount() {
+
+    constructor() {
+        super(...arguments)
         this.setState({
             userId: Taro.getStorageSync('userInfo').id,
+            pageIndex: 0,
+            pageNextIndex: 1
+        });
+    }
+
+    componentWillMount() {
+        this.setState({
             articleList: []
         });
         this.updateList();
@@ -40,75 +49,34 @@ export default class Detection extends Taro.Component {
     }
 
     updateList() {
-        this.props.getDetectionList(0).then(() => {
+        this.props.getDetectionList(this.state.pageIndex).then(() => {
             this.setState(({
-                articleList: this.props.detection.detectionList
+                articleList: this.props.detection.detectionList,
+                pageIndex: 0,
+                pageNextIndex: 1
             }))
         }).catch((e) => {
             console.log(e);
-        })
-        // this.setState({
-        //     articleList: [
-        //         {
-        //             name: '罗钦才',
-        //             content: '测试json',
-        //             images: [
-        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-        //                 'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-        //             ],
-        //             time: '2019-01-01 00:00:00'
-        //         },
-        //         {
-        //             name: '罗钦才',
-        //             content: '测试json',
-        //             images: [
-        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-        //                 'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-        //             ],
-        //             time: '2019-01-01 00:00:00'
-        //         },
-        //         {
-        //             name: '罗钦才',
-        //             content: '测试json',
-        //             images: [
-        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-        //                 'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-        //             ],
-        //             time: '2019-01-01 00:00:00'
-        //         },
-        //         {
-        //             name: '罗钦才',
-        //             content: '测试json',
-        //             images: [
-        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-        //                 'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-        //             ],
-        //             time: '2019-01-01 00:00:00'
-        //         }
-        //     ]
-        // })
+        });
     }
 
     appendNextPageList() {
-        console.log("down");
-        const list = [
-            {
-                name: '罗钦才',
-                content: '测试json',
-                images: [
-                    'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                    'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                    'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-                ],
-                time: '2019-01-01 00:00:00'
+        console.log(this.state.pageIndex);
+        console.log(this.state.pageNextIndex);
+        this.props.getDetectionList(this.state.pageNextIndex).then(() => {
+            const list = this.props.detection.detectionList;
+            if (list.length <= 0) {
+                Taro.showToast({
+                    title: '没有更多动态了!',
+                    icon: 'none'
+                });
+            } else {
+                this.setState({
+                    articleList: this.state.articleList.concat(list),
+                    pageIndex: this.state.pageIndex + 1,
+                    pageNextIndex: this.state.pageNextIndex + 1
+                })
             }
-        ];
-        this.setState({
-            articleList: this.state.articleList.concat(list)
         })
     }
 
@@ -141,8 +109,6 @@ export default class Detection extends Taro.Component {
                                 content={item.content}
                                 images={item.images}
                                 time={item.createTime}
-                                star={item.collectionCount}
-                                commentCount={item.commentCount}
                             />
                         </View>
                         <View className='line'></View>

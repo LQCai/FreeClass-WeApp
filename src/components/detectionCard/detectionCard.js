@@ -5,7 +5,7 @@ import { AtIcon } from 'taro-ui';
 
 export default class DetectionCard extends Taro.Component {
     render() {
-        const { name, content, images, time } = this.props;
+        const { name, content, images, time, star, commentCount } = this.props;
         return (
             <View className='at-article'>
                 <View>
@@ -21,10 +21,12 @@ export default class DetectionCard extends Taro.Component {
                         <Image className='list-img' key={index} src={image} />
                     ))}
                 </View>
-                <View className='time'>
+                <View className='other'>
                     <Text className='time-text'>
                         {time}
                     </Text>
+                    <Text className='comment-text'>评论:{commentCount}</Text>
+                    <Text className='star-text'>收藏:{star}</Text>
                 </View>
             </View>
         );

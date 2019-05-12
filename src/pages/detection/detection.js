@@ -3,7 +3,15 @@ import { ScrollView, View, Text } from '@tarojs/components';
 import './detection.scss'
 import DetectionCard from '../../components/detectionCard/detectionCard';
 import { AtButton } from 'taro-ui';
+import { connect } from '@tarojs/redux';
+import { bindActionCreators } from 'redux';
+import { getDetectionList } from '../../actions/detection';
 
+@connect(({ detection }) => ({
+    detection
+}), (dispatch) => bindActionCreators({
+    getDetectionList
+}, dispatch))
 export default class Detection extends Taro.Component {
     config = {
         navigationBarTitleText: '动态',
@@ -32,51 +40,57 @@ export default class Detection extends Taro.Component {
     }
 
     updateList() {
-        console.log("up");
-        this.setState({
-            articleList: [
-                {
-                    name: '罗钦才',
-                    content: '测试json',
-                    images: [
-                        'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                        'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                        'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-                    ],
-                    time: '2019-01-01 00:00:00'
-                },
-                {
-                    name: '罗钦才',
-                    content: '测试json',
-                    images: [
-                        'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                        'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                        'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-                    ],
-                    time: '2019-01-01 00:00:00'
-                },
-                {
-                    name: '罗钦才',
-                    content: '测试json',
-                    images: [
-                        'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                        'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                        'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-                    ],
-                    time: '2019-01-01 00:00:00'
-                },
-                {
-                    name: '罗钦才',
-                    content: '测试json',
-                    images: [
-                        'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                        'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-                        'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
-                    ],
-                    time: '2019-01-01 00:00:00'
-                }
-            ]
+        this.props.getDetectionList(0).then(() => {
+            this.setState(({
+                articleList: this.props.detection.detectionList
+            }))
+        }).catch((e) => {
+            console.log(e);
         })
+        // this.setState({
+        //     articleList: [
+        //         {
+        //             name: '罗钦才',
+        //             content: '测试json',
+        //             images: [
+        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
+        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
+        //                 'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
+        //             ],
+        //             time: '2019-01-01 00:00:00'
+        //         },
+        //         {
+        //             name: '罗钦才',
+        //             content: '测试json',
+        //             images: [
+        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
+        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
+        //                 'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
+        //             ],
+        //             time: '2019-01-01 00:00:00'
+        //         },
+        //         {
+        //             name: '罗钦才',
+        //             content: '测试json',
+        //             images: [
+        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
+        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
+        //                 'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
+        //             ],
+        //             time: '2019-01-01 00:00:00'
+        //         },
+        //         {
+        //             name: '罗钦才',
+        //             content: '测试json',
+        //             images: [
+        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
+        //                 'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
+        //                 'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
+        //             ],
+        //             time: '2019-01-01 00:00:00'
+        //         }
+        //     ]
+        // })
     }
 
     appendNextPageList() {
@@ -116,17 +130,19 @@ export default class Detection extends Taro.Component {
                     className='button'
                     onClick={this.postDetection}
                 >发布动态</AtButton>
-                {this.state.articleList.map((item, index) => (
+                {this.state.articleList.map((item) => (
                     <View
                         onClick={this.showDetail}
-                        key={index}>
+                        key={item.id}>
                         <View
                             className='item'>
                             <DetectionCard
                                 name={item.name}
                                 content={item.content}
                                 images={item.images}
-                                time={item.time}
+                                time={item.createTime}
+                                star={item.collectionCount}
+                                commentCount={item.commentCount}
                             />
                         </View>
                         <View className='line'></View>

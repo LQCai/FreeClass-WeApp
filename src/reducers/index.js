@@ -7,6 +7,7 @@ import classInfo from './classInfo';
 import homework from './homework';
 import attendance from './attendance';
 import announce from './announce';
+import detection from './detection';
 
 export default combineReducers({
     counter,
@@ -16,5 +17,6 @@ export default combineReducers({
     classInfo,
     homework,
     attendance,
-    announce
+    announce,
+    detection
 });

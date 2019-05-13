@@ -6,12 +6,14 @@ import {
     DETECTION_COMMENT_CANCEL,
     DETECTION_DELETE,
     DETECTION_DETAIL,
-    DETECTION_POST
+    DETECTION_POST,
+    DETECTION_IMAGE_LIST
 } from '../canstants/detection';
 
 const INITAL_STATE = {
     detectionList: [],
-    postResult: {}
+    postResult: {},
+    detectionImageList: []
 }
 
 export default function detection(state = INITAL_STATE, action) {
@@ -28,6 +30,11 @@ export default function detection(state = INITAL_STATE, action) {
             return {
                 ...state,
                 postResult: payload,
+            }
+        case DETECTION_IMAGE_LIST:
+            return {
+                ...state,
+                detectionImageList: payload,
             }
         default:
             return state

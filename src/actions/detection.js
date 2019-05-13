@@ -6,7 +6,8 @@ import {
     DETECTION_COMMENT_CANCEL,
     DETECTION_DELETE,
     DETECTION_DETAIL,
-    DETECTION_POST
+    DETECTION_POST,
+    DETECTION_IMAGE_LIST
 } from '../canstants/detection';
 import wreq from '../utils/request';
 import config from '../config';
@@ -38,53 +39,69 @@ export const getDetectionList = (pageIndex) => dispatch => new Promise(
 );
 
 /**
+ * 上传文件
+ * @param {*} images 
+ */
+export const uploadFiles = (images) => dispatch => new Promise(
+    (resolve, reject) => {
+        let imageUrls = [];
+        for (let i = 0; i < images.length; i++) {
+            Taro.uploadFile({
+                url: `${config.server.host}/user/article/upload`,
+                filePath: images[i]['url'],
+                name: 'image',
+                formData: null
+            }).then((res) => {
+                const resObj = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
+                if (resObj.code == config.code.fail) {
+                    return reject(resObj);
+                }
+                imageUrls = imageUrls.concat(resObj.data);
+                console.log(imageUrls);
+                dispatch({
+                    type: DETECTION_IMAGE_LIST,
+                    payload: imageUrls
+                });
+                return resolve(resObj);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
+        }
+    }
+);
+
+/**
  * 发布动态
  * @param {*} content 
  * @param {*} userId 
- * @param {*} images 
+ * @param {*} imageUrls 
  */
 export const postDetection = (
     content,
     userId,
-    images) => dispatch => new Promise(
+    imageUrls) => dispatch => new Promise(
         (resolve, reject) => {
-            if (images.length <= 0) {
-                wreq.request({
-                    url: `${config.server.host}/user/article/add`,
-                    method: 'POST',
-                    data: {
-                        userId: userId,
-                        content: content
-                    }
-                }).then((res) => {
-                    dispatch({
-                        type: DETECTION_LIST,
-                        payload: res.data.data
-                    });
-                    return resolve(res.data);
-                }).catch((e) => {
-                    console.log(e);
-                    return reject(e);
+            console.log(imageUrls);
+            console.log(content);
+            console.log(userId);
+            wreq.request({
+                url: `${config.server.host}/user/article/add`,
+                method: 'POST',
+                data: {
+                    userId: userId,
+                    content: content,
+                    images: imageUrls
+                }
+            }).then((res) => {
+                dispatch({
+                    type: DETECTION_POST,
+                    payload: res.data.data
                 });
-            } else {
-                Taro.uploadFile({
-                    url: `${config.server.host}/user/article/add`,
-                    filePath: images[i],
-                    name: 'images',
-                    formData: {
-                        userId: userId,
-                        content: content
-                    }
-                }).then((res) => {
-                    dispatch({
-                        type: DETECTION_POST,
-                        payload: res.data
-                    });
-                    return resolve(res.data);
-                }).catch((e) => {
-                    console.log(e);
-                    return reject(e);
-                });
-            }
+                return resolve(res.data);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
         }
     );

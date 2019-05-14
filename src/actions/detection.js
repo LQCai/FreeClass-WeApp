@@ -62,7 +62,9 @@ export const uploadFiles = (images) => dispatch => new Promise(
                     type: DETECTION_IMAGE_LIST,
                     payload: imageUrls
                 });
-                return resolve(resObj);
+                if (i == images.length - 1) {
+                    return resolve(resObj);
+                }
             }).catch((e) => {
                 console.log(e);
                 return reject(e);

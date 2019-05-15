@@ -35,6 +35,10 @@ export default class Detection extends Taro.Component {
         this.updateList();
     }
 
+    componentDidShow() {
+        this.updateList();
+    }
+
 
     postDetection() {
         Taro.navigateTo({
@@ -103,6 +107,8 @@ export default class Detection extends Taro.Component {
                                 content={item.content}
                                 images={item.images}
                                 time={item.createTime}
+                                commentList={item.commentList}
+                                star={item.star}
                             />
                         </View>
                         <View className='line'></View>

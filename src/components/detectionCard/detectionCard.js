@@ -41,10 +41,32 @@ export default class DetectionCard extends Taro.Component {
     }
 
     collect() {
-        if (this.state.star == 1) {
-            this.props.collect(this.state.id);
+        if (this.state.star == 2) {
+            this.props.collect(this.state.id).then(() => {
+                Taro.showToast({
+                    title: '收藏成功',
+                    icon: 'success'
+                }).then(() => {
+                    Taro.reLaunch({
+                        url: '/pages/detection/detection'
+                    });
+                }).catch((e) => {
+                    console.log(e);
+                })
+            })
         } else {
-            this.props.collectCancel(this.state.id);
+            this.props.collectCancel(this.state.id).then(() => {
+                Taro.showToast({
+                    title: '取消收藏成功',
+                    icon: 'success'
+                }).then(() => {
+                    Taro.reLaunch({
+                        url: '/pages/detection/detection'
+                    });
+                }).catch((e) => {
+                    console.log(e);
+                })
+            })
         }
     }
 
@@ -55,25 +77,6 @@ export default class DetectionCard extends Taro.Component {
     }
 
     render() {
-        const star1 = 1;
-        const commentList = [
-            {
-                name: '罗钦才',
-                comment: '哈哈哈！！'
-            },
-            {
-                name: '芹菜',
-                comment: '今天做了啥？'
-            },
-            {
-                name: '芹菜',
-                comment: '今天做了啥？'
-            },
-            {
-                name: '芹菜',
-                comment: '今天做了啥？'
-            }
-        ]
         return (
             <View className='detection'>
                 <View>
@@ -82,7 +85,7 @@ export default class DetectionCard extends Taro.Component {
                     </Text>
                 </View>
                 <View className='content'>
-                    {this.state.comment}
+                    {this.state.content}
                 </View>
                 <View>
                     {this.state.images.map((image, index) => (
@@ -94,7 +97,7 @@ export default class DetectionCard extends Taro.Component {
                         {this.state.time}
                     </Text>
                     <View className='collect' onClick={this.collect}>
-                        {star1 == 1
+                        {this.state.star == 1
                             ?
                             <AtIcon value='star-2' />
                             :
@@ -107,9 +110,9 @@ export default class DetectionCard extends Taro.Component {
                 </View>
                 <View className='comment'>
                     <View className='comment-list'>
-                        {commentList.map((commentInfo, index) => (
-                            <View key={index}>
-                                <Text>{commentInfo.name + ' : '} </Text>
+                        {this.state.commentList.map((commentInfo) => (
+                            <View key={commentInfo.id}>
+                                <Text>{commentInfo.creator + ' : '} </Text>
                                 <Text>{commentInfo.comment}</Text>
                             </View>
                         ))}

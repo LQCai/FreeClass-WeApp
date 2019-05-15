@@ -34,8 +34,8 @@ export default class DetectionComment extends Taro.Component {
         title: '评论成功',
         icon: 'success'
       }).then(() => {
-        Taro.navigateBack({
-          delta: 1
+        Taro.reLaunch({
+          url: '/pages/detection/detection'
         });
       })
     }).catch((e) => {

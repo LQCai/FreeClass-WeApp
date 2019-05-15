@@ -23,7 +23,8 @@ export const getDetectionList = (pageIndex) => dispatch => new Promise(
             url: `${config.server.host}/user/article/list`,
             method: 'GET',
             data: {
-                pageIndex: pageIndex
+                pageIndex: pageIndex,
+                userId: Taro.getStorageSync('userInfo').id
             }
         }).then((res) => {
             dispatch({

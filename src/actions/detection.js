@@ -107,3 +107,65 @@ export const postDetection = (
             });
         }
     );
+
+/**
+ * 动态收藏
+ * @param {*} userId 
+ * @param {*} articleId 
+ */
+export const collect = (
+    articleId) => dispatch => new Promise(
+        (resolve, reject) => {
+            console.log(articleId);
+            wreq.request({
+                url: `${config.server.host}/user/article/collect`,
+                method: 'POST',
+                data: {
+                    data: {
+                        userId: Taro.getStorageSync('userInfo').id,
+                        articleId: articleId
+                    }
+                }
+            }).then((res) => {
+                dispatch({
+                    type: DETECTION_COLLECT,
+                    payload: res.data.data
+                });
+                return resolve(res.data);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
+        }
+    );
+
+/**
+ * 取消收藏
+ * @param {*} userId 
+ * @param {*} articleId 
+ */
+export const collectCancel = (
+    articleId) => dispatch => new Promise(
+        (resolve, reject) => {
+            console.log(articleId);
+            wreq.request({
+                url: `${config.server.host}/user/article/cancelCollect`,
+                method: 'PUT',
+                data: {
+                    data: {
+                        userId: Taro.getStorageSync('userInfo').id,
+                        articleId: articleId
+                    }
+                }
+            }).then((res) => {
+                dispatch({
+                    type: DETECTION_COLLECT_CANCEL,
+                    payload: res.data.data
+                });
+                return resolve(res.data);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
+        }
+    );

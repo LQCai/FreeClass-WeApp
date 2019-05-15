@@ -42,12 +42,6 @@ export default class Detection extends Taro.Component {
         })
     }
 
-    showDetail() {
-        Taro.navigateTo({
-            url: '/pages/detectionDetail/detectionDetail'
-        })
-    }
-
     updateList() {
         this.props.getDetectionList(0).then(() => {
             this.setState(({
@@ -100,11 +94,11 @@ export default class Detection extends Taro.Component {
                 >发布动态</AtButton>
                 {this.state.articleList.map((item) => (
                     <View
-                        onClick={this.showDetail}
                         key={item.id}>
                         <View
                             className='item'>
                             <DetectionCard
+                                uid={item.id}
                                 name={item.name}
                                 content={item.content}
                                 images={item.images}

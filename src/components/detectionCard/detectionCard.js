@@ -2,12 +2,24 @@ import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import './detectionCard.scss';
 import { AtIcon } from 'taro-ui';
+import { connect } from '@tarojs/redux';
+import { bindActionCreators } from 'redux';
+import config from '../../config';
+import { collect, collectCancel } from '../../actions/detection';
 
+
+@connect(({ detection }) => ({
+    detection
+}), (dispatch) => bindActionCreators({
+    collect,
+    collectCancel
+}, dispatch))
 export default class DetectionCard extends Taro.Component {
 
     componentWillMount() {
+        console.log(this.props);
         this.setState({
-            id: this.props.id,
+            id: this.props.uid,
             name: this.props.name,
             content: this.props.content,
             images: this.props.images,
@@ -19,7 +31,7 @@ export default class DetectionCard extends Taro.Component {
 
     componentDidShow() {
         this.setState({
-            id: this.props.id,
+            id: this.props.uid,
             name: this.props.name,
             content: this.props.content,
             images: this.props.images,
@@ -30,7 +42,11 @@ export default class DetectionCard extends Taro.Component {
     }
 
     collect() {
-
+        if (this.state.star == 1) {
+            this.props.collect(this.state.id);
+        } else {
+            this.props.collectCancel(this.state.id);
+        }
     }
 
     render() {

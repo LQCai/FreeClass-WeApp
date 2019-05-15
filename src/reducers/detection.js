@@ -13,7 +13,8 @@ import {
 const INITAL_STATE = {
     detectionList: [],
     postResult: {},
-    detectionImageList: []
+    detectionImageList: [],
+    collectResult: 0,
 }
 
 export default function detection(state = INITAL_STATE, action) {
@@ -35,6 +36,16 @@ export default function detection(state = INITAL_STATE, action) {
             return {
                 ...state,
                 detectionImageList: payload,
+            }
+        case DETECTION_COLLECT:
+            return {
+                ...state,
+                collectResult: 1,
+            }
+        case DETECTION_COLLECT_CANCEL:
+            return {
+                ...state,
+                collectResult: 2,
             }
         default:
             return state

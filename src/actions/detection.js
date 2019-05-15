@@ -169,3 +169,67 @@ export const collectCancel = (
             });
         }
     );
+
+/**
+* 动态评论
+* @param {*} userId 
+* @param {*} articleId 
+*/
+export const commet = (
+    articleId,
+    content) => dispatch => new Promise(
+        (resolve, reject) => {
+            console.log(articleId);
+            wreq.request({
+                url: `${config.server.host}/user/article/comment`,
+                method: 'POST',
+                data: {
+                    data: {
+                        userId: Taro.getStorageSync('userInfo').id,
+                        articleId: articleId,
+                        content: content
+                    }
+                }
+            }).then((res) => {
+                dispatch({
+                    type: DETECTION_COMMENT,
+                    payload: res.data.data
+                });
+                return resolve(res.data);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
+        }
+    );
+
+/**
+ * 删除评论
+ * @param {*} userId 
+ * @param {*} articleId 
+ */
+export const commentDelete = (
+    articleCommentId) => dispatch => new Promise(
+        (resolve, reject) => {
+            console.log(articleId);
+            wreq.request({
+                url: `${config.server.host}/user/article/deleteComment`,
+                method: 'PUT',
+                data: {
+                    data: {
+                        userId: Taro.getStorageSync('userInfo').id,
+                        articleCommentId: articleCommentId
+                    }
+                }
+            }).then((res) => {
+                dispatch({
+                    type: DETECTION_COMMENT_CANCEL,
+                    payload: res.data.data
+                });
+                return resolve(res.data);
+            }).catch((e) => {
+                console.log(e);
+                return reject(e);
+            });
+        }
+    );

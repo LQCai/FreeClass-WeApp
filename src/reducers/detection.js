@@ -15,6 +15,7 @@ const INITAL_STATE = {
     postResult: {},
     detectionImageList: [],
     collectResult: 0,
+    commentResult: 0
 }
 
 export default function detection(state = INITAL_STATE, action) {
@@ -46,6 +47,16 @@ export default function detection(state = INITAL_STATE, action) {
             return {
                 ...state,
                 collectResult: 2,
+            }
+        case DETECTION_COMMENT:
+            return {
+                ...state,
+                commentResult: 1,
+            }
+        case DETECTION_COMMENT_CANCEL:
+            return {
+                ...state,
+                commentResult: 2,
             }
         default:
             return state

@@ -17,7 +17,6 @@ import { collect, collectCancel } from '../../actions/detection';
 export default class DetectionCard extends Taro.Component {
 
     componentWillMount() {
-        console.log(this.props);
         this.setState({
             id: this.props.uid,
             name: this.props.name,
@@ -47,6 +46,12 @@ export default class DetectionCard extends Taro.Component {
         } else {
             this.props.collectCancel(this.state.id);
         }
+    }
+
+    comment() {
+        Taro.navigateTo({
+            url: '/pages/detectionComment/detectionComment?articleId=' + this.state.id
+        });
     }
 
     render() {
@@ -96,7 +101,7 @@ export default class DetectionCard extends Taro.Component {
                             <AtIcon value='star' />
                         }
                     </View>
-                    <View className='comment-action'>
+                    <View className='comment-action' onClick={this.comment}>
                         <AtIcon value='message' />
                     </View>
                 </View>

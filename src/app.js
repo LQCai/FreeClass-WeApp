@@ -38,7 +38,7 @@ class App extends Component {
       "pages/editAnnounce/editAnnounce",
       "pages/detection/detection",
       "pages/postDetection/postDetection",
-      "pages/detectionDetail/detectionDetail",
+      "pages/detectionComment/detectionComment",
     ],
     tabBar: {
       color: "#595959",

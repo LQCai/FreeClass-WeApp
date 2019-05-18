@@ -105,7 +105,7 @@ export default class DetectionCard extends Taro.Component {
                 </View>
                 <View>
                     {this.state.images.map((image, index) => (
-                        <Image className='list-img' key={index} src={image} onClick={this.previewAvatar.bind(this,image)} />
+                        <Image className='list-img' key={index} src={image} onClick={this.previewAvatar.bind(this, image)} />
                     ))}
                 </View>
                 <View className='other'>

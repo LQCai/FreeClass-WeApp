@@ -35,11 +35,6 @@ export default class Detection extends Taro.Component {
         this.updateList();
     }
 
-    componentDidShow() {
-        this.updateList();
-    }
-
-
     postDetection() {
         Taro.navigateTo({
             url: '/pages/postDetection/postDetection'

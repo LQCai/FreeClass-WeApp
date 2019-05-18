@@ -44,42 +44,64 @@ export const getHomeworkList = (classId) => dispatch => new Promise(
  * @param {*} classId 
  * @param {*} content 
  * @param {*} deadline 
- * @param {*} url 
+ * @param {*} file 
  */
 export const postHomework = (
     teacherId,
     title,
     classId,
     content,
-    deadline,
+    date,
     formId,
-    url) => dispatch => new Promise(
+    file) => dispatch => new Promise(
         (resolve, reject) => {
             console.log(formId);
-            Taro.uploadFile({
-                url: `${config.server.host}/user/homework/post`,
-                filePath: url,
-                name: 'annex',
-                formData: {
-                    teacherId: teacherId,
-                    homeworkName: title,
-                    classId: classId,
-                    homeworkIntroduction: content,
-                    sendByEmail: 2,
-                    fullScore: 100,
-                    formId: formId,
-                    deadline: deadline
-                }
-            }).then((res) => {
-                dispatch({
-                    type: HOMEWORK_POST,
-                    payload: res.data
+            if (file.length == 0) {
+                wreq.request({
+                    url: `${config.server.host}/user/homework/postText`,
+                    method: 'POST',
+                    data: {
+                        teacherId: teacherId,
+                        homeworkName: title,
+                        classId: classId,
+                        homeworkIntroduction: content,
+                        formId: formId,
+                        date: date
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: HOMEWORK_POST,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
                 });
-                return resolve(res.data);
-            }).catch((e) => {
-                console.log(e);
-                return reject(e);
-            });
+            } else {
+                Taro.uploadFile({
+                    url: `${config.server.host}/user/homework/post`,
+                    filePath: file[0].url,
+                    name: 'annex',
+                    formData: {
+                        teacherId: teacherId,
+                        homeworkName: title,
+                        classId: classId,
+                        homeworkIntroduction: content,
+                        formId: formId,
+                        deadline: date + " 00:00:00"
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: HOMEWORK_POST,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
+                });
+            }
         }
     );
 
@@ -90,48 +112,66 @@ export const postHomework = (
  * @param {*} name 
  * @param {*} id 
  * @param {*} introduction 
- * @param {*} deadline 
+ * @param {*} date 
  * @param {*} url 
  */
 export const editHomework = (
-    teacherId,
     classId,
     name,
     id,
     introduction,
-    deadline,
-    url) => dispatch => new Promise(
+    date,
+    file) => dispatch => new Promise(
         (resolve, reject) => {
-            console.log(teacherId);
-            console.log(classId);
-            console.log(name);
-            console.log(id);
             console.log(introduction);
-            console.log(deadline);
-            Taro.uploadFile({
-                url: `${config.server.host}/user/homework/edit`,
-                filePath: url,
-                name: 'annex',
-                formData: {
-                    teacherId: teacherId,
-                    classId: classId,
-                    homeworkName: name,
-                    id: id,
-                    homeworkIntroduction: introduction,
-                    sendByEmail: 2,
-                    fullScore: 100,
-                    deadline: deadline
-                }
-            }).then((res) => {
-                dispatch({
-                    type: HOMEWORK_EDIT,
-                    payload: res.data
+            console.log(date);
+            console.log(name);
+            if (file.length == 0) {
+                wreq.request({
+                    url: `${config.server.host}/user/homework/editText`,
+                    method: 'POST',
+                    data: {
+                        teacherId: Taro.getStorageSync('userInfo').id,
+                        classId: classId,
+                        homeworkName: name,
+                        id: id,
+                        homeworkIntroduction: introduction,
+                        date: date
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: HOMEWORK_EDIT,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
                 });
-                return resolve(res.data);
-            }).catch((e) => {
-                console.log(e);
-                return reject(e);
-            });
+            } else {
+                Taro.uploadFile({
+                    url: `${config.server.host}/user/homework/edit`,
+                    filePath: file[0].url,
+                    name: 'annex',
+                    formData: {
+                        teacherId: Taro.getStorageSync('userInfo').id,
+                        classId: classId,
+                        homeworkName: name,
+                        id: id,
+                        homeworkIntroduction: introduction,
+                        deadline: date + " 00:00:00"
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: HOMEWORK_EDIT,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
+                });
+            }
         }
     );
 

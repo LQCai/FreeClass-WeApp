@@ -50,7 +50,7 @@ export default class AttendanceDetail extends Taro.Component {
                 }).catch((e) => {
                     console.log(e);
                 });
-            }, 3000)
+            }, 1000)
         });
     }
 

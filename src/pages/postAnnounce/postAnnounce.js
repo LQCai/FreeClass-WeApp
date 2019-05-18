@@ -60,40 +60,32 @@ export default class PostAnnounce extends Taro.Component {
 
     onSubmitPost() {
         const data = this.state;
-        if (data.files.length == 0) {
-            Taro.showToast({
-                title: '请上传附件',
-                icon: 'none'
-            });
-        } else {
-            console.log(data);
-            this.props.postAnnounce(data.teacherId,
-                data.title,
-                data.classId,
-                data.content,
-                data.files[0].url).then((res) => {
-                    const resObj = typeof res === 'string' ? JSON.parse(res) : res;
-                    if (resObj.code != config.code.success) {
-                        Taro.showToast({
-                            title: `${resObj.msg}`,
-                            icon: 'none'
-                        })
-                    } else {
-                        Taro.showToast({
-                            title: '发布成功',
-                            icon: 'success'
-                        }).then(() => {
-                            Taro.navigateBack({
-                                delta: 1
-                            });
-                        }).catch((e) => {
-                            console.log(e);
+        this.props.postAnnounce(data.teacherId,
+            data.title,
+            data.classId,
+            data.content,
+            data.files).then((res) => {
+                const resObj = typeof res === 'string' ? JSON.parse(res) : res;
+                if (resObj.code != config.code.success) {
+                    Taro.showToast({
+                        title: `${resObj.msg}`,
+                        icon: 'none'
+                    })
+                } else {
+                    Taro.showToast({
+                        title: '发布成功',
+                        icon: 'success'
+                    }).then(() => {
+                        Taro.navigateBack({
+                            delta: 1
                         });
-                    }
-                }).catch((e) => {
-                    console.log(e);
-                })
-        }
+                    }).catch((e) => {
+                        console.log(e);
+                    });
+                }
+            }).catch((e) => {
+                console.log(e);
+            })
     }
 
     render() {

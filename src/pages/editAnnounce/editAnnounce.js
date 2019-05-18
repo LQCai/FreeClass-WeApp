@@ -34,14 +34,26 @@ export default class EditAnnounce extends Taro.Component {
     }
 
     componentWillMount() {
-        this.setState({
-            classId: this.$router.params.classId,
-            teacherId: this.$router.params.teacherId,
-            id: this.$router.params.id,
-            title: this.$router.params.title,
-            content: this.$router.params.content,
-            annex: [{ 'url': this.$router.params.annexUrl }]
-        });
+        if (this.$router.params.annexUrl == '') {
+            this.setState({
+                classId: this.$router.params.classId,
+                teacherId: this.$router.params.teacherId,
+                id: this.$router.params.id,
+                title: this.$router.params.title,
+                content: this.$router.params.content,
+                annex: []
+            });
+        } else {
+            this.setState({
+                classId: this.$router.params.classId,
+                teacherId: this.$router.params.teacherId,
+                id: this.$router.params.id,
+                title: this.$router.params.title,
+                content: this.$router.params.content,
+                annex: [{ 'url': this.$router.params.annexUrl }]
+            });
+        }
+
         this.props.closeAnnounceItem();
     }
 
@@ -70,41 +82,34 @@ export default class EditAnnounce extends Taro.Component {
 
     onSubmitEdit() {
         const data = this.state;
-        if (data.annex.length == 0) {
-            Taro.showToast({
-                title: '请上传附件',
-                icon: 'none'
-            });
-        } else {
-            this.props.editAnnounce(
-                data.id,
-                data.teacherId,
-                data.title,
-                data.classId,
-                data.content,
-                data.annex[0].url).then((res) => {
-                    const resObj = typeof res === 'string' ? JSON.parse(res) : res;
-                    if (resObj.code != config.code.success) {
-                        Taro.showToast({
-                            title: `${resObj.msg}`,
-                            icon: 'none'
-                        })
-                    } else {
-                        Taro.showToast({
-                            title: '编辑成功',
-                            icon: 'success'
-                        }).then(() => {
-                            Taro.navigateBack({
-                                delta: 1
-                            });
-                        }).catch((e) => {
-                            console.log(e);
+        this.props.editAnnounce(
+            data.id,
+            data.teacherId,
+            data.title,
+            data.classId,
+            data.content,
+            data.annex).then((res) => {
+                const resObj = typeof res === 'string' ? JSON.parse(res) : res;
+                if (resObj.code != config.code.success) {
+                    Taro.showToast({
+                        title: `${resObj.msg}`,
+                        icon: 'none'
+                    })
+                } else {
+                    Taro.showToast({
+                        title: '编辑成功',
+                        icon: 'success'
+                    }).then(() => {
+                        Taro.navigateBack({
+                            delta: 1
                         });
-                    }
-                }).catch((e) => {
-                    console.log(e);
-                })
-        }
+                    }).catch((e) => {
+                        console.log(e);
+                    });
+                }
+            }).catch((e) => {
+                console.log(e);
+            })
     }
 
     render() {

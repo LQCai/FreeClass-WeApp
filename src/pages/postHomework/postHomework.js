@@ -24,7 +24,6 @@ export default class PostHomework extends Taro.Component {
             content: '',
             files: [],
             dateSel: '2019-04-01',
-            timeSel: '00:00:00',
             classId: '',
             teacherId: ''
         };
@@ -37,11 +36,6 @@ export default class PostHomework extends Taro.Component {
         })
     }
 
-    onTimeChange = e => {
-        this.setState({
-            timeSel: e.detail.value
-        })
-    }
     onDateChange = e => {
         this.setState({
             dateSel: e.detail.value
@@ -75,41 +69,34 @@ export default class PostHomework extends Taro.Component {
         const formId = e.detail.formId;
         console.log(formId);
         const data = this.state;
-        if (data.files.length == 0) {
-            Taro.showToast({
-                title: '请上传附件',
-                icon: 'none'
-            });
-        } else {
-            this.props.postHomework(data.teacherId,
-                data.title,
-                data.classId,
-                data.content,
-                data.dateSel + ' ' + data.timeSel + ":00",
-                formId,
-                data.files[0].url).then((res) => {
-                    const resObj = typeof res === 'string' ? JSON.parse(res) : res;
-                    if (resObj.code != config.code.success) {
-                        Taro.showToast({
-                            title: `${resObj.msg}`,
-                            icon: 'none'
-                        })
-                    } else {
-                        Taro.showToast({
-                            title: '发布成功',
-                            icon: 'success'
-                        }).then(() => {
-                            Taro.navigateBack({
-                                delta: 1
-                            });
-                        }).catch((e) => {
-                            console.log(e);
+        this.props.postHomework(data.teacherId,
+            data.title,
+            data.classId,
+            data.content,
+            data.dateSel,
+            formId,
+            data.files).then((res) => {
+                const resObj = typeof res === 'string' ? JSON.parse(res) : res;
+                if (resObj.code != config.code.success) {
+                    Taro.showToast({
+                        title: `${resObj.msg}`,
+                        icon: 'none'
+                    })
+                } else {
+                    Taro.showToast({
+                        title: '发布成功',
+                        icon: 'success'
+                    }).then(() => {
+                        Taro.navigateBack({
+                            delta: 1
                         });
-                    }
-                }).catch((e) => {
-                    console.log(e);
-                })
-        }
+                    }).catch((e) => {
+                        console.log(e);
+                    });
+                }
+            }).catch((e) => {
+                console.log(e);
+            })
     }
 
     render() {
@@ -135,14 +122,6 @@ export default class PostHomework extends Taro.Component {
                             <View className='picker'>
                                 <Text className='picker-label'>截止日期</Text>
                                 <Text className='picker-value'>{this.state.dateSel}</Text>
-                            </View>
-                        </Picker>
-                    </View>
-                    <View className='page-section'>
-                        <Picker mode='time' onChange={this.onTimeChange}>
-                            <View className='picker'>
-                                <Text className='picker-label'>截止时间</Text>
-                                <Text className='picker-value'>{this.state.timeSel}</Text>
                             </View>
                         </Picker>
                     </View>

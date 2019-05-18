@@ -21,28 +21,50 @@ export const postAnnounce = (
     title,
     classId,
     content,
-    url) => dispatch => new Promise(
+    file) => dispatch => new Promise(
         (resolve, reject) => {
-            Taro.uploadFile({
-                url: `${config.server.host}/user/announcement/post`,
-                filePath: url,
-                name: 'annex',
-                formData: {
-                    teacherId: teacherId,
-                    classId: classId,
-                    title: title,
-                    content: content
-                }
-            }).then((res) => {
-                dispatch({
-                    type: ANNOUNCE_POST,
-                    payload: res.data
+            if (file.length == 0) {
+                wreq.request({
+                    url: `${config.server.host}/user/announcement/postText`,
+                    method: 'POST',
+                    data: {
+                        teacherId: teacherId,
+                        classId: classId,
+                        title: title,
+                        content: content
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: ANNOUNCE_POST,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
                 });
-                return resolve(res.data);
-            }).catch((e) => {
-                console.log(e);
-                return reject(e);
-            });
+            } else {
+                Taro.uploadFile({
+                    url: `${config.server.host}/user/announcement/post`,
+                    filePath: file[0].url,
+                    name: 'annex',
+                    formData: {
+                        teacherId: teacherId,
+                        classId: classId,
+                        title: title,
+                        content: content
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: ANNOUNCE_POST,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
+                });
+            }
         }
     );
 
@@ -61,29 +83,52 @@ export const editAnnounce = (
     title,
     classId,
     content,
-    url) => dispatch => new Promise(
+    file) => dispatch => new Promise(
         (resolve, reject) => {
-            Taro.uploadFile({
-                url: `${config.server.host}/user/announcement/edit`,
-                filePath: url,
-                name: 'annex',
-                formData: {
-                    id: id,
-                    teacherId: teacherId,
-                    classId: classId,
-                    title: title,
-                    content: content
-                }
-            }).then((res) => {
-                dispatch({
-                    type: ANNOUNCE_EDIT,
-                    payload: res.data
+            if (file.length == 0) {
+                wreq.request({
+                    url: `${config.server.host}/user/announcement/editText`,
+                    method: 'POST',
+                    data: {
+                        id: id,
+                        teacherId: teacherId,
+                        classId: classId,
+                        title: title,
+                        content: content
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: ANNOUNCE_EDIT,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
                 });
-                return resolve(res.data);
-            }).catch((e) => {
-                console.log(e);
-                return reject(e);
-            });
+            } else {
+                Taro.uploadFile({
+                    url: `${config.server.host}/user/announcement/edit`,
+                    filePath: file[0].url,
+                    name: 'annex',
+                    formData: {
+                        id: id,
+                        teacherId: teacherId,
+                        classId: classId,
+                        title: title,
+                        content: content
+                    }
+                }).then((res) => {
+                    dispatch({
+                        type: ANNOUNCE_EDIT,
+                        payload: res.data
+                    });
+                    return resolve(res.data);
+                }).catch((e) => {
+                    console.log(e);
+                    return reject(e);
+                });
+            }
         }
     );
 

@@ -65,10 +65,16 @@ export default class AnnounceDetail extends Taro.Component {
                             <View className='at-article__p'>
                                 {this.state.announceDetail.content}
                             </View>
-                            <Image
-                                className='at-article__img'
-                                src={this.state.announceDetail.annexUrl}
-                                mode='widthFix' />
+                            {this.state.announceDetail.annexUrl == ''
+                                ?
+                                <View />
+                                :
+                                <Image
+                                    className='at-article__img'
+                                    src={this.state.announceDetail.annexUrl}
+                                    mode='widthFix' />
+                            }
+
                         </View>
                     </View>
                 </View>

@@ -5,7 +5,7 @@ import {
     DETECTION_COMMENT,
     DETECTION_COMMENT_CANCEL,
     DETECTION_DELETE,
-    DETECTION_DETAIL,
+    DETECTION_COLLECT_LIST,
     DETECTION_POST,
     DETECTION_IMAGE_LIST
 } from '../canstants/detection';
@@ -29,6 +29,30 @@ export const getDetectionList = (pageIndex) => dispatch => new Promise(
         }).then((res) => {
             dispatch({
                 type: DETECTION_LIST,
+                payload: res.data.data
+            });
+            return resolve(res.data);
+        }).catch((e) => {
+            console.log(e);
+            return reject(e);
+        });
+    }
+);
+
+/**
+ * 获取收藏列表 
+ */
+export const getDetectionCollectList = () => dispatch => new Promise(
+    (resolve, reject) => {
+        wreq.request({
+            url: `${config.server.host}/user/article/collectList`,
+            method: 'GET',
+            data: {
+                userId: Taro.getStorageSync('userInfo').id
+            }
+        }).then((res) => {
+            dispatch({
+                type: DETECTION_COLLECT_LIST,
                 payload: res.data.data
             });
             return resolve(res.data);

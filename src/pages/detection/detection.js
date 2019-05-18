@@ -109,6 +109,7 @@ export default class Detection extends Taro.Component {
                                 time={item.createTime}
                                 commentList={item.commentList}
                                 star={item.star}
+                                type={1}
                             />
                         </View>
                         <View className='line'></View>

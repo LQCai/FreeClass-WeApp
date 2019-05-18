@@ -10,19 +10,21 @@ export default class Profile extends Taro.Component {
     console.log("s");
   }
   //跳转到各个页面，通过传过来的e进行判断跳转哪一个页面
-  jump(e){
-  if(e=="personalData"){
-    console.log(e)
-    Taro.navigateTo({
-      url: "../../pages/personalData/personalData"
-    });
-  }
-  else if(e=="collection"){
-    console.log(e)
-  }
-  else{
-    console.log(e)
-  }
+  jump(e) {
+    if (e == "personalData") {
+      console.log(e)
+      Taro.navigateTo({
+        url: "../../pages/personalData/personalData"
+      });
+    }
+    else if (e == "collection") {
+      Taro.navigateTo({
+        url: "/pages/detectionCollect/detectionCollect"
+      });
+    }
+    else {
+      console.log(e)
+    }
   }
   render() {
     const userInfo = Taro.getStorageSync('userInfo');
@@ -39,13 +41,13 @@ export default class Profile extends Taro.Component {
             </View>
           </View>
           <View className="data">
-            <AtButton type="secondary" size="small" onClick={this.jump.bind(this,"personalData")}>
+            <AtButton type="secondary" size="small" onClick={this.jump.bind(this, "personalData")}>
               编辑个人资料
             </AtButton>
           </View>
         </View>
         <View className="line" />
-        <View className="content" onClick={this.jump.bind(this,"collection")}>
+        <View className="content" onClick={this.jump.bind(this, "collection")}>
           <View className="box">
             <Image src={collection} className="image" />
           </View>
@@ -57,7 +59,7 @@ export default class Profile extends Taro.Component {
         <View className='line-part' />
         <ProfileContent content="帮助" />
         <View>
-          <View className="content" onClick={this.jump.bind(this,"help")}>
+          <View className="content" onClick={this.jump.bind(this, "help")}>
             <View className="box">
               <Image src={help} className="image" />
             </View>

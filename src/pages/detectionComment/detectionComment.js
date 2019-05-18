@@ -4,20 +4,22 @@ import { AtForm, AtInput, AtButton } from '_taro-ui@2.0.2@taro-ui';
 import { connect } from '@tarojs/redux';
 import { bindActionCreators } from 'redux';
 import config from '../../config';
-import { commet, commentDelete } from '../../actions/detection';
+import { commet, commentDelete, getDetectionCollectList } from '../../actions/detection';
 
 
 @connect(({ detection }) => ({
   detection
 }), (dispatch) => bindActionCreators({
   commentDelete,
-  commet
+  commet,
+  getDetectionCollectList
 }, dispatch))
 export default class DetectionComment extends Taro.Component {
   componentWillMount() {
     this.setState({
       content: '',
-      articleId: this.$router.params.articleId
+      articleId: this.$router.params.articleId,
+      type: this.$router.params.type
     });
   }
 
@@ -34,9 +36,19 @@ export default class DetectionComment extends Taro.Component {
         title: '评论成功',
         icon: 'success'
       }).then(() => {
-        Taro.reLaunch({
-          url: '/pages/detection/detection'
-        });
+        if (this.state.type == 1) {
+          Taro.reLaunch({
+            url: '/pages/detection/detection'
+          });
+        } else {
+          this.props.getDetectionCollectList().then(() => {
+            Taro.navigateBack({
+              delta: 1
+            });
+          }).catch((e) => {
+            console.log(e);
+          })
+        }
       })
     }).catch((e) => {
       console.log(e);

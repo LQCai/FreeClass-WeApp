@@ -40,6 +40,7 @@ class App extends Component {
       "pages/postDetection/postDetection",
       "pages/detectionComment/detectionComment",
       "pages/detectionCollect/detectionCollect",
+      "pages/help/help",
     ],
     tabBar: {
       color: "#595959",
@@ -75,7 +76,7 @@ class App extends Component {
     }
   };
 
-  componentDidShow() {}
+  componentDidShow() { }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数

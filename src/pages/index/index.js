@@ -34,9 +34,7 @@ import { getClassList, deleteClass, quitClass } from '../../actions/classInfo';
 class Index extends Component {
 
   config = {
-    navigationBarTitleText: '首页',
-    enablePullDownRefresh: true,
-    backgroundTextStyle: 'dark',
+    navigationBarTitleText: '首页'
   }
 
   constructor() {

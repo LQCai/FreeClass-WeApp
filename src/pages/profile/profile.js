@@ -23,7 +23,9 @@ export default class Profile extends Taro.Component {
       });
     }
     else {
-      console.log(e)
+      Taro.navigateTo({
+        url: '/pages/help/help'
+      });
     }
   }
   render() {

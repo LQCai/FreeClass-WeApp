@@ -1,0 +1,12 @@
+.line {
+    padding: 0 20px 0;
+    margin: 20px 0;
+    line-height: 1px;
+    border-left: 200px solid #ddd;
+    border-right: 200px solid #ddd;
+    background-color: black;
+    text-align: center;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+}

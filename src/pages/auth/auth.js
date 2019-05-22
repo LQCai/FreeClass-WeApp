@@ -80,7 +80,7 @@ export default class Auth extends Taro.Component {
                         获取你的公开信息（昵称、头像等）
                     </Text>
                 </View>
-                <View className='button'>
+                <View className='button-local'>
                     <Button openType='getUserInfo' type='primary' lang='zh_CN' onGetUserInfo={this.bindGetUserInfo.bind(this)}>
                         授权登录
                     </Button>

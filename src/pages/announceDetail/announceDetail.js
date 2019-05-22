@@ -78,7 +78,7 @@ export default class AnnounceDetail extends Taro.Component {
                         </View>
                     </View>
                 </View>
-                <View className='comment'>
+                {/* <View className='comment'>
                     <AtForm>
                         <AtInput
                             type='text'
@@ -86,7 +86,7 @@ export default class AnnounceDetail extends Taro.Component {
                             <AtButton formType='reset' type='primary' size='small'>提交</AtButton>
                         </AtInput>
                     </AtForm>
-                </View>
+                </View> */}
             </View>
         );
     }

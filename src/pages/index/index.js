@@ -304,9 +304,8 @@ class Index extends Component {
     //课堂actionSheet的状态
     let { classItemInfo, showClassItem, closeClassItem } = this.props;
     const images = [
-      'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-      'http://pic.to8to.com/case/2017/10/13/20171013141744-83b8e01c.jpg',
-      'http://pic.to8to.com/case/2016/09/10/20160910160945-78193f1e.jpg'
+      'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=168883838,1751966121&fm=26&gp=0.jpg',
+      'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=54792967,3662211541&fm=26&gp=0.jpg'
     ];
 
     const tabList = [{ title: '我教的课' }, { title: '我听的课' }];

@@ -2,3 +2,4 @@ export const CLASS_MENU_OPEN = 'OPEN';
 export const CLASS_MENU_CLOES = 'CLOSE';
 export const CLASS_ITEM_INFO = 'CLASS_ITEM_INFO';
 export const HOMEWORK_ITEM_INFO = 'HOMEWORK_ITEM_INFO';
+export const ANNOUNCE_ITEM_INFO = 'ANNOUNCE_ITEM_INFO';

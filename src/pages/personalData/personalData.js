@@ -56,7 +56,7 @@ export default class PersonalData extends Taro.Component {
         </AtList>
         <View class="backgroundContent" />
         <View className='logo-background'>
-          <image src={logo} />
+          <Image className='logo-1' src={logo} />
         </View>
       </View>
     );

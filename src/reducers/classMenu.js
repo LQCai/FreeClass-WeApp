@@ -2,7 +2,8 @@ import {
     CLASS_MENU_OPEN,
     CLASS_MENU_CLOES,
     CLASS_ITEM_INFO,
-    HOMEWORK_ITEM_INFO
+    HOMEWORK_ITEM_INFO,
+    ANNOUNCE_ITEM_INFO
 } from '../canstants/classMenu';
 
 const INITAL_STATE = {
@@ -30,13 +31,24 @@ const INITAL_STATE = {
             name: ''
         },
         role: ''
+    },
+    announceItemInfo: {
+        sheet: false,
+        announceInfo: {
+            annexUrl: '',
+            created: '',
+            id: '',
+            title: '',
+            content: ''
+        },
+        role: ''
     }
 }
 
 export default function classMenu(state = INITAL_STATE, action) {
     const type = action.type;
     const payload = action.payload;
-    switch (action.type) {
+    switch (type) {
         case CLASS_MENU_OPEN:
             return {
                 ...state,
@@ -56,6 +68,11 @@ export default function classMenu(state = INITAL_STATE, action) {
             return {
                 ...state,
                 homeworkItemInfo: payload
+            };
+        case ANNOUNCE_ITEM_INFO:
+            return {
+                ...state,
+                announceItemInfo: payload
             };
         default:
             return state;

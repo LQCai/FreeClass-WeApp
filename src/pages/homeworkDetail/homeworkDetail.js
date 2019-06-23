@@ -236,24 +236,22 @@ export default class HomeworkDetail extends Taro.Component {
                         </AtTabs>
                     </View>
                     :
-                    <View>
-                        <View>
-                            <Text>作业标题:</Text>
+                    <View className='at-article'>
+                        <View className='at-article__h1'>
                             <Text>{this.state.homeworkDetail.name}</Text>
                         </View>
-                        <View>
-                            <Text>作业内容:</Text>
+                        <View className='at-article__p'>
                             <Text>{this.state.homeworkDetail.introduction}</Text>
                         </View>
-                        <View>
-                            <Text>截至:</Text>
+                        <View className='at-article__info'>
+                            <Text>截至：</Text>
                             <Text>{this.state.homeworkDetail.deadline}</Text>
                         </View>
                         <View>
-                            <Text>附件:</Text>
                             <Image
+                                className='at-article__img'
                                 src={this.state.homeworkDetail.annexUrl}
-                                style='width: 100px;height: 100px;background: #fff;'
+                                mode='widthFix'
                             />
                         </View>
                         <View>

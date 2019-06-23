@@ -2,7 +2,8 @@ import {
     CLASS_MENU_OPEN,
     CLASS_MENU_CLOES,
     CLASS_ITEM_INFO,
-    HOMEWORK_ITEM_INFO
+    HOMEWORK_ITEM_INFO,
+    ANNOUNCE_ITEM_INFO
 } from '../canstants/classMenu';
 import config from '../config';
 
@@ -96,3 +97,34 @@ export const closeHomeworkItem = () => {
     }
 };
 
+
+export const showAnnounceItem = (announceInfo, role) => {
+    return {
+        type: ANNOUNCE_ITEM_INFO,
+        payload: {
+            sheet: true,
+            announceInfo: announceInfo,
+            role: role
+        }
+    }
+};
+
+/**
+ * 收起公告的sheet
+ */
+export const closeAnnounceItem = () => {
+    return {
+        type: ANNOUNCE_ITEM_INFO,
+        payload: {
+            sheet: false,
+            announceInfo: {
+                annexUrl: '',
+                created: '',
+                id: '',
+                title: '',
+                content: ''
+            },
+            role: ''
+        }
+    }
+};

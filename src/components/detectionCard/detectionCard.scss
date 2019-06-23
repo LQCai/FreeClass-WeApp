@@ -1,0 +1,74 @@
+.detection {
+    font-size: 35px;
+    .content {
+        line-height: 45px;
+        margin-bottom: 15px;
+    }
+}
+.list-img {
+    width: 30%;
+    max-height: 200px;
+    max-width: 200px;
+    padding-right: 5px;
+    object-fit: cover
+}
+
+.name {
+    color: #6190E8;
+}
+
+.other {
+    font-size: 80%;
+
+    .time-text {
+        color: gray;
+    }
+}
+
+.collect {
+    width: 20px;
+
+}
+
+.comment {
+    clear: both;
+    font-size: 25px;
+    width: 100%;
+    background-color: #eee;
+    line-height: 35px;
+}
+
+.collect {
+    display: inline;
+    margin-left: 20px;
+}
+
+.comment-action {
+    display: inline;
+    margin-left: 20px;
+}
+
+.comment-list {
+    padding: 5px 12px;
+    color: #454545;
+    padding-top: 3px;
+    color: #3b5384;
+}
+.other{
+    position: relative;
+    padding: 20px 0;
+    .time-text{
+        font-size: 25px
+    }
+    .collect{
+        top: 18px;
+        position: absolute; 
+        right: 130px;
+    }
+    .comment-action{
+        top: 20px;
+        position: absolute; 
+        right: 23px;
+        
+    }
+}

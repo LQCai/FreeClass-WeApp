@@ -33,6 +33,14 @@ class App extends Component {
       "pages/homeworkDetail/homeworkDetail",
       "pages/attendanceDetail/attendanceDetail",
       "pages/attendanceRecord/attendanceRecord",
+      "pages/postAnnounce/postAnnounce",
+      "pages/announceDetail/announceDetail",
+      "pages/editAnnounce/editAnnounce",
+      "pages/detection/detection",
+      "pages/postDetection/postDetection",
+      "pages/detectionComment/detectionComment",
+      "pages/detectionCollect/detectionCollect",
+      "pages/help/help",
     ],
     tabBar: {
       color: "#595959",
@@ -46,10 +54,10 @@ class App extends Component {
           text: "课程"
         },
         {
-          iconPath: "./asset/tabbar/message.png",
-          selectedIconPath: "./asset/tabbar/message_active.png",
-          pagePath: "pages/message/message",
-          text: "消息"
+          iconPath: "./asset/tabbar/detection.png",
+          selectedIconPath: "./asset/tabbar/detection_active.png",
+          pagePath: "pages/detection/detection",
+          text: "发现"
         },
         {
           iconPath: "./asset/tabbar/user.png",
@@ -68,7 +76,7 @@ class App extends Component {
     }
   };
 
-  componentDidShow() {}
+  componentDidShow() { }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数

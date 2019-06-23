@@ -77,19 +77,29 @@ export default class Attendance extends Taro.Component {
                     />
                 </View>
                 <View>
-                    {this.props.attendance.attendanceList.map((attendanceInfo) => (
-                        <View
-                            onClick={this.showDetail.bind(this, attendanceInfo.id, attendanceInfo.status)}
-                            className='card'
-                            key={attendanceInfo.id}>
-                            <AtCard
-                                title={attendanceInfo.name}
-                                extra={attendanceInfo.status == 1 ? '进行中' : '截止'}
-                            >
-                                <Text>创建时间： {attendanceInfo.created}</Text>
-                            </AtCard>
-                        </View>
-                    ))}
+                    {
+                        this.props.attendance.attendanceList.length > 0
+                            ?
+                            this.props.attendance.attendanceList.map((attendanceInfo) => (
+                                <View
+                                    onClick={this.showDetail.bind(this, attendanceInfo.id, attendanceInfo.status)}
+                                    className='card'
+                                    key={attendanceInfo.id}>
+                                    <AtCard
+                                        title={attendanceInfo.name}
+                                        extra={attendanceInfo.status == 1 ? '进行中' : '截止'}
+                                    >
+                                        <Text>创建时间： {attendanceInfo.created}</Text>
+                                    </AtCard>
+                                </View>
+                            ))
+                            :
+                            role == config.role.teacher
+                                ?
+                                <View className='text'><Text>您尚未发布考勤...</Text></View>
+                                :
+                                <View className='text'><Text>暂无考勤...</Text></View>
+                    }
                 </View>
             </View>
         );

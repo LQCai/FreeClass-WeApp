@@ -9,6 +9,8 @@ import {
 } from '../canstants/attendance';
 import wreq from '../utils/request';
 import config from '../config';
+import Taro from '@tarojs/taro';
+
 
 /**
  * 开始数字考勤
@@ -71,7 +73,7 @@ export const getAttendanceList = (classId) => dispatch => new Promise(
  */
 export const getAttendanceRealTimeInfo = (attendanceId, classId) => dispatch => new Promise(
     (resolve, reject) => {
-        wreq.request({
+        Taro.request({
             url: `${config.server.host}/user/attendance/startingInfo`,
             method: 'GET',
             data: {

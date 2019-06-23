@@ -23,36 +23,39 @@ export default class EditHomework extends Taro.Component {
         super(...arguments);
         this.state = {
             classId: '',
-            teacherId: '',
             id: '',
             name: '',
             introduction: '',
             dateSel: '2019-04-01',
-            timeSel: '00:00:00',
-            annex: [{ 
-                'url': '' }]
+            annex: []
         };
     }
 
     componentWillMount() {
-        this.setState({
-            classId: this.$router.params.classId,
-            teacherId: this.$router.params.teacherId,
-            id: this.$router.params.id,
-            name: this.$router.params.name,
-            introduction: this.$router.params.introduction,
-            dateSel: this.$router.params.dateSel,
-            timeSel: this.$router.params.timeSel,
-            annex: [{ 'url': this.$router.params.annexUrl }]
-        });
+        if (this.$router.params.annexUrl == '') {
+            this.setState({
+                classId: this.$router.params.classId,
+                id: this.$router.params.id,
+                name: this.$router.params.name,
+                introduction: this.$router.params.introduction,
+                dateSel: this.$router.params.dateSel,
+                timeSel: this.$router.params.timeSel,
+                annex: []
+            });
+        } else {
+            this.setState({
+                classId: this.$router.params.classId,
+                id: this.$router.params.id,
+                name: this.$router.params.name,
+                introduction: this.$router.params.introduction,
+                dateSel: this.$router.params.dateSel,
+                timeSel: this.$router.params.timeSel,
+                annex: [{ 'url': this.$router.params.annexUrl }]
+            });
+        }
         this.props.closeHomeworkItem();
     }
 
-    onTimeChange = e => {
-        this.setState({
-            timeSel: e.detail.value
-        })
-    }
     onDateChange = e => {
         this.setState({
             dateSel: e.detail.value
@@ -84,42 +87,35 @@ export default class EditHomework extends Taro.Component {
 
     onSubmitEdit() {
         const data = this.state;
-        if (data.annex.length == 0) {
-            Taro.showToast({
-                title: '请上传附件',
-                icon: 'none'
-            });
-        } else {
-            this.props.editHomework(
-                data.teacherId,
-                data.classId,
-                data.name,
-                data.id,
-                data.introduction,
-                data.dateSel + ' ' + data.timeSel,
-                data.annex[0].url).then((res) => {
-                    const resObj = JSON.parse(res);
-                    if (resObj.code != config.code.success) {
-                        Taro.showToast({
-                            title: `${resObj.msg}`,
-                            icon: 'none'
-                        })
-                    } else {
-                        Taro.showToast({
-                            title: '编辑成功',
-                            icon: 'success'
-                        }).then(() => {
-                            Taro.navigateBack({
-                                delta: 1
-                            });
-                        }).catch((e) => {
-                            console.log(e);
+
+        this.props.editHomework(
+            data.classId,
+            data.name,
+            data.id,
+            data.introduction,
+            data.dateSel,
+            data.annex).then((res) => {
+                const resObj = typeof res === 'string' ? JSON.parse(res) : res;
+                if (resObj.code != config.code.success) {
+                    Taro.showToast({
+                        title: `${resObj.msg}`,
+                        icon: 'none'
+                    })
+                } else {
+                    Taro.showToast({
+                        title: '编辑成功',
+                        icon: 'success'
+                    }).then(() => {
+                        Taro.navigateBack({
+                            delta: 1
                         });
-                    }
-                }).catch((e) => {
-                    console.log(e);
-                })
-        }
+                    }).catch((e) => {
+                        console.log(e);
+                    });
+                }
+            }).catch((e) => {
+                console.log(e);
+            })
     }
 
     render() {
@@ -148,14 +144,6 @@ export default class EditHomework extends Taro.Component {
                             <View className='picker'>
                                 <Text className='picker-label'>截止日期</Text>
                                 <Text className='picker-value'>{this.state.dateSel}</Text>
-                            </View>
-                        </Picker>
-                    </View>
-                    <View className='page-section'>
-                        <Picker mode='time' onChange={this.onTimeChange}>
-                            <View className='picker'>
-                                <Text className='picker-label'>截止时间</Text>
-                                <Text className='picker-value'>{this.state.timeSel}</Text>
                             </View>
                         </Picker>
                     </View>

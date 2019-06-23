@@ -1,0 +1,4 @@
+export const ANNOUNCE_POST = 'ANNOUNCE_POST';
+export const ANNOUNCE_EDIT = 'ANNOUNCE_EDIT';
+export const ANNOUNCE_DELETE = 'ANNOUNCE_DELETE';
+export const ANNOUNCE_LIST = 'ANNOUNCE_LIST';
